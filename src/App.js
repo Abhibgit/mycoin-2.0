@@ -1,5 +1,5 @@
 import DashboardPage from "./pages/DashboardPage/DashboardPage";
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
@@ -17,6 +17,8 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import { Route } from "react-router-dom";
+import SignUpPage from "./pages/SignUpPage/SignUpPage";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -59,6 +61,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 function App() {
+  const arr = useState(false);
+  const user = arr[0];
+  const setUser = arr[1];
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -226,6 +232,7 @@ function App() {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
+      <SignUpPage user={user} />
     </Box>
   );
 }
