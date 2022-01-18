@@ -1,5 +1,4 @@
-import DashboardPage from "./pages/DashboardPage/DashboardPage";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
@@ -8,15 +7,21 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
+import Button from "@mui/material/Button";
+import { TextField } from "@mui/material";
 import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import axios from "axios";
+import DashboardPage from "./pages/DashboardPage/DashboardPage";
+import { Autocomplete } from "@mui/material";
+
+// const ticker = new WebSocket("wss://stream.binance.com:9443/ws/!bookTicker");
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -59,11 +64,23 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 function App() {
+  const [coinData, setCoinData] = useState({});
+  const [coinList, setCoinList] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  useEffect(() => {
+    axios
+      .get("https://api.coingecko.com/api/v3/coins/list")
+      .then((response) => {
+        setCoinList(response.data);
+        setIsLoading(false);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -155,12 +172,19 @@ function App() {
       </MenuItem>
     </Menu>
   );
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log(event.target);
+  };
 
+  if (isLoading) {
+    return <span>Loading...</span>;
+  }
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <img src={require("./images/MyCoin.svg").default} alt="mySvgImage" />
+          <img src={require("./assets/MyCoin.svg").default} alt="mySvgImage" />
           <Typography
             variant="h6"
             noWrap
@@ -170,13 +194,25 @@ function App() {
             MyCoin
           </Typography>
           <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ "aria-label": "search" }}
-            />
+            <form onSubmit={handleSubmit}>
+              <Autocomplete
+                placeholder="Search…"
+                sx={{ width: 300, colour: "secondary" }}
+                options={coinList.map((e) => e.name)}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Search..."
+                    sx={{ colour: "secondary" }}
+                  />
+                )}
+              />
+              <Button
+                variant="contained"
+                endIcon={<SearchIcon />}
+                type="submit"
+              />
+            </form>
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
@@ -226,6 +262,7 @@ function App() {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
+      <DashboardPage coinList={coinList} />
     </Box>
   );
 }
