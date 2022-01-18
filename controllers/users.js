@@ -38,3 +38,36 @@ async function login(req, res) {
     res.status(400).json("Bad Credentials");
   }
 }
+
+function sendNotification(req, res) {
+  let nodemailer = require("nodemailer");
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL,
+      pass: process.env.PASS,
+    },
+  });
+  console.log(transporter.transporter.options.auth.user);
+  let subject = req.body.subject;
+  let message = req.body.message;
+  let coin = req.body.coin;
+  let coinPrice = req.body.price;
+  if (subject != "Email Confirmation") {
+    subject = `Your ${coin} price is ${coinPrice}`;
+  }
+  let mailOptions = {
+    from: transporter.transporter.options.auth.user,
+    to: req.body.email,
+    subject: subject,
+    text: message,
+  };
+
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Email sent: ", info.response);
+    }
+  });
+}
