@@ -26,4 +26,15 @@ async function create(req, res) {
   }
 }
 
-async function login(req, res) {}
+async function login(req, res) {
+  try {
+    const user = await User.findOne({ name: req.body.name });
+    if (!(await bcrypt.compare(req.body.password, user.password)))
+      throw new Error();
+
+    const token = jwt.sign({ user }, process.env.SECRET, { expiresIn: "24h" });
+    res.json(token);
+  } catch {
+    res.status(400).json("Bad Credentials");
+  }
+}
