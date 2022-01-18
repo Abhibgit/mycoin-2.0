@@ -244,7 +244,6 @@ function App() {
         </AppBar>
         {renderMobileMenu}
         {renderMenu}
-        <DashboardPage coinList={coinList} />
       </Switch>
     </Box>
   );
