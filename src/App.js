@@ -22,7 +22,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import { Route } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
 
 const ticker = new WebSocket("wss://stream.binance.com:9443/ws/!ticker@arr");
