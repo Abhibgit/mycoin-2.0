@@ -1,5 +1,5 @@
 import React from "react";
-import Login from "../../components/Login/Login";
+import LoginForm from "../../components/Login/Login";
 
 export default class LoginPage extends React.Component {
   state = {
@@ -17,7 +17,7 @@ export default class LoginPage extends React.Component {
           </h3>
         </div>
 
-        <Login setUserInState={this.props.setUserInState} />
+        <LoginForm setUserInState={this.props.setUserInState} />
       </main>
     );
   }

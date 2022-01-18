@@ -1,5 +1,5 @@
 import React from "react";
-import SignUp from "../../components/SignUp/SignUp";
+import SignUpForm from "../../components/SignUp/SignUp";
 
 export default class SignUpPage extends React.Component {
   state = {
@@ -17,7 +17,7 @@ export default class SignUpPage extends React.Component {
           </h3>
         </div>
 
-        <SignUp setUserInState={this.props.setUserInState} />
+        <SignUpForm setUserInState={this.props.setUserInState} />
       </main>
     );
   }
