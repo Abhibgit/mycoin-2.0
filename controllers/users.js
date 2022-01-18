@@ -18,7 +18,7 @@ async function create(req, res) {
       password: hashedPassword,
     });
     const token = jwt.sign({ user }, process.env.SECRET, { expiresIn: "24h" });
-    res.json(token);
+    res.status(200).json(token);
     console.log("user created", user);
   } catch (err) {
     console.log("user creation error", err);

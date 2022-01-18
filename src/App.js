@@ -36,9 +36,15 @@ function App() {
   const [profileCoin, setProfileCoin] = useState({});
   const [tickerSymbol, setTickerSymbol] = useState("");
   const [coinWatchlist, setCoinWatchlist] = useState([]);
-  const arr = useState(false);
-  const user = arr[0];
-  const setUser = arr[1];
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const setUserInState = (incomingUserData) => {
+    setUser(incomingUserData);
+  };
 
   let coinFeed = [];
 

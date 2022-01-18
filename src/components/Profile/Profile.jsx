@@ -1,11 +1,30 @@
 import React from "react";
 
-function Profile(props) {
+function Profile(props, onDelete, onEdit) {
+  onDelete = () => {
+    alert(" Prepare to be terminated");
+  };
+  onEdit = () => {
+    alert(" Prepare to be terminated");
+  };
   return (
     <div>
-      <h1>Hello, {props.user.name}</h1>
-      <h2>Email {props.user.email}</h2>
-      <h2>Password {props.user.password}</h2>
+      <form onSubmit={onEdit}>
+        <label>
+          <span>Name</span>
+          <input name="name" value={props.user.name} />
+        </label>
+        <label>
+          <span>Email</span>
+          <input name="email" value={props.user.email} />
+        </label>
+        <label>
+          <span>Password</span>
+          <input name="password" value={props.user.password} />
+        </label>
+        <button onClick={onEdit}>Edit User</button>
+      </form>
+      <button onClick={onDelete}>Delete User</button>
     </div>
   );
 }
