@@ -1,8 +1,24 @@
 import React from "react";
 import SignUp from "../../components/SignUp/SignUp";
 
-function SignUpPage() {
-  return <div></div>;
-}
+export default class SignUpPage extends React.Component {
+  state = {
+    showLogin: false,
+  };
 
-export default SignUpPage;
+  render() {
+    return (
+      <main className="SignUpPage">
+        <div>
+          <h3
+            onClick={() => this.setState({ showLogin: !this.state.showLogin })}
+          >
+            {this.state.showLogin ? "SIGN UP" : "LOG IN"}
+          </h3>
+        </div>
+
+        <SignUp setUserInState={this.props.setUserInState} />
+      </main>
+    );
+  }
+}
