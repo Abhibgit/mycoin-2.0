@@ -24,6 +24,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { Route, Switch, Redirect } from "react-router-dom";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
+import ProfilePage from "./pages/ProfilePage/ProfilePage";
 
 const ticker = new WebSocket("wss://stream.binance.com:9443/ws/!ticker@arr");
 let coinWatchSymbol = [];
