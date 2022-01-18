@@ -17,7 +17,7 @@ app.use(express.static(path.join(__dirname, "build")));
 
 app.use("/api/coins", require("./routes/api/coins.js"));
 app.use("/api/users", require("./routes/api/users.js"));
-// app.use('/api/orders', require('./routes/api/orders.js'));
+
 // The following "catch all" route (note the *)is necessary
 // for a SPA's client-side routing to properly work
 app.get("/*", function (req, res) {
