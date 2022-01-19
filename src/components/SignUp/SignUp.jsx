@@ -2,14 +2,6 @@ import React from "react";
 import { Component } from "react";
 
 export default class SignUpForm extends Component {
-  state = {
-    name: "",
-    email: "",
-    password: "",
-    confirm: "",
-    error: "",
-  };
-
   handleChange = (evt) => {
     this.setState({
       [evt.target.name]: evt.target.value,
@@ -38,6 +30,7 @@ export default class SignUpForm extends Component {
       localStorage.setItem("token", token); // 4. Stick token into localStorage
 
       const userDoc = JSON.parse(atob(token.split(".")[1])).user; // 5. Decode the token + put user document into state
+      console.log("created_user: " + userDoc);
       this.props.setUserInState(userDoc);
     } catch (err) {
       console.log("SignupForm error", err);

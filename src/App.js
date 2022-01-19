@@ -37,6 +37,7 @@ function App() {
   const [tickerSymbol, setTickerSymbol] = useState("");
   const [coinWatchlist, setCoinWatchlist] = useState([]);
   const [user, setUser] = useState({
+    id: "",
     name: "",
     email: "",
     password: "",
