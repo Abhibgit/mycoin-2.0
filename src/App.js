@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import NavBar from "./navbar/NavBar";
 import DashboardPage from "./pages/DashboardPage/DashboardPage";
-import CoinProfilePage from "./pages/ProfilePage/ProfilePage";
+import CoinInformation from "./components/CoinProfile/CoinInformation";
 import axios from "axios";
 
 const ticker = new WebSocket("wss://stream.binance.com:9443/ws/!ticker@arr");
@@ -9,10 +9,10 @@ const ticker = new WebSocket("wss://stream.binance.com:9443/ws/!ticker@arr");
 function App() {
   const [coinList, setCoinList] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const [coinData, setCoinData] = useState([]);
-  const [tickerIdx, setTickerIdx] = useState(0);
-  const [profileCoin, setProfileCoin] = useState("");
-  const [tickerObj, setTickerObj] = useState([]);
+  const [coinData, setCoinData] = useState({});
+  const [profileCoin, setProfileCoin] = useState({});
+  const [tickerSymbol, setTickerSymbol] = useState("");
+  let coinFeed = [];
 
   useEffect(() => {
     axios
@@ -31,23 +31,39 @@ function App() {
       console.log("Connected");
     };
     ticker.onmessage = (message) => {
-      setTickerObj(message.data.s);
-      console.log(message.data.s, "this is the message data");
+      coinFeed = JSON.parse(message.data);
+      let idx = coinFeed.map((e) => e.s).indexOf(tickerSymbol);
+      setProfileCoin(coinFeed[idx]);
+      console.log(coinFeed, "this is the coin feed");
+      // console.log(message.data, "this is the message data");
     };
-  }, []);
+  }, [tickerSymbol]);
+
+  // const findTickerIdx = (idx) => {};
 
   const findProfileCoin = (symbol) => {
-    console.log(symbol, "this is the symbol");
-    const idx = ticker.s.indexOf(symbol);
-    setTickerIdx(idx);
-    console.log(tickerIdx, "this is the ticker index");
+    setProfileCoin({});
+    setTickerSymbol(symbol);
+    console.log("this is the symbol");
   };
 
-  const addWatchlistCoin = (symbol) => {
-    setCoinData([...coinData, symbol]);
-  };
+  // const getNewCoinData = async () => {
+  //   axios
+  //     .get(
+  //       "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=false"
+  //     )
+  //     .then((response) => {
+  //       setCoinList(response.data);
+  //       console.log(coinList, "New API call is working");
+  //     })
+  //     .catch((err) => console.log(err))
+  //     .finally(setTimeout(getNewCoinData, 5000));
+  // };
 
-  const findTickerIdx = (idx) => {};
+  // const handleSingleCoin = (eventId) => {
+  //   // let singleCoinId = coinList.find((e) => e.id === eventId);
+  //   setCoinData(eventId);
+  // };
 
   if (isLoading) {
     return <span>Loading...</span>;
@@ -55,14 +71,11 @@ function App() {
   return (
     <div>
       <NavBar coinList={coinList} findProfileCoin={findProfileCoin} />
-      <DashboardPage ticker={ticker} />
-      <CoinProfilePage
+      <CoinInformation
         coinList={coinList}
         coinData={coinData}
-        ticker={ticker}
-        tickerIdx={tickerIdx}
+        profileCoin={profileCoin}
       />
-      {console.log(ticker)}
     </div>
   );
 }

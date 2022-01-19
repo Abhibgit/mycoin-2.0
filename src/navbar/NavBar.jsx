@@ -151,7 +151,6 @@ function NavBar(props) {
       </MenuItem>
     </Menu>
   );
-  console.log(props.coinList);
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">

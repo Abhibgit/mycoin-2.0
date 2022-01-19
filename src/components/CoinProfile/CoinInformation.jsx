@@ -3,8 +3,8 @@ import React from "react";
 function CoinInformation(props) {
   return (
     <div>
-      {console.log(props.ticker)}
-      <h1>{props.ticker[props.tickerIdx].e}</h1>
+      <h3>{props.profileCoin && props.profileCoin.s}</h3>
+      <h3>{props.profileCoin && props.profileCoin.c}</h3>
     </div>
   );
 }

@@ -4,18 +4,28 @@ import { Autocomplete, Button, TextField } from "@mui/material";
 function Search(props) {
   const [name, setName] = useState("");
 
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+  //   console.log(name);
+  //   const idx = props.coinList.map((e) => e.name).indexOf(name);
+  //   console.log(idx);
+  //   const coinId = props.coinList[idx].id;
+  //   console.log(coinId);
+  //   props.handleSingleCoin(coinId);
+  // };
+
+  // const coinSymbol = props.coinList[idx].symbol.toUpperCase();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(name);
     const idx = props.coinList.map((e) => e.name).indexOf(name);
     console.log(idx);
     const coinSymbol = props.coinList[idx].symbol.toUpperCase();
-
     if (coinSymbol === "USDT") {
       props.findLiveCoin(coinSymbol);
     } else {
       let newCoinSymbol = coinSymbol + "USDT";
-      console.log(coinSymbol);
       props.findProfileCoin(newCoinSymbol);
     }
   };
@@ -23,6 +33,7 @@ function Search(props) {
   const handleAutocomplete = (event, value) => {
     setName(value);
   };
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
