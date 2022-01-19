@@ -1,6 +1,6 @@
 import React from "react";
 
-function Watchlist() {
+function Watchlist(props) {
   // const handleSubmit = (event) => {
   //   event.preventDefault();
   //   console.log(name);
@@ -16,7 +16,19 @@ function Watchlist() {
   //     props.findLiveCoin(newCoinSymbol);
   //   }
   // };
-  return <div></div>;
+  return (
+    <div>
+      {console.log(props.coinWatchlist)}
+      {props.coinWatchlist.map((e, idx) => {
+        return (
+          <div key={e.s + idx}>
+            <h3>{e.s}</h3>
+            <h3>{e.c}</h3>
+          </div>
+        );
+      })}
+    </div>
+  );
 }
 
 export default Watchlist;

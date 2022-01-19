@@ -2,16 +2,21 @@ import React, { useState, useEffect } from "react";
 import NavBar from "./navbar/NavBar";
 import DashboardPage from "./pages/DashboardPage/DashboardPage";
 import CoinInformation from "./components/CoinProfile/CoinInformation";
+import Watchlist from "./components/Watchlist/Watchlist";
 import axios from "axios";
+import TopCoins from "./components/TopCoins/TopCoins";
 
 const ticker = new WebSocket("wss://stream.binance.com:9443/ws/!ticker@arr");
+let coinWatchSymbol = [];
+let coinWatchlistArray = [];
 
 function App() {
-  const [coinList, setCoinList] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const [coinData, setCoinData] = useState({});
+  const [coinList, setCoinList] = useState({});
   const [profileCoin, setProfileCoin] = useState({});
   const [tickerSymbol, setTickerSymbol] = useState("");
+  const [coinWatchlist, setCoinWatchlist] = useState([]);
+
   let coinFeed = [];
 
   useEffect(() => {
@@ -31,20 +36,44 @@ function App() {
       console.log("Connected");
     };
     ticker.onmessage = (message) => {
+      console.log(coinWatchSymbol);
       coinFeed = JSON.parse(message.data);
-      let idx = coinFeed.map((e) => e.s).indexOf(tickerSymbol);
-      setProfileCoin(coinFeed[idx]);
-      console.log(coinFeed, "this is the coin feed");
-    };
-  }, [tickerSymbol]);
+      let idxTemplate = coinFeed.map((e) => e.s);
+      let singleIdx = idxTemplate.indexOf(tickerSymbol);
+      setProfileCoin(coinFeed[singleIdx]);
+      coinWatchlistArray = [];
+      coinWatchSymbol.forEach(function (e) {
+        let watchSingleIdx = idxTemplate.indexOf(e);
+        coinWatchlistArray = [...coinWatchlistArray, coinFeed[watchSingleIdx]];
+        setCoinWatchlist([]);
+        setCoinWatchlist(coinWatchlistArray);
 
+        //   let matchedCoin = coinWatchlistArray.findIndex(
+        //     (coinId) => coinId.s === e
+        //   );
+        //   console.log(matchedCoin);
+        //   if (matchedCoin === -1 || matchedCoin === undefined) {
+        //     coinWatchlistArray.splice(matchedCoin);
+        //   } else {
+        //     coinWatchlistArray = [
+        //       ...coinWatchlistArray,
+        //       coinFeed[watchSingleIdx],
+        //     ];
+        //   }
+        // });
+      });
+    };
+  }, [tickerSymbol, coinWatchSymbol]);
 
   const findProfileCoin = (symbol) => {
     setProfileCoin({});
     setTickerSymbol(symbol);
-    console.log("this is the symbol");
   };
 
+  const saveWatchlistCoin = (symbol) => {
+    console.log(symbol);
+    coinWatchSymbol.push(symbol);
+  };
 
   if (isLoading) {
     return <span>Loading...</span>;
@@ -52,11 +81,13 @@ function App() {
   return (
     <div>
       <NavBar coinList={coinList} findProfileCoin={findProfileCoin} />
-      <CoinInformation
+      {/* <CoinInformation coinList={coinList} profileCoin={profileCoin} /> */}
+      <Watchlist
         coinList={coinList}
-        coinData={coinData}
-        profileCoin={profileCoin}
+        coinWatchlist={coinWatchlist}
+        saveWatchlistCoin={saveWatchlistCoin}
       />
+      <TopCoins coinList={coinList} saveWatchlistCoin={saveWatchlistCoin} />
     </div>
   );
 }
