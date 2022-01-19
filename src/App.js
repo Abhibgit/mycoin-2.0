@@ -35,11 +35,9 @@ function App() {
       let idx = coinFeed.map((e) => e.s).indexOf(tickerSymbol);
       setProfileCoin(coinFeed[idx]);
       console.log(coinFeed, "this is the coin feed");
-      // console.log(message.data, "this is the message data");
     };
   }, [tickerSymbol]);
 
-  // const findTickerIdx = (idx) => {};
 
   const findProfileCoin = (symbol) => {
     setProfileCoin({});
@@ -47,23 +45,6 @@ function App() {
     console.log("this is the symbol");
   };
 
-  // const getNewCoinData = async () => {
-  //   axios
-  //     .get(
-  //       "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=false"
-  //     )
-  //     .then((response) => {
-  //       setCoinList(response.data);
-  //       console.log(coinList, "New API call is working");
-  //     })
-  //     .catch((err) => console.log(err))
-  //     .finally(setTimeout(getNewCoinData, 5000));
-  // };
-
-  // const handleSingleCoin = (eventId) => {
-  //   // let singleCoinId = coinList.find((e) => e.id === eventId);
-  //   setCoinData(eventId);
-  // };
 
   if (isLoading) {
     return <span>Loading...</span>;
