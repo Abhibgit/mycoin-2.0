@@ -3,12 +3,20 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import SignUpPage from "./pages/SignUpPage/SignUpPage";
+import ProfilePage from "./pages/ProfilePage/ProfilePage";
 
 ReactDOM.render(
-  <Router>
-    <App />
-  </Router>,
+  <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<App />}>
+        {" "}
+      </Route>
+      <Route path="/user/profile" element={<ProfilePage />} />
+      <Route path="/user/signup" element={<SignUpPage />} />
+    </Routes>
+  </BrowserRouter>,
   document.getElementById("root")
 );
 

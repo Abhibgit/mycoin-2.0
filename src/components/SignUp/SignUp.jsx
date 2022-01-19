@@ -2,6 +2,13 @@ import React from "react";
 import { Component } from "react";
 
 export default class SignUpForm extends Component {
+  state = {
+    name: "",
+    email: "",
+    password: "",
+    confirm: "",
+    error: "",
+  };
   handleChange = (evt) => {
     this.setState({
       [evt.target.name]: evt.target.value,

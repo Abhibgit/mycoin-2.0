@@ -22,7 +22,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import { Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter, Routes, Link } from "react-router-dom";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 
@@ -118,7 +118,11 @@ function App() {
         saveWatchlistCoin={saveWatchlistCoin}
       />
       <TopCoins coinList={coinList} saveWatchlistCoin={saveWatchlistCoin} />
-      <SignUpPage user={user} />
+      {user.id === "" ? (
+        <SignUpPage setUserInState={setUserInState} />
+      ) : (
+        <ProfilePage user={user} setUserInState={setUserInState} />
+      )}
     </div>
   );
 }
