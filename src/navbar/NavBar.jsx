@@ -169,6 +169,7 @@ function NavBar(props) {
               coinList={props.coinList}
               ticker={props.ticker}
               findProfileCoin={props.findProfileCoin}
+              handleCoinProfileData={props.handleCoinProfileData}
             />
           </Search>
           <Box sx={{ flexGrow: 1 }} />
