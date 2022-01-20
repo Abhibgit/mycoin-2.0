@@ -66,7 +66,6 @@ async function deleteUser(req, res) {
 }
 
 async function login(req, res) {
-  console.log(req.body.name);
   try {
     const user = await User.findOne({ name: req.body.name });
     // check password. if it's bad throw an error.

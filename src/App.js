@@ -27,6 +27,7 @@ import { BrowserRouter, Routes, Link } from "react-router-dom";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import LoginPage from "./pages/LoginPage/LoginPage";
+import Logout from "./components/Logout/Logout";
 
 const ticker = new WebSocket("wss://stream.binance.com:9443/ws/!ticker@arr");
 let coinWatchSymbol = [];
@@ -75,19 +76,19 @@ function App() {
   //The ticker.onmessage is the websocket that provides the coinFeed with the realtime data.
   useEffect(() => {
     ticker.onopen = () => {
-      console.log("Connected");
+      //console.log("Connected");
       topTen = coinList.slice(0, 11);
       let coinSymbolMap = topTen.map((e) => e.symbol.toUpperCase());
       coinSymbolMap.forEach(function (e) {
         if (e === "USDT") {
           // topTenSymbol.push(e);
-          console.log("invalid");
+          //console.log("invalid");
         } else {
           let newCoinSymbol = e + "USDT";
           topTenSymbol.push(newCoinSymbol);
         }
       });
-      console.log(console.log(topTenSymbol));
+      //console.log(console.log(topTenSymbol));
     };
     ticker.onmessage = (message) => {
       //Maps the data to put the symbol from Binance
@@ -109,9 +110,9 @@ function App() {
       topTenArray = [];
       topTenSymbol.forEach(function (e) {
         if (e === "USDT") {
-          console.log("This is from USDT");
+          //console.log("This is from USDT");
         } else if (e === "USDCUSDT") {
-          console.log("this is USDC");
+          //console.log("this is USDC");
         } else {
           let topTenIndex = idxTemplate.indexOf(e);
           return (topTenArray = [...topTenArray, coinFeed[topTenIndex]]);
@@ -128,7 +129,7 @@ function App() {
   };
 
   const saveWatchlistCoin = (symbol) => {
-    console.log(symbol);
+    //console.log(symbol);
     coinWatchSymbol.push(symbol);
   };
 
@@ -183,6 +184,7 @@ function App() {
             <>
               <ProfilePage user={user} setUserInState={setUserInState} />
               <p>{user.name} is logged in</p>
+              <Logout setUserInState={setUserInState} />
             </>
           )}
         </Grid>
