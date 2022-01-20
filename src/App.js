@@ -87,11 +87,8 @@ function App() {
         }
       });
       setTopTenCoins(topTenArray);
-      console.log(topTenCoins);
     };
   }, [tickerSymbol, coinWatchSymbol, coinFeed]);
-
-  // useEffect(() => {}, [coinFeed, coinList]);
 
   const findProfileCoin = (symbol) => {
     setProfileCoin({});
