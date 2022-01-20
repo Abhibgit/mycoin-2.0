@@ -1,5 +1,10 @@
+import React, { useState, useEffect } from "react";
+import NavBar from "./navbar/NavBar";
 import DashboardPage from "./pages/DashboardPage/DashboardPage";
-import React, { useState } from "react";
+import CoinInformation from "./components/CoinProfile/CoinInformation";
+import Watchlist from "./components/Watchlist/Watchlist";
+import axios from "axios";
+import TopCoins from "./components/TopCoins/TopCoins";
 import "./App.css";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
@@ -7,7 +12,7 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-// import InputBase from "@mui/material/InputBase";
+import InputBase from "@mui/material/InputBase";
 import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
@@ -17,188 +22,105 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import { Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter, Routes, Link } from "react-router-dom";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
-import Search from "./components/Search/Search";
+import ProfilePage from "./pages/ProfilePage/ProfilePage";
+
+const ticker = new WebSocket("wss://stream.binance.com:9443/ws/!ticker@arr");
+let coinWatchSymbol = [];
+let coinWatchlistArray = [];
 
 function App() {
-  const arr = useState(false);
-  const user = arr[0];
-  const setUser = arr[1];
+  const [isLoading, setIsLoading] = useState(true);
+  const [coinList, setCoinList] = useState({});
+  const [profileCoin, setProfileCoin] = useState({});
+  const [tickerSymbol, setTickerSymbol] = useState("");
+  const [coinWatchlist, setCoinWatchlist] = useState([]);
+  const [user, setUser] = useState({
+    id: "",
+    name: "",
+    email: "",
+    password: "",
+  });
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
-  const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
+  const setUserInState = (incomingUserData) => {
+    setUser(incomingUserData);
   };
 
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
+  let coinFeed = [];
+
+  useEffect(() => {
+    axios
+      .get(
+        "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=false"
+      )
+      .then((response) => {
+        setCoinList(response.data);
+        setIsLoading(false);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  useEffect(() => {
+    ticker.onopen = () => {
+      console.log("Connected");
+    };
+    ticker.onmessage = (message) => {
+      console.log(coinWatchSymbol);
+      coinFeed = JSON.parse(message.data);
+      let idxTemplate = coinFeed.map((e) => e.s);
+      let singleIdx = idxTemplate.indexOf(tickerSymbol);
+      setProfileCoin(coinFeed[singleIdx]);
+      coinWatchlistArray = [];
+      coinWatchSymbol.forEach(function (e) {
+        let watchSingleIdx = idxTemplate.indexOf(e);
+        coinWatchlistArray = [...coinWatchlistArray, coinFeed[watchSingleIdx]];
+        setCoinWatchlist([]);
+        setCoinWatchlist(coinWatchlistArray);
+
+        //   let matchedCoin = coinWatchlistArray.findIndex(
+        //     (coinId) => coinId.s === e
+        //   );
+        //   console.log(matchedCoin);
+        //   if (matchedCoin === -1 || matchedCoin === undefined) {
+        //     coinWatchlistArray.splice(matchedCoin);
+        //   } else {
+        //     coinWatchlistArray = [
+        //       ...coinWatchlistArray,
+        //       coinFeed[watchSingleIdx],
+        //     ];
+        //   }
+        // });
+      });
+    };
+  }, [tickerSymbol, coinWatchSymbol]);
+
+  const findProfileCoin = (symbol) => {
+    setProfileCoin({});
+    setTickerSymbol(symbol);
   };
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-    handleMobileMenuClose();
+  const saveWatchlistCoin = (symbol) => {
+    console.log(symbol);
+    coinWatchSymbol.push(symbol);
   };
-
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
-  };
-
-  const menuId = "primary-search-account-menu";
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-    </Menu>
-  );
-
-  const mobileMenuId = "primary-search-account-menu-mobile";
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
-    </Menu>
-  );
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <Switch>
-        <Route path="/user/signup">
-          {" "}
-          <SignUpPage user={user} />
-        </Route>
-        <AppBar position="static">
-          <Toolbar>
-            <img
-              src={require("./images/MyCoin.svg").default}
-              alt="mySvgImage"
-            />
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{
-                display: { xs: "none", sm: "block" },
-                m: 0.75,
-                fontSize: 25,
-              }}
-            >
-              MyCoin
-            </Typography>
-            <Search />
-            <Box sx={{ flexGrow: 1 }} />
-            <Box sx={{ display: { xs: "none", md: "flex" } }}>
-              <IconButton
-                size="large"
-                aria-label="show 4 new mails"
-                color="inherit"
-              >
-                <Badge badgeContent={4} color="error">
-                  <MailIcon />
-                </Badge>
-              </IconButton>
-              <IconButton
-                size="large"
-                aria-label="show 17 new notifications"
-                color="inherit"
-              >
-                <Badge badgeContent={17} color="error">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
-              <IconButton
-                size="large"
-                edge="end"
-                aria-label="account of current user"
-                aria-controls={menuId}
-                aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-            </Box>
-            <Box sx={{ display: { xs: "flex", md: "none" } }}>
-              <IconButton
-                size="large"
-                aria-label="show more"
-                aria-controls={mobileMenuId}
-                aria-haspopup="true"
-                onClick={handleMobileMenuOpen}
-                color="inherit"
-              >
-                <MoreIcon />
-              </IconButton>
-            </Box>
-          </Toolbar>
-        </AppBar>
-        {renderMobileMenu}
-        {renderMenu}
-      </Switch>
-    </Box>
+    <div>
+      <NavBar coinList={coinList} findProfileCoin={findProfileCoin} />
+      {/* <CoinInformation coinList={coinList} profileCoin={profileCoin} /> */}
+      <Watchlist
+        coinList={coinList}
+        coinWatchlist={coinWatchlist}
+        saveWatchlistCoin={saveWatchlistCoin}
+      />
+      <TopCoins coinList={coinList} saveWatchlistCoin={saveWatchlistCoin} />
+      {user.id === "" ? (
+        <SignUpPage setUserInState={setUserInState} />
+      ) : (
+        <ProfilePage user={user} setUserInState={setUserInState} />
+      )}
+    </div>
   );
 }
 
