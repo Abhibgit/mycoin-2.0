@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
+import LoginPage from "./pages/LoginPage/LoginPage";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -15,6 +16,7 @@ ReactDOM.render(
       </Route>
       <Route path="/user/profile" element={<ProfilePage />} />
       <Route path="/user/signup" element={<SignUpPage />} />
+      <Route path="/user/login" element={<LoginPage />} />
     </Routes>
   </BrowserRouter>,
   document.getElementById("root")

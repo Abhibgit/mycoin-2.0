@@ -1,8 +1,16 @@
 import React from "react";
-import Login from "../../components/Login/Login";
+import LoginForm from "../../components/Login/Login";
 
-function LoginPage() {
-  return <div></div>;
+export default function LoginPage(props) {
+  const [showSignup, setShowSignup] = React.useState(false);
+
+  return (
+    <main className="LoginPage">
+      <div>
+        <h3> LOGIN IN</h3>
+      </div>
+
+      <LoginForm setUserInState={props.setUserInState} />
+    </main>
+  );
 }
-
-export default LoginPage;

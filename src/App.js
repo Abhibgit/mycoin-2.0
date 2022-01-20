@@ -9,6 +9,7 @@ import { Grid } from "@mui/material";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import LoginPage from "./pages/LoginPage/LoginPage";
 
 export const themeOptions = createTheme({
   palette: {
