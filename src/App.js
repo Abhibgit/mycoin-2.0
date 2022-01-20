@@ -171,7 +171,8 @@ function App() {
             saveWatchlistCoin={saveWatchlistCoin}
           />
         </Grid>
-        <div>
+
+        <Grid item xs={4}>
           {user.id === "" ? (
             <>
               <SignUpPage setUserInState={setUserInState} />
@@ -184,7 +185,7 @@ function App() {
               <p>{user.name} is logged in</p>
             </>
           )}
-        </div>
+        </Grid>
       </Grid>
     </div>
   );
