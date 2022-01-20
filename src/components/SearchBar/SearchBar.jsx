@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { Autocomplete, Button, TextField } from "@mui/material";
 
 function Search(props) {
-  let coinName = "";
+  const [coinName, setCoinName] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log(coinName);
     const idx = props.coinList.map((e) => e.name).indexOf(coinName);
     console.log(idx);
     const coinSymbol = props.coinList[idx].symbol.toUpperCase();
@@ -20,7 +21,7 @@ function Search(props) {
   };
 
   const handleAutocomplete = (event, value) => {
-    coinName = value;
+    setCoinName(value);
   };
 
   return (
