@@ -9,6 +9,7 @@ module.exports = {
   login,
   edit,
   delete: deleteUser,
+  addCoinToUser,
 };
 
 async function create(req, res) {
@@ -78,5 +79,22 @@ async function login(req, res) {
     res.json(token);
   } catch {
     res.status(400).json("Bad Credentials");
+  }
+}
+
+async function addCoinToUser(req, res) {
+  try {
+    console.log("addCoinToUser");
+    const user = await User.findByIdAndUpdate(
+      { _id: req.params.id },
+      {
+        watchlist: req.body.coin_ids,
+      },
+      { returnDocument: "after" }
+    );
+    res.status(200).json(user);
+  } catch (err) {
+    console.log("user delete error", err);
+    res.status(400).json(err);
   }
 }
