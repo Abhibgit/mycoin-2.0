@@ -11,21 +11,6 @@ import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import { IconButton } from "@mui/material";
 
 function TopCoins(props) {
-  const [name, setName] = useState("");
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const idx = props.coinList.map((e) => e.name).indexOf(name);
-    console.log(idx);
-    const coinSymbol = props.coinList[idx].symbol.toUpperCase();
-    if (coinSymbol === "USDT") {
-      props.saveWatchlistCoin(coinSymbol);
-    } else {
-      let newCoinSymbol = coinSymbol + "USDT";
-      props.saveWatchlistCoin(newCoinSymbol);
-    }
-  };
-
   return (
     <div>
       <TableContainer component={Paper}>
@@ -50,8 +35,12 @@ function TopCoins(props) {
                 <TableCell align="center">${row.o}</TableCell>
                 <TableCell align="center">${row.h}</TableCell>
                 <TableCell align="center">${row.l}</TableCell>
-                <IconButton>
-                  <BookmarkBorderIcon align="center" />
+                <IconButton
+                  align="center"
+                  onClick={() => props.saveWatchlistCoin(row.s)}
+                  value={row.s}
+                >
+                  <BookmarkBorderIcon />
                 </IconButton>
               </TableRow>
             ))}
