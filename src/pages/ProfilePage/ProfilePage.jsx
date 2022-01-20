@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import Watchlist from "../../components/Watchlist/Watchlist";
 import Profile from "../../components/Profile/Profile";
 
 function ProfilePage(props) {
-  console.log("Profile Page" + props);
+  console.log("Profile Page", props);
   return (
     <div>
       <Profile
