@@ -171,17 +171,21 @@ function App() {
             saveWatchlistCoin={saveWatchlistCoin}
           />
         </Grid>
-
-        {user.id === "" ? (
-          <>
-            <SignUpPage setUserInState={setUserInState} />
-            <LoginPage setUserInState={setUserInState} />
-          </>
-        ) : (
-          <ProfilePage user={user} setUserInState={setUserInState} />
-        )}
+        <div>
+          {user.id === "" ? (
+            <>
+              <SignUpPage setUserInState={setUserInState} />
+              <LoginPage setUserInState={setUserInState} />
+              <p>Please Sign in</p>
+            </>
+          ) : (
+            <>
+              <ProfilePage user={user} setUserInState={setUserInState} />
+              <p>{user.name} is logged in</p>
+            </>
+          )}
+        </div>
       </Grid>
-      {user.id !== "" ? <p>user is logged in</p> : <p>You need to sign in</p>}
     </div>
   );
 }
