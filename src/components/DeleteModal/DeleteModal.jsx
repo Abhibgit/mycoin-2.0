@@ -31,9 +31,27 @@ class DeleteModal extends Component {
     // instance.close();
     // instance.destroy();
   }
-  deleteUser = () => {
-    console.log("DeleteUserCalled");
-    this.props.setUserInState("");
+
+  deleteUser = async (evt) => {
+    evt.preventDefault();
+    try {
+      console.log("DeleteUserCalled", this.props);
+      const fetchResponse = await fetch(`/api/users/${this.props.user_id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      // 2. Check "fetchResponse.ok". False means status code was 4xx from the server/controller action
+      if (!fetchResponse.ok) throw new Error("Fetch failed - Bad request");
+      let deleted_user = await fetchResponse.json();
+      console.log("deleted user", deleted_user);
+      if (deleted_user._id === this.props.user_id)
+        console.log("App User State updated");
+      this.props.setUserInState("");
+      window.location.reload(true);
+    } catch (err) {
+      console.log("Edit Form error", err);
+    }
   };
 
   handleClose = () => {

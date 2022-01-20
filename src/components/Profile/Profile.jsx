@@ -43,6 +43,11 @@ function Profile(props) {
     });
   };
 
+  let deleteProps = {
+    setUserInState: props.setUserInState,
+    user_id: props.user._id,
+  };
+
   return (
     <div>
       <form onSubmit={handleEditSubmit}>
@@ -76,7 +81,7 @@ function Profile(props) {
         </label>
         <button type="submit">Edit User</button>
       </form>
-      <DeleteModal setUserInState={props.setUserInState} />
+      <DeleteModal {...deleteProps} />
     </div>
   );
 }
