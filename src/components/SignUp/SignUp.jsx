@@ -59,6 +59,7 @@ export default class SignUpForm extends Component {
             onChange={this.handleChange}
             required
           />
+          <br />
           <label>Email</label>
           <input
             type="email"
@@ -67,6 +68,7 @@ export default class SignUpForm extends Component {
             onChange={this.handleChange}
             required
           />
+          <br />
           <label>Password</label>
           <input
             type="password"
@@ -75,6 +77,7 @@ export default class SignUpForm extends Component {
             onChange={this.handleChange}
             required
           />
+          <br />
           <label>Confirm</label>
           <input
             type="password"
@@ -83,6 +86,7 @@ export default class SignUpForm extends Component {
             onChange={this.handleChange}
             required
           />
+          <br />
           <button type="submit" disabled={disable}>
             SIGN UP
           </button>
