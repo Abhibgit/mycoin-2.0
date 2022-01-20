@@ -1,5 +1,5 @@
 import React from "react";
-import SignUpForm from "../../components/SignUp/SignUp";
+import SignUp from "../../components/SignUp/SignUp";
 
 function SignupPage(props) {
   const [showLogin, setShowLogin] = React.useState(false);

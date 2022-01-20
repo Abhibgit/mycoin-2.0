@@ -65,4 +65,18 @@ async function deleteUser(req, res) {
   }
 }
 
-async function login(req, res) {}
+async function login(req, res) {
+  console.log(req.body.name);
+  try {
+    const user = await User.findOne({ name: req.body.name });
+    // check password. if it's bad throw an error.
+    if (!(await bcrypt.compare(req.body.password, user.password)))
+      throw new Error();
+
+    // if we got to this line, password is ok. give user a new token.
+    const token = jwt.sign({ user }, process.env.SECRET, { expiresIn: "24h" });
+    res.json(token);
+  } catch {
+    res.status(400).json("Bad Credentials");
+  }
+}

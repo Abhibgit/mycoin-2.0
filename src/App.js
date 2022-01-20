@@ -25,6 +25,7 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import { BrowserRouter, Routes, Link } from "react-router-dom";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
+import LoginPage from "./pages/LoginPage/LoginPage";
 
 const ticker = new WebSocket("wss://stream.binance.com:9443/ws/!ticker@arr");
 let coinWatchSymbol = [];
@@ -105,6 +106,9 @@ function App() {
     coinWatchSymbol.push(symbol);
   };
 
+  if (isLoading) {
+    return <span>Loading...</span>;
+  }
   return (
     <div>
       <NavBar coinList={coinList} findProfileCoin={findProfileCoin} />
@@ -116,10 +120,15 @@ function App() {
       />
       <TopCoins coinList={coinList} saveWatchlistCoin={saveWatchlistCoin} />
       {user.id === "" ? (
-        <SignUpPage setUserInState={setUserInState} />
+        <div>
+          <SignUpPage setUserInState={setUserInState} />
+          <LoginPage setUserInState={setUserInState} />
+        </div>
       ) : (
         <ProfilePage user={user} setUserInState={setUserInState} />
       )}
+
+      {user.id !== "" ? <p>user is logged in</p> : <p>You need to sign in</p>}
     </div>
   );
 }
