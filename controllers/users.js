@@ -38,7 +38,7 @@ async function login(req, res) {
     res.status(400).json("Bad Credentials");
   }
 }
-
+//npm install nodemailer
 function sendNotification(req, res) {
   let nodemailer = require("nodemailer");
   const transporter = nodemailer.createTransport({
@@ -53,8 +53,10 @@ function sendNotification(req, res) {
   let message = req.body.message;
   let coin = req.body.coin;
   let coinPrice = req.body.price;
+  //Have to work on this later after Justin is done populating props
   if (subject != "Email Confirmation") {
     subject = `Your ${coin} price is ${coinPrice}`;
+    message = `Give us your money`;
   }
   let mailOptions = {
     from: transporter.transporter.options.auth.user,
