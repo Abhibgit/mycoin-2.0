@@ -6,28 +6,22 @@ import Watchlist from "./components/Watchlist/Watchlist";
 import axios from "axios";
 import TopCoins from "./components/TopCoins/TopCoins";
 import { Grid } from "@mui/material";
-import "./App.css";
-import { styled, alpha } from "@mui/material/styles";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import InputBase from "@mui/material/InputBase";
-import Badge from "@mui/material/Badge";
-import MenuItem from "@mui/material/MenuItem";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import SearchIcon from "@mui/icons-material/Search";
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import MailIcon from "@mui/icons-material/Mail";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import MoreIcon from "@mui/icons-material/MoreVert";
-import { BrowserRouter, Routes, Link } from "react-router-dom";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import LoginPage from "./pages/LoginPage/LoginPage";
-import Logout from "./components/Logout/Logout";
+
+export const themeOptions = createTheme({
+  palette: {
+    type: "light",
+    primary: {
+      main: "#212121",
+    },
+    secondary: {
+      main: "#faf6dc",
+    },
+  },
+});
 
 const ticker = new WebSocket("wss://stream.binance.com:9443/ws/!ticker@arr");
 let coinWatchSymbol = [];
@@ -76,19 +70,17 @@ function App() {
   //The ticker.onmessage is the websocket that provides the coinFeed with the realtime data.
   useEffect(() => {
     ticker.onopen = () => {
-      //console.log("Connected");
+      console.log("Connected");
       topTen = coinList.slice(0, 11);
       let coinSymbolMap = topTen.map((e) => e.symbol.toUpperCase());
       coinSymbolMap.forEach(function (e) {
         if (e === "USDT") {
-          // topTenSymbol.push(e);
-          //console.log("invalid");
+          console.log("invalid");
         } else {
           let newCoinSymbol = e + "USDT";
           topTenSymbol.push(newCoinSymbol);
         }
       });
-      //console.log(console.log(topTenSymbol));
     };
     ticker.onmessage = (message) => {
       //Maps the data to put the symbol from Binance
@@ -110,9 +102,9 @@ function App() {
       topTenArray = [];
       topTenSymbol.forEach(function (e) {
         if (e === "USDT") {
-          //console.log("This is from USDT");
+          console.log("this is USDT");
         } else if (e === "USDCUSDT") {
-          //console.log("this is USDC");
+          console.log("this is USDC");
         } else {
           let topTenIndex = idxTemplate.indexOf(e);
           return (topTenArray = [...topTenArray, coinFeed[topTenIndex]]);
@@ -129,7 +121,7 @@ function App() {
   };
 
   const saveWatchlistCoin = (symbol) => {
-    //console.log(symbol);
+    console.log(symbol);
     coinWatchSymbol.push(symbol);
   };
 
@@ -144,51 +136,44 @@ function App() {
   }
   return (
     <div>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <NavBar
-            coinList={coinList}
-            findProfileCoin={findProfileCoin}
-            handleCoinProfileData={handleCoinProfileData}
-          />
+      <ThemeProvider theme={themeOptions}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <NavBar
+              coinList={coinList}
+              findProfileCoin={findProfileCoin}
+              handleCoinProfileData={handleCoinProfileData}
+            />
+          </Grid>
+          <Grid item xs={8}>
+            <CoinInformation
+              profileCoinInfo={profileCoinInfo}
+              profileCoin={profileCoin}
+            />
+          </Grid>
+          <Grid item xs={8}>
+            <TopCoins
+              topTenCoins={topTenCoins}
+              coinList={coinList}
+              saveWatchlistCoin={saveWatchlistCoin}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <Watchlist
+              coinList={coinList}
+              coinWatchlist={coinWatchlist}
+              saveWatchlistCoin={saveWatchlistCoin}
+            />
+          </Grid>
+          {/* 
+        {user.id === "" ? (
+          <SignUpPage setUserInState={setUserInState} />
+        ) : (
+          <ProfilePage user={user} setUserInState={setUserInState} />
+          <Logout />
+        )} */}
         </Grid>
-        <Grid item xs={8}>
-          <TopCoins
-            topTenCoins={topTenCoins}
-            coinList={coinList}
-            saveWatchlistCoin={saveWatchlistCoin}
-          />
-        </Grid>
-        <Grid item xs={8}>
-          {/* <CoinInformation
-            profileCoinInfo={profileCoinInfo}
-            profileCoin={profileCoin}
-          /> */}
-        </Grid>
-        <Grid item xs={4}>
-          <Watchlist
-            coinList={coinList}
-            coinWatchlist={coinWatchlist}
-            saveWatchlistCoin={saveWatchlistCoin}
-          />
-        </Grid>
-
-        <Grid item xs={4}>
-          {user.id === "" ? (
-            <>
-              <SignUpPage setUserInState={setUserInState} />
-              <LoginPage setUserInState={setUserInState} />
-              <p>Please Sign in</p>
-            </>
-          ) : (
-            <>
-              <ProfilePage user={user} setUserInState={setUserInState} />
-              <p>{user.name} is logged in</p>
-              <Logout setUserInState={setUserInState} />
-            </>
-          )}
-        </Grid>
-      </Grid>
+      </ThemeProvider>
     </div>
   );
 }
