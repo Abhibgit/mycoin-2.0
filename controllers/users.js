@@ -8,6 +8,7 @@ module.exports = {
   create,
   login,
   edit,
+  delete: deleteUser,
 };
 
 async function create(req, res) {
@@ -49,6 +50,17 @@ async function edit(req, res) {
     console.log("Updated Complete");
   } catch (err) {
     console.log("user update error", err);
+    res.status(400).json(err);
+  }
+}
+
+async function deleteUser(req, res) {
+  try {
+    console.log("User Delete Request Received");
+    const deletedUser = await User.findByIdAndDelete(req.params.id);
+    res.status(200).json(deletedUser);
+  } catch (err) {
+    console.log("user delete error", err);
     res.status(400).json(err);
   }
 }

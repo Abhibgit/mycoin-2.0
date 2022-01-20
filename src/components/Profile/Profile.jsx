@@ -1,15 +1,12 @@
 import React from "react";
+import DeleteModal from "../DeleteModal/DeleteModal";
 
-function Profile(props, onDelete) {
+function Profile(props) {
   const [formState, setFormState] = React.useState({
     name: props.user.name,
     email: props.user.email,
     password: props.user.password,
   });
-
-  onDelete = () => {
-    alert(" Prepare to be terminated");
-  };
 
   const handleEditSubmit = async (evt) => {
     evt.preventDefault();
@@ -46,6 +43,11 @@ function Profile(props, onDelete) {
     });
   };
 
+  let deleteProps = {
+    setUserInState: props.setUserInState,
+    user_id: props.user._id,
+  };
+
   return (
     <div>
       <form onSubmit={handleEditSubmit}>
@@ -79,7 +81,7 @@ function Profile(props, onDelete) {
         </label>
         <button type="submit">Edit User</button>
       </form>
-      <button onClick={onDelete}>Delete User</button>
+      <DeleteModal {...deleteProps} />
     </div>
   );
 }
