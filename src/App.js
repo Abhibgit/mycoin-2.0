@@ -173,10 +173,10 @@ function App() {
         </Grid>
 
         {user.id === "" ? (
-          <div>
+          <>
             <SignUpPage setUserInState={setUserInState} />
             <LoginPage setUserInState={setUserInState} />
-          </div>
+          </>
         ) : (
           <ProfilePage user={user} setUserInState={setUserInState} />
         )}
