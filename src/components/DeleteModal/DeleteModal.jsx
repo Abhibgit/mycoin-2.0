@@ -1,102 +1,69 @@
-// import React, { Component } from "react";
-// import M from "materialize-css";
-// import "materialize-css/dist/css/materialize.min.css";
+import React, { Component } from "react";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
 
-// class DeleteModal extends Component {
-//   componentDidMount() {
-//     const options = {
-//       onOpenStart: () => {
-//         console.log("Open Start");
-//       },
-//       onOpenEnd: () => {
-//         console.log("Open End");
-//       },
-//       onCloseStart: () => {
-//         console.log("Close Start");
-//       },
-//       onCloseEnd: () => {
-//         console.log("Close End");
-//       },
-//       inDuration: 250,
-//       outDuration: 250,
-//       opacity: 0.5,
-//       dismissible: false,
-//       startingTop: "4%",
-//       endingTop: "10%",
-//     };
-//     M.Modal.init(this.Modal, options);
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
-//     // let instance = M.Modal.getInstance(this.Modal);
-//     // instance.open();
-//     // instance.close();
-//     // instance.destroy();
-//   }
+export default function DeleteModal(props) {
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
-//   deleteUser = async (evt) => {
-//     evt.preventDefault();
-//     try {
-//       console.log("DeleteUserCalled", this.props);
-//       const fetchResponse = await fetch(`/api/users/${this.props.user_id}`, {
-//         method: "DELETE",
-//         headers: { "Content-Type": "application/json" },
-//       });
+  const deleteUser = async (evt) => {
+    evt.preventDefault();
+    try {
+      console.log("DeleteUserCalled", props);
+      const fetchResponse = await fetch(`/api/users/${props.user_id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      });
 
-//       // 2. Check "fetchResponse.ok". False means status code was 4xx from the server/controller action
-//       if (!fetchResponse.ok) throw new Error("Fetch failed - Bad request");
-//       let deleted_user = await fetchResponse.json();
-//       console.log("deleted user", deleted_user);
-//       if (deleted_user._id === this.props.user_id)
-//         console.log("App User State updated");
-//       this.props.setUserInState("");
-//       window.location.reload(true);
-//     } catch (err) {
-//       console.log("Edit Form error", err);
-//     }
-//   };
+      // 2. Check "fetchResponse.ok". False means status code was 4xx from the server/controller action
+      if (!fetchResponse.ok) throw new Error("Fetch failed - Bad request");
+      let deleted_user = await fetchResponse.json();
+      console.log("deleted user", deleted_user);
+      if (deleted_user._id === props.user_id)
+        console.log("App User State updated");
+      props.setUserInState("");
+      handleClose();
+      window.location.reload(true);
+    } catch (err) {
+      console.log("Edit Form error", err);
+    }
+  };
 
-//   handleClose = () => {
-//     console.log("Delete Modal closed");
-//   };
-
-//   render() {
-//     return (
-//       <div>
-//         <a
-//           className="waves-effect waves-light btn modal-trigger"
-//           data-target="modal1"
-//         >
-//           Delete User
-//         </a>
-
-//         <div
-//           ref={(Modal) => {
-//             this.Modal = Modal;
-//           }}
-//           id="modal1"
-//           className="modal"
-//         >
-//           <div className="modal-content">
-//             <h4>Delete User</h4>
-//             <p>Are you sure you want to be terminated? </p>
-//           </div>
-//           <div className="modal-footer">
-//             <a
-//               className="modal-close waves-effect waves-red btn-flat"
-//               onClick={this.handleClose}
-//             >
-//               Disagree
-//             </a>
-//             <a
-//               className="modal-close waves-effect waves-green btn-flat"
-//               onClick={this.deleteUser}
-//             >
-//               Agree
-//             </a>
-//           </div>
-//         </div>
-//       </div>
-//     );
-//   }
-// }
-
-// export default DeleteModal;
+  return (
+    <div>
+      <Button onClick={handleOpen}>Delete User</Button>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Delete User
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Are you sure you want to be terminated?
+          </Typography>
+          <Button onClick={handleClose}> Disagree</Button>
+          <Button onClick={deleteUser}>Agree</Button>
+        </Box>
+      </Modal>
+    </div>
+  );
+}
