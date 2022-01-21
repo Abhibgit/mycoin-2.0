@@ -1,6 +1,10 @@
 {
   "name": "mycoin",
   "version": "0.1.0",
+  "engines": {
+    "node": "17.x",
+    "npm": "8.x"
+  },
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.7.1",
