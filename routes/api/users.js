@@ -8,5 +8,6 @@ router.post("/signup", usersCtrl.create);
 router.post("/login", usersCtrl.login);
 router.post("/:id/edit", usersCtrl.edit);
 router.delete("/:id", usersCtrl.delete);
+router.post("/:id/coin", usersCtrl.addCoinToUser);
 
 module.exports = router;
