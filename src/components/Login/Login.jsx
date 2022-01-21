@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { Card, Input, CardContent, Button } from "@mui/material";
 
 export default class LoginForm extends Component {
   state = {
@@ -42,29 +43,59 @@ export default class LoginForm extends Component {
   render() {
     return (
       <div>
-        <div className="form-container" onSubmit={this.handleSubmit}>
-          <form autoComplete="off">
-            <label>Username</label>
-            <input
-              type="text"
-              name="name"
-              value={this.state.name}
-              onChange={this.handleChange}
-              required
-            />
-            <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              value={this.state.password}
-              onChange={this.handleChange}
-              required
-            />
-            <button type="submit">LOG IN</button>
-          </form>
-        </div>
-        <p className="error-message">&nbsp;{this.state.error}</p>
+        <Card sx={{ minWidth: 275 }}>
+          <CardContent>
+            <h2>Login</h2>
+            <div className="form-container" onSubmit={this.handleSubmit}>
+              <form autoComplete="off">
+                <Input
+                  color="secondary"
+                  type="text"
+                  name="name"
+                  value={this.state.name}
+                  onChange={this.handleChange}
+                  required
+                  label="Username"
+                  placeholder="Username"
+                />
+                <Input
+                  type="password"
+                  name="password"
+                  value={this.state.password}
+                  onChange={this.handleChange}
+                  required
+                  placeholder="Password"
+                />
+                <Button type="submit" variant="outlined">
+                  LOG IN
+                </Button>
+              </form>
+            </div>
+            <p className="error-message">&nbsp;{this.state.error}</p>
+          </CardContent>
+        </Card>
       </div>
     );
   }
 }
+// <Card sx={{ minWidth: 275 }}>
+//     <CardContent>
+//       <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+//         Word of the Day
+//       </Typography>
+//       <Typography variant="h5" component="div">
+//         be{bull}nev{bull}o{bull}lent
+//       </Typography>
+//       <Typography sx={{ mb: 1.5 }} color="text.secondary">
+//         adjective
+//       </Typography>
+//       <Typography variant="body2">
+//         well meaning and kindly.
+//         <br />
+//         {'"a benevolent smile"'}
+//       </Typography>
+//     </CardContent>
+//     <CardActions>
+//       <Button size="small">Learn More</Button>
+//     </CardActions>
+//   </Card>

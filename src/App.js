@@ -34,7 +34,7 @@ let topTen = [];
 let topTenArray = [];
 
 function App() {
-  const [isError, setIsError] = useState({});
+  const [isError, setIsError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [coinList, setCoinList] = useState([]);
   const [profileCoin, setProfileCoin] = useState({});
@@ -43,18 +43,39 @@ function App() {
   const [coinWatchlist, setCoinWatchlist] = useState([]);
   const [topTenCoins, setTopTenCoins] = useState([]);
   //same as coinWatchSymbol, however it's required due to the speed of data
-  const [userCoinDb, setUserCoinDb] = useState([]);
+  const [coinState, setCoinState] = useState({
+    name: "",
+    upperLimit: 0,
+    lowerLimit: 0,
+  });
   const [user, setUser] = useState({
     id: "",
     name: "",
     email: "",
     password: "",
+    watchlist: [],
   });
   const setUserInState = (incomingUserData) => {
     setUser(incomingUserData);
   };
 
+  const [showLogin, setShowLogin] = useState(true);
+
+  function showSignup() {
+    console.log("Signup Clicked!!!");
+    setShowLogin(false);
+    // <SignUpPage setUserInState={setUserInState} />;
+  }
+
   let coinFeed = [];
+  // let token = localStorage.getItem("token");
+
+  // useEffect(() => {
+  //   if (token) {
+  //     const userDoc = JSON.parse(atob(token.split(".")[1])).user;
+  //     setUserInState(userDoc);
+  //   }
+  // }, [token]);
 
   useEffect(() => {
     axios
@@ -65,12 +86,36 @@ function App() {
         setCoinList(response.data);
         console.log("the api has been pinged");
         setIsLoading(false);
+        // grabUsercoins();
       })
       .catch((err) => console.log(err));
     return () => {
       ticker.close();
     };
   }, []);
+
+  // async function grabUsercoins() {
+  //   try {
+  //     const fetchResponse = await fetch("/api/users/getuser", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({
+  //         user: user._id,
+  //       }),
+  //     });
+  //     if (!fetchResponse.ok) throw new Error("Fetch failed - Bad request");
+
+  //     let token = await fetchResponse.json();
+  //     localStorage.setItem("token", token);
+  //     console.log(token);
+
+  //     const userDoc = JSON.parse(atob(token.split(".")[1])).user;
+  //     setUserInState(userDoc);
+  //   } catch (err) {
+  //     console.log("LoginForm error", err);
+  //     setIsError("Get Coins Failed ");
+  //   }
+  // }
 
   //The ticker.onmessage is the websocket that provides the coinFeed with the realtime data.
   useEffect(() => {
@@ -132,7 +177,7 @@ function App() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          user: user.id,
+          user: user._id,
           name: symbol,
         }),
       });
@@ -145,13 +190,12 @@ function App() {
 
       const userDoc = JSON.parse(atob(token.split(".")[1])).user; // 5. Decode the token + put user document into state
       console.log("created_coin: " + userDoc);
-      this.props.setUserInState(userDoc);
+      setUserInState(userDoc);
     } catch (err) {
       console.log("CoinCreate error", err);
-      setIsError({ error: "CoinCreate Failed - Try Again" });
+      setIsError("CoinCreate Failed - Try Again");
     }
     coinWatchSymbol.push(symbol);
-    setUserCoinDb([...userCoinDb, symbol]);
   }
 
   const handleCoinProfileData = (name) => {
@@ -176,10 +220,16 @@ function App() {
               setUserInState={setUserInState}
             />
           </Grid>
+          <Grid item xs={2}>
+            <button onClick={() => showSignup()}>Sign Up</button>
+          </Grid>
           {user.id === "" ? (
             <Grid item xs={2}>
-              <SignUpPage setUserInState={setUserInState} />
-              <LoginPage setUserInState={setUserInState} />
+              {showLogin === true ? (
+                <LoginPage setUserInState={setUserInState} />
+              ) : (
+                <SignUpPage setUserInState={setUserInState} />
+              )}
             </Grid>
           ) : (
             <Grid item xs={12}>
