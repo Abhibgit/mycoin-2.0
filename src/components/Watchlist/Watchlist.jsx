@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React from "react";
 
 import { Card } from "@mui/material";
 
@@ -8,7 +8,8 @@ function Watchlist(props) {
       {props.coinWatchlist.map((e, idx) => {
         return (
           <>
-            <Card>{e.s}</Card>
+            <h3>{e.s}</h3>
+            <Card>${e.c}</Card>
           </>
         );
       })}
