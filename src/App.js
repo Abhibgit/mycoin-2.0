@@ -176,28 +176,20 @@ function App() {
               user={user}
             />
           </Grid>
-          <Grid item xs={8}>
-            <CoinInformation
-              saveWatchlistCoin={saveWatchlistCoin}
-              profileCoinInfo={profileCoinInfo}
-              profileCoin={profileCoin}
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <WatchlistPage
-              coinList={coinList}
-              coinWatchlist={coinWatchlist}
-              saveWatchlistCoin={saveWatchlistCoin}
-              coinWatchSymbol={coinWatchSymbol}
-            />
-          </Grid>
-          <Grid item xs={8}>
-            <TopCoins
-              topTenCoins={topTenCoins}
-              coinList={coinList}
-              saveWatchlistCoin={saveWatchlistCoin}
-            />
-          </Grid>
+          <DashboardPage
+            coinList={coinList}
+            findProfileCoin={findProfileCoin}
+            handleCoinProfileData={handleCoinProfileData}
+            profileCoinInfo={profileCoinInfo}
+            profileCoin={profileCoin}
+            saveWatchlistCoin={saveWatchlistCoin}
+            coinList={coinList}
+            coinWatchlist={coinWatchlist}
+            saveWatchlistCoin={saveWatchlistCoin}
+            coinWatchSymbol={coinWatchSymbol}
+            topTenCoins={topTenCoins}
+            user={user}
+          />
 
           {user.id === "" ? (
             <Grid item xs={2}>
