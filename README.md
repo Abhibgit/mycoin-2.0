@@ -1,4 +1,47 @@
-# Getting Started with Create React App
+![alt text](https://i.imgur.com/7idCSbI.png)
+
+# MyCoin
+
+## About
+
+> This is a app is MERN Stack application that tracks all crypto currencies using coingecko api.
+
+## API
+
+[CoinGecko](https://www.coingecko.com/en/api)
+
+## Installs
+
+### Install backend
+
+```
+Create a MongoDB instance
+Edit the index.js in /server/db/
+Set a secret key for jwt in /server/db/secretKey.js
+npm install or yarn install
+```
+
+### Install frontend
+
+```
+npm install or yarn install
+npm start or yarn start
+
+```
+
+### Contributors
+
+```
+@JChapman13
+@Abhibgit
+@Aryan2000x
+```
+
+## Features:
+
+- Login/Signup/Logout
+- Crypto currency tracking and viewing Top cryptos and different statistics using coingecko api
+- Bookmark Watchlist of any crypto
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
