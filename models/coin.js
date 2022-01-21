@@ -14,7 +14,8 @@ const commentSchema = new Schema(
 const coinSchema = new Schema(
   {
     name: String,
-    price: Number,
+    upperPrice: Number,
+    lowerPrice: Number,
     comment: [commentSchema],
   },
   {
