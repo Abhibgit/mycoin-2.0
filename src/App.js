@@ -38,15 +38,12 @@ function App() {
   const [tickerSymbol, setTickerSymbol] = useState("");
   const [coinWatchlist, setCoinWatchlist] = useState([]);
   const [topTenCoins, setTopTenCoins] = useState([]);
-  // const [user, setUser] = useState({
-  //   id: "",
-  //   name: "",
-  //   email: "",
-  //   password: "",
-  // });
-  const state = {
-    user: null,
-  };
+  const [user, setUser] = useState({
+    id: "",
+    name: "",
+    email: "",
+    password: "",
+  });
 
   const setUserInState = (incomingUserData) => {
     this.setState({ user: incomingUserData });
@@ -154,7 +151,7 @@ function App() {
               coinList={coinList}
               findProfileCoin={findProfileCoin}
               handleCoinProfileData={handleCoinProfileData}
-              user={state.user}
+              setUserInState={setUserInState}
             />
           </Grid>
           <DashboardPage
