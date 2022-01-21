@@ -12,7 +12,12 @@ function CoinInformation(props) {
   return (
     <TableContainer component={Paper}>
       <h1>Coin Profile</h1>
-      <Button type="submit" label="Save Coin" variant="outlined">
+      <Button
+        type="submit"
+        label="Save Coin"
+        variant="outlined"
+        onClick={() => props.saveWatchlistCoin(props.profileCoin.s)}
+      >
         Save Coin
       </Button>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
