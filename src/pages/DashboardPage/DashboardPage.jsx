@@ -12,7 +12,6 @@ function DashboardPage(props) {
           saveWatchlistCoin={props.saveWatchlistCoin}
           profileCoinInfo={props.profileCoinInfo}
           profileCoin={props.profileCoin}
-          user={props.user}
         />
       </Grid>
       <Grid item xs={4}>
@@ -21,6 +20,7 @@ function DashboardPage(props) {
           coinWatchlist={props.coinWatchlist}
           saveWatchlistCoin={props.saveWatchlistCoin}
           coinWatchSymbol={props.coinWatchSymbol}
+          user={props.user}
         />
       </Grid>
       <Grid item xs={8}>
@@ -28,6 +28,7 @@ function DashboardPage(props) {
           topTenCoins={props.topTenCoins}
           coinList={props.coinList}
           saveWatchlistCoin={props.saveWatchlistCoin}
+          user={props.user}
         />
       </Grid>
     </>
