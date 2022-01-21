@@ -1,21 +1,22 @@
-import React, { useState } from "react";
+import React from "react";
+import { Component } from "react";
 
-function SignUpForm(props) {
-  const [user, setUser] = useState({
-    id: "",
+export default class SignUpForm extends Component {
+  state = {
     name: "",
     email: "",
     password: "",
-  });
-
-  const handleChange = (evt) => {
-    setUser({
+    confirm: "",
+    error: "",
+  };
+  handleChange = (evt) => {
+    this.setState({
       [evt.target.name]: evt.target.value,
       error: "",
     });
   };
 
-  const handleSubmit = async (evt) => {
+  handleSubmit = async (evt) => {
     evt.preventDefault();
     try {
       // 1. POST our new user info to the server
@@ -37,60 +38,60 @@ function SignUpForm(props) {
 
       const userDoc = JSON.parse(atob(token.split(".")[1])).user; // 5. Decode the token + put user document into state
       console.log("created_user: " + userDoc);
-      props.setUserInState(userDoc);
+      this.props.setUserInState(userDoc);
     } catch (err) {
       console.log("SignupForm error", err);
       this.setState({ error: "Sign Up Failed - Try Again" });
     }
   };
 
-  const disable = user.password !== user.confirm;
-  return (
-    <div>
-      <div className="form-container"></div>
-      <form autoComplete="off" onSubmit={handleSubmit}>
-        <label>Name</label>
-        <input
-          type="text"
-          name="name"
-          value={user.name}
-          onChange={handleChange}
-          required
-        />
-        <br />
-        <label>Email</label>
-        <input
-          type="email"
-          name="email"
-          value={user.email}
-          onChange={handleChange}
-          required
-        />
-        <br />
-        <label>Password</label>
-        <input
-          type="password"
-          name="password"
-          value={user.password}
-          onChange={handleChange}
-          required
-        />
-        <br />
-        <label>Confirm</label>
-        <input
-          type="password"
-          name="confirm"
-          value={user.confirm}
-          onChange={handleChange}
-          required
-        />
-        <br />
-        <button type="submit" disabled={disable}>
-          SIGN UP
-        </button>
-      </form>
-    </div>
-  );
+  render() {
+    const disable = this.state.password !== this.state.confirm;
+    return (
+      <div>
+        <div className="form-container"></div>
+        <form autoComplete="off" onSubmit={this.handleSubmit}>
+          <label>Name</label>
+          <input
+            type="text"
+            name="name"
+            value={this.state.name}
+            onChange={this.handleChange}
+            required
+          />
+          <br />
+          <label>Email</label>
+          <input
+            type="email"
+            name="email"
+            value={this.state.email}
+            onChange={this.handleChange}
+            required
+          />
+          <br />
+          <label>Password</label>
+          <input
+            type="password"
+            name="password"
+            value={this.state.password}
+            onChange={this.handleChange}
+            required
+          />
+          <br />
+          <label>Confirm</label>
+          <input
+            type="password"
+            name="confirm"
+            value={this.state.confirm}
+            onChange={this.handleChange}
+            required
+          />
+          <br />
+          <button type="submit" disabled={disable}>
+            SIGN UP
+          </button>
+        </form>
+      </div>
+    );
+  }
 }
-
-export default SignUpForm;
