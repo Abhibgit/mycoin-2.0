@@ -11,6 +11,9 @@ export default function LoginPage(props) {
       </div>
 
       <LoginForm setUserInState={props.setUserInState} />
+      <button onClick={setShowSignup.useState(true)}>
+        <a href="/user/signup">SIGN UP</a>
+      </button>
     </main>
   );
 }

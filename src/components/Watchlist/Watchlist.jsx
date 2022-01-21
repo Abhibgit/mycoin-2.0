@@ -15,7 +15,7 @@ function Watchlist(props) {
     console.log(idx);
     const coinSymbol = props.coinList[idx].symbol.toUpperCase();
     if (coinSymbol === "USDT") {
-      props.findLiveCoin(coinSymbol);
+      props.findLiveCoin(coinSymbol); //can't find this prop
       props.handleCoinProfileData(coinName);
     } else {
       let newCoinSymbol = coinSymbol + "USDT";

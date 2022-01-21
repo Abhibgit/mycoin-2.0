@@ -6,9 +6,9 @@ import Watchlist from "./components/Watchlist/Watchlist";
 import axios from "axios";
 import TopCoins from "./components/TopCoins/TopCoins";
 import { Grid } from "@mui/material";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
 import LoginPage from "./pages/LoginPage/LoginPage";
 
 export const themeOptions = createTheme({
@@ -38,15 +38,26 @@ function App() {
   const [tickerSymbol, setTickerSymbol] = useState("");
   const [coinWatchlist, setCoinWatchlist] = useState([]);
   const [topTenCoins, setTopTenCoins] = useState([]);
-  const [user, setUser] = useState({
-    id: "",
-    name: "",
-    email: "",
-    password: "",
-  });
+  // const [user, setUser] = useState({
+  //   id: "",
+  //   name: "",
+  //   email: "",
+  //   password: "",
+  // });
+  const state = {
+    user: null,
+  };
 
   const setUserInState = (incomingUserData) => {
-    setUser(incomingUserData);
+    this.setState({ user: incomingUserData });
+  };
+
+  const componentDidMount = () => {
+    let token = localStorage.getItem("token");
+    if (token) {
+      let userDoc = JSON.parse(atob(token.split(".")[1])).user;
+      this.setState({ user: userDoc });
+    }
   };
 
   let coinFeed = [];
@@ -143,28 +154,19 @@ function App() {
               coinList={coinList}
               findProfileCoin={findProfileCoin}
               handleCoinProfileData={handleCoinProfileData}
+              user={state.user}
             />
           </Grid>
-          <Grid item xs={8}>
-            <CoinInformation
-              profileCoinInfo={profileCoinInfo}
-              profileCoin={profileCoin}
-            />
-          </Grid>
-          <Grid item xs={8}>
-            <TopCoins
-              topTenCoins={topTenCoins}
-              coinList={coinList}
-              saveWatchlistCoin={saveWatchlistCoin}
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Watchlist
-              coinList={coinList}
-              coinWatchlist={coinWatchlist}
-              saveWatchlistCoin={saveWatchlistCoin}
-            />
-          </Grid>
+          <DashboardPage
+            profileCoinInfo={profileCoinInfo}
+            profileCoin={profileCoin}
+            topTenCoins={topTenCoins}
+            coinList={coinList}
+            saveWatchlistCoin={saveWatchlistCoin}
+            coinWatchlist={coinWatchlist}
+            handleCoinProfileData={handleCoinProfileData}
+            findProfileCoin={findProfileCoin}
+          />
           {/* 
         {user.id === "" ? (
           <SignUpPage setUserInState={setUserInState} />

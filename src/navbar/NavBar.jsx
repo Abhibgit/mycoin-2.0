@@ -14,6 +14,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import SearchBar from "../components/SearchBar/SearchBar";
+//import user from "../../models/user";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -95,8 +96,20 @@ function NavBar(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>{}</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      {props.user.id === "" ? (
+        <>
+          <MenuItem onClick={handleMenuClose}>
+            <a href="/user/login">Sign in</a>
+          </MenuItem>
+        </>
+      ) : (
+        <>
+          <MenuItem onClick={handleMenuClose}>
+            Welcome {props.user.name}
+          </MenuItem>
+          <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+        </>
+      )}
     </Menu>
   );
 
