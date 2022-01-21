@@ -29,6 +29,15 @@ npm start or yarn start
 
 ```
 
+### Teachnologies used
+
+- React
+- Node.js
+- Express
+- HTML/CSS/Javascript
+- Materialize
+- JWT JsonWebToken
+
 ### Contributors
 
 ```
