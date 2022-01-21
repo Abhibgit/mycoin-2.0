@@ -15,6 +15,9 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import SearchBar from "../components/SearchBar/SearchBar";
 //import user from "../../models/user";
+import { useParams, useNavigate } from "react-router-dom";
+import Logout from "../components/Logout/Logout";
+import { Button } from "@mui/material";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -77,6 +80,12 @@ function NavBar(props) {
 
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
+  };
+  let navigate = useNavigate();
+  const handleProfileShow = () => {
+    console.log("pROFILE clicked");
+    navigate("/user/profile");
+    handleMenuClose();
   };
 
   const menuId = "primary-search-account-menu";
@@ -173,6 +182,7 @@ function NavBar(props) {
               handleCoinProfileData={props.handleCoinProfileData}
             />
           </Search>
+          <Logout />
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton
