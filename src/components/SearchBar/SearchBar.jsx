@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Autocomplete, Button, TextField } from "@mui/material";
+import { Autocomplete, Button, TextField, Grid } from "@mui/material";
 
 function Search(props) {
   const [coinName, setCoinName] = useState("");
@@ -25,27 +25,34 @@ function Search(props) {
   };
 
   return (
-    <div>
+    <>
       <form onSubmit={handleSubmit}>
         <Autocomplete
+          freeSolo
           placeholder="Search…"
-          sx={{ width: 300, colour: "secondary" }}
+          sx={{ width: 300, backgroundColor: "beige" }}
           options={props.coinList.map((e) => e.name)}
           onChange={handleAutocomplete}
           renderInput={(params) => (
             <TextField
               id="searchfield"
               {...params}
-              label="Search..."
+              label="Enter coin name..."
               sx={{ colour: "secondary" }}
               type="search"
               value={coinName}
             />
           )}
         />
-        <Button variant="contained" type="submit" />
+        <Button
+          variant="contained"
+          type="submit"
+          style={{ backgroundColor: "beige", color: "black" }}
+        >
+          Search
+        </Button>
       </form>
-    </div>
+    </>
   );
 }
 

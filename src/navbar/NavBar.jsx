@@ -96,20 +96,8 @@ function NavBar(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      {props.user.id === "" ? (
-        <>
-          <MenuItem onClick={handleMenuClose}>
-            <a href="/user/login">Sign in</a>
-          </MenuItem>
-        </>
-      ) : (
-        <>
-          <MenuItem onClick={handleMenuClose}>
-            Welcome {props.user.name}
-          </MenuItem>
-          <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-        </>
-      )}
+      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
   );
 
@@ -189,19 +177,10 @@ function NavBar(props) {
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton
               size="large"
-              aria-label="show 4 new mails"
-              color="inherit"
-            >
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
               aria-label="show 17 new notifications"
               color="inherit"
             >
-              <Badge badgeContent={17} color="error">
+              <Badge badgeContent="" color="error">
                 <NotificationsIcon />
               </Badge>
             </IconButton>

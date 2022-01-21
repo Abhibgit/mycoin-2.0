@@ -198,13 +198,14 @@ function App() {
               saveWatchlistCoin={saveWatchlistCoin}
             />
           </Grid>
+
           {user.id === "" ? (
-            <Grid item xs={4}>
+            <Grid item xs={2}>
               <SignUpPage setUserInState={setUserInState} />
               <LoginPage setUserInState={setUserInState} />
             </Grid>
           ) : (
-            <Grid item xs={4}>
+            <Grid item xs={2}>
               <ProfilePage user={user} setUserInState={setUserInState} />
               <Logout />
             </Grid>
