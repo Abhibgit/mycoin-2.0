@@ -43,7 +43,6 @@ function App() {
   const [coinWatchlist, setCoinWatchlist] = useState([]);
   const [topTenCoins, setTopTenCoins] = useState([]);
   //same as coinWatchSymbol, however it's required due to the speed of data
-
   const [coinState, setCoinState] = useState({
     name: "",
     upperLimit: 0,
@@ -59,6 +58,14 @@ function App() {
   const setUserInState = (incomingUserData) => {
     setUser(incomingUserData);
   };
+
+  const [showLogin, setShowLogin] = useState(true);
+
+  function showSignup() {
+    console.log("Signup Clicked!!!");
+    setShowLogin(false);
+    // <SignUpPage setUserInState={setUserInState} />;
+  }
 
   let coinFeed = [];
   // let token = localStorage.getItem("token");
@@ -213,10 +220,16 @@ function App() {
               setUserInState={setUserInState}
             />
           </Grid>
+          <Grid item xs={2}>
+            <button onClick={() => showSignup()}>Sign Up</button>
+          </Grid>
           {user.id === "" ? (
             <Grid item xs={2}>
-              <SignUpPage setUserInState={setUserInState} />
-              <LoginPage setUserInState={setUserInState} />
+              {showLogin === true ? (
+                <LoginPage setUserInState={setUserInState} />
+              ) : (
+                <SignUpPage setUserInState={setUserInState} />
+              )}
             </Grid>
           ) : (
             <Grid item xs={12}>
