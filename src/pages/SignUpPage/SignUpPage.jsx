@@ -2,7 +2,7 @@ import React from "react";
 import SignUp from "../../components/SignUp/SignUp";
 
 function SignupPage(props) {
-  console.log("signup page");
+  // console.log("signup page");
   return (
     <main className="SignUpPage">
       <div>

@@ -3,7 +3,7 @@ import NavBar from "./navbar/NavBar";
 import DashboardPage from "./pages/DashboardPage/DashboardPage";
 import CoinInformation from "./components/CoinProfile/CoinInformation";
 import Watchlist from "./components/Watchlist/Watchlist";
-import axios from "axios";
+import axios, { Axios } from "axios";
 import TopCoins from "./components/TopCoins/TopCoins";
 import { Grid } from "@mui/material";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
@@ -12,6 +12,7 @@ import Logout from "./components/Logout/Logout";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import WatchlistPage from "./pages/WatchlistPage/WatchListPage";
+import { ConnectingAirportsOutlined } from "@mui/icons-material";
 
 export const themeOptions = createTheme({
   palette: {
@@ -64,10 +65,10 @@ function App() {
       )
       .then((response) => {
         setCoinList(response.data);
-        console.log("the api has been pinged");
+        // console.log("the api has been pinged");
         setIsLoading(false);
-      })
-      .catch((err) => console.log(err));
+      });
+    // .catch((err) => console.log(err));
     return () => {
       ticker.close();
     };
@@ -76,12 +77,12 @@ function App() {
   //The ticker.onmessage is the websocket that provides the coinFeed with the realtime data.
   useEffect(() => {
     ticker.onopen = () => {
-      console.log("Connected");
+      // console.log("Connected");
       topTen = coinList.slice(0, 11);
       let coinSymbolMap = topTen.map((e) => e.symbol.toUpperCase());
       coinSymbolMap.forEach(function (e) {
         if (e === "USDT") {
-          console.log("invalid");
+          // console.log("invalid");
         } else {
           let newCoinSymbol = e + "USDT";
           topTenSymbol.push(newCoinSymbol);
@@ -108,9 +109,9 @@ function App() {
       topTenArray = [];
       topTenSymbol.forEach(function (e) {
         if (e === "USDT") {
-          console.log("this is USDT");
+          // console.log("this is USDT");
         } else if (e === "USDCUSDT") {
-          console.log("this is USDC");
+          // console.log("this is USDC");
         } else {
           let topTenIndex = idxTemplate.indexOf(e);
           return (topTenArray = [...topTenArray, coinFeed[topTenIndex]]);
@@ -129,12 +130,13 @@ function App() {
   async function saveWatchlistCoin(symbol) {
     try {
       // 1. POST our new user info to the server
-      const fetchResponse = await fetch("/api/coins", {
+      console.log(user);
+      const fetchResponse = await fetch("/api/users/coins", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          user: user.id,
-          name: symbol,
+          _id: user._id,
+          coin: symbol,
         }),
       });
 
@@ -185,7 +187,6 @@ function App() {
             saveWatchlistCoin={saveWatchlistCoin}
             coinList={coinList}
             coinWatchlist={coinWatchlist}
-            saveWatchlistCoin={saveWatchlistCoin}
             coinWatchSymbol={coinWatchSymbol}
             topTenCoins={topTenCoins}
             user={user}

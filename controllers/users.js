@@ -1,4 +1,5 @@
 const User = require("../models/user.js");
+const Coin = require("../models/coin.js");
 const jwt = require("jsonwebtoken"); // import the jwt library
 const bcrypt = require("bcrypt"); // import bcrypt
 
@@ -9,6 +10,7 @@ module.exports = {
   login,
   edit,
   delete: deleteUser,
+  add,
 };
 
 async function create(req, res) {
@@ -77,5 +79,28 @@ async function login(req, res) {
     res.json(token);
   } catch {
     res.status(400).json("Bad Credentials");
+  }
+}
+
+async function add(req, res) {
+  let newCoin;
+  try {
+    console.log(req.body);
+    const user = await User.findById(req.body._id);
+    const coin = await Coin.find({ name: req.body.coin });
+    console.log(coin);
+    if (coin.length === 0) {
+      newCoin = new Coin({ name: req.body.coin });
+      newCoin.save();
+      user.watchlist.push(newCoin._id);
+    } else {
+      user.watchlist.push(coin._id);
+    }
+
+    user.save((err) => {
+      console.log(user);
+    });
+  } catch (err) {
+    console.log(err);
   }
 }
