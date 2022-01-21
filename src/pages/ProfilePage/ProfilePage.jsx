@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 function ProfilePage(props) {
   const { state } = useLocation();
-  console.log("Profile Page", state);
+  // console.log("Profile Page", state);
   let user = "";
   let setUserInState = "";
   if (state === null) {

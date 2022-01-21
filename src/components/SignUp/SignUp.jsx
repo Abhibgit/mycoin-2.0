@@ -1,5 +1,6 @@
 import React from "react";
 import { Component } from "react";
+import { Input, Card, Button, CardContent, Typography } from "@mui/material";
 
 export default class SignUpForm extends Component {
   state = {
@@ -49,48 +50,54 @@ export default class SignUpForm extends Component {
     const disable = this.state.password !== this.state.confirm;
     return (
       <div>
-        <div className="form-container"></div>
-        <form autoComplete="off" onSubmit={this.handleSubmit}>
-          <label>Name</label>
-          <input
-            type="text"
-            name="name"
-            value={this.state.name}
-            onChange={this.handleChange}
-            required
-          />
-          <br />
-          <label>Email</label>
-          <input
-            type="email"
-            name="email"
-            value={this.state.email}
-            onChange={this.handleChange}
-            required
-          />
-          <br />
-          <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            value={this.state.password}
-            onChange={this.handleChange}
-            required
-          />
-          <br />
-          <label>Confirm</label>
-          <input
-            type="password"
-            name="confirm"
-            value={this.state.confirm}
-            onChange={this.handleChange}
-            required
-          />
-          <br />
-          <button type="submit" disabled={disable}>
-            SIGN UP
-          </button>
-        </form>
+        <Card sx={{ minWidth: 275 }}>
+          <CardContent>
+            <div className="form-container"></div>
+            <form autoComplete="off" onSubmit={this.handleSubmit}>
+              <Input
+                type="text"
+                name="name"
+                value={this.state.name}
+                onChange={this.handleChange}
+                required
+                placeholder="Name"
+              />
+              <br />
+              <Input
+                type="email"
+                name="email"
+                value={this.state.email}
+                onChange={this.handleChange}
+                required
+                placeholder="Email"
+              />
+              <br />
+
+              <Input
+                type="password"
+                name="password"
+                value={this.state.password}
+                onChange={this.handleChange}
+                required
+                placeholder="Password"
+              />
+              <br />
+
+              <Input
+                type="password"
+                name="confirm"
+                value={this.state.confirm}
+                onChange={this.handleChange}
+                required
+                placeholder="Confirm Password"
+              />
+              <br />
+              <Button type="submit" disabled={disable} variant="outlined">
+                SIGN UP
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
       </div>
     );
   }
