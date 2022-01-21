@@ -6,10 +6,12 @@ import Watchlist from "./components/Watchlist/Watchlist";
 import axios from "axios";
 import TopCoins from "./components/TopCoins/TopCoins";
 import { Grid } from "@mui/material";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
-import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import LoginPage from "./pages/LoginPage/LoginPage";
+import Logout from "./components/Logout/Logout";
+import ProfilePage from "./pages/ProfilePage/ProfilePage";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import WatchlistPage from "./pages/WatchlistPage/WatchListPage";
 
 export const themeOptions = createTheme({
   palette: {
@@ -24,6 +26,8 @@ export const themeOptions = createTheme({
 });
 
 const ticker = new WebSocket("wss://stream.binance.com:9443/ws/!ticker@arr");
+
+//coinWatchSymbol stores coins that are saved
 let coinWatchSymbol = [];
 let coinWatchlistArray = [];
 let topTenSymbol = [];
@@ -31,6 +35,7 @@ let topTen = [];
 let topTenArray = [];
 
 function App() {
+  const [isError, setIsError] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [coinList, setCoinList] = useState([]);
   const [profileCoin, setProfileCoin] = useState({});
@@ -38,26 +43,16 @@ function App() {
   const [tickerSymbol, setTickerSymbol] = useState("");
   const [coinWatchlist, setCoinWatchlist] = useState([]);
   const [topTenCoins, setTopTenCoins] = useState([]);
-  // const [user, setUser] = useState({
-  //   id: "",
-  //   name: "",
-  //   email: "",
-  //   password: "",
-  // });
-  const state = {
-    user: null,
-  };
-
+  //same as coinWatchSymbol, however it's required due to the speed of data
+  const [userCoinDb, setUserCoinDb] = useState([]);
+  const [user, setUser] = useState({
+    id: "",
+    name: "",
+    email: "",
+    password: "",
+  });
   const setUserInState = (incomingUserData) => {
-    this.setState({ user: incomingUserData });
-  };
-
-  const componentDidMount = () => {
-    let token = localStorage.getItem("token");
-    if (token) {
-      let userDoc = JSON.parse(atob(token.split(".")[1])).user;
-      this.setState({ user: userDoc });
-    }
+    setUser(incomingUserData);
   };
 
   let coinFeed = [];
@@ -131,10 +126,34 @@ function App() {
     handleCoinProfileData();
   };
 
-  const saveWatchlistCoin = (symbol) => {
-    console.log(symbol);
+  async function saveWatchlistCoin(symbol) {
+    try {
+      // 1. POST our new user info to the server
+      const fetchResponse = await fetch("/api/coins", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user: user.id,
+          name: symbol,
+        }),
+      });
+
+      // 2. Check "fetchResponse.ok". False means status code was 4xx from the server/controller action
+      if (!fetchResponse.ok) throw new Error("Fetch failed - Bad request");
+
+      let token = await fetchResponse.json(); // 3. decode fetch response to get jwt from srv
+      localStorage.setItem("token", token); // 4. Stick token into localStorage
+
+      const userDoc = JSON.parse(atob(token.split(".")[1])).user; // 5. Decode the token + put user document into state
+      console.log("created_coin: " + userDoc);
+      this.props.setUserInState(userDoc);
+    } catch (err) {
+      console.log("CoinCreate error", err);
+      setIsError({ error: "CoinCreate Failed - Try Again" });
+    }
     coinWatchSymbol.push(symbol);
-  };
+    setUserCoinDb([...userCoinDb, symbol]);
+  }
 
   const handleCoinProfileData = (name) => {
     let coinMap = coinList.map((e) => e.name);
@@ -154,26 +173,42 @@ function App() {
               coinList={coinList}
               findProfileCoin={findProfileCoin}
               handleCoinProfileData={handleCoinProfileData}
-              user={state.user}
+              user={user}
             />
           </Grid>
-          <DashboardPage
-            profileCoinInfo={profileCoinInfo}
-            profileCoin={profileCoin}
-            topTenCoins={topTenCoins}
-            coinList={coinList}
-            saveWatchlistCoin={saveWatchlistCoin}
-            coinWatchlist={coinWatchlist}
-            handleCoinProfileData={handleCoinProfileData}
-            findProfileCoin={findProfileCoin}
-          />
-          {/* 
-        {user.id === "" ? (
-          <SignUpPage setUserInState={setUserInState} />
-        ) : (
-          <ProfilePage user={user} setUserInState={setUserInState} />
-          <Logout />
-        )} */}
+          <Grid item xs={8}>
+            <CoinInformation
+              saveWatchlistCoin={saveWatchlistCoin}
+              profileCoinInfo={profileCoinInfo}
+              profileCoin={profileCoin}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <WatchlistPage
+              coinList={coinList}
+              coinWatchlist={coinWatchlist}
+              saveWatchlistCoin={saveWatchlistCoin}
+              coinWatchSymbol={coinWatchSymbol}
+            />
+          </Grid>
+          <Grid item xs={8}>
+            <TopCoins
+              topTenCoins={topTenCoins}
+              coinList={coinList}
+              saveWatchlistCoin={saveWatchlistCoin}
+            />
+          </Grid>
+          {user.id === "" ? (
+            <>
+              <SignUpPage setUserInState={setUserInState} />
+              <LoginPage setUserInState={setUserInState} />
+            </>
+          ) : (
+            <>
+              <ProfilePage user={user} setUserInState={setUserInState} />
+              <Logout />
+            </>
+          )}
         </Grid>
       </ThemeProvider>
     </div>
