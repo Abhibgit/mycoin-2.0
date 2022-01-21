@@ -10,6 +10,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import LoginPage from "./pages/LoginPage/LoginPage";
+import Logout from "./components/Logout/Logout";
 import WatchlistPage from "./pages/WatchlistPage/WatchListPage";
 
 export const themeOptions = createTheme({
@@ -181,6 +182,7 @@ function App() {
               findProfileCoin={findProfileCoin}
               handleCoinProfileData={handleCoinProfileData}
               setUserInState={setUserInState}
+              user={user}
             />
           </Grid>
           <Grid item xs={8}>
@@ -206,9 +208,14 @@ function App() {
             />
           </Grid>
           {user.id === "" ? (
-            <SignUpPage setUserInState={setUserInState} />
+            <>
+              <SignUpPage setUserInState={setUserInState} />
+              <LoginPage setUserInState={setUserInState} />
+            </>
           ) : (
-            <ProfilePage user={user} setUserInState={setUserInState} />
+            <>
+              <ProfilePage user={user} setUserInState={setUserInState} />
+            </>
           )}
         </Grid>
       </ThemeProvider>

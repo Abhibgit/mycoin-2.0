@@ -1,6 +1,6 @@
 import { Component } from "react";
 
-export default class Logout extends Component {
+class Logout extends Component {
   handleSubmit = async (evt) => {
     evt.preventDefault();
 
@@ -17,3 +17,5 @@ export default class Logout extends Component {
     );
   }
 }
+
+export default Logout;

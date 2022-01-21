@@ -17,6 +17,7 @@ export default class LoginForm extends Component {
   handleSubmit = async (evt) => {
     evt.preventDefault();
     try {
+      console.log("Login is pressed");
       const fetchResponse = await fetch("/api/users/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -98,15 +98,11 @@ function NavBar(props) {
     >
       {props.user.id === "" ? (
         <>
-          <MenuItem onClick={handleMenuClose}>
-            <a href="/user/login">Sign in</a>
-          </MenuItem>
+          <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
         </>
       ) : (
         <>
-          <MenuItem onClick={handleMenuClose}>
-            Welcome {props.user.name}
-          </MenuItem>
+          <MenuItem onClick={handleMenuClose}>Welcome</MenuItem>
           <MenuItem onClick={handleMenuClose}>My account</MenuItem>
         </>
       )}
