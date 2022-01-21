@@ -22,9 +22,9 @@ function WatchlistForm(props) {
   };
 
   const handleSubmit = (e) => {
-    console.log(e);
+    // console.log(e);
   };
-  console.log(props.coinWatchSymbol);
+
   return (
     <div>
       {props.coinWatchSymbol.map((e, idx) => {

@@ -196,12 +196,12 @@ function App() {
               saveWatchlistCoin={saveWatchlistCoin}
             />
           </Grid>
-          {/* 
-        {user.id === "" ? (
-          <SignUpPage setUserInState={setUserInState} />
-        ) : (
-          <ProfilePage user={user} setUserInState={setUserInState} />
-        )} */}
+
+          {user.id === "" ? (
+            <SignUpPage setUserInState={setUserInState} user={user} />
+          ) : (
+            <ProfilePage user={user} setUserInState={setUserInState} />
+          )}
         </Grid>
       </ThemeProvider>
     </div>

@@ -24,9 +24,9 @@ export default class SignUpForm extends Component {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: user.name,
-          email: user.email,
-          password: user.password,
+          name: this.state.name,
+          email: this.state.email,
+          password: this.state.password,
         }),
       });
 
