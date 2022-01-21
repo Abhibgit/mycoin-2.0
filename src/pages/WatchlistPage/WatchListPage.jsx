@@ -6,11 +6,11 @@ import { Grid } from "@mui/material";
 function WatchListPage(props) {
   return (
     <>
-      <Grid>
-        <Grid item xs={2}>
+      <Grid container spacing={2}>
+        <Grid item xs={8}>
           <WatchlistForm coinWatchSymbol={props.coinWatchSymbol} />
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={4}>
           <Watchlist coinWatchlist={props.coinWatchlist} />
         </Grid>
       </Grid>
