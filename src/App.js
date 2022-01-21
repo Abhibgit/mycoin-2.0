@@ -199,15 +199,15 @@ function App() {
             />
           </Grid>
           {user.id === "" ? (
-            <>
+            <Grid item xs={4}>
               <SignUpPage setUserInState={setUserInState} />
               <LoginPage setUserInState={setUserInState} />
-            </>
+            </Grid>
           ) : (
-            <>
+            <Grid item xs={4}>
               <ProfilePage user={user} setUserInState={setUserInState} />
               <Logout />
-            </>
+            </Grid>
           )}
         </Grid>
       </ThemeProvider>
