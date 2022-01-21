@@ -8,7 +8,6 @@ import TopCoins from "./components/TopCoins/TopCoins";
 import { Grid } from "@mui/material";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
-import Logout from "./components/Logout/Logout";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import WatchlistPage from "./pages/WatchlistPage/WatchListPage";
@@ -177,38 +176,30 @@ function App() {
               setUserInState={setUserInState}
             />
           </Grid>
-          <Grid item xs={8}>
-            <CoinInformation
-              saveWatchlistCoin={saveWatchlistCoin}
-              profileCoinInfo={profileCoinInfo}
-              profileCoin={profileCoin}
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <WatchlistPage
-              coinList={coinList}
-              coinWatchlist={coinWatchlist}
-              saveWatchlistCoin={saveWatchlistCoin}
-              coinWatchSymbol={coinWatchSymbol}
-            />
-          </Grid>
-          <Grid item xs={8}>
-            <TopCoins
-              topTenCoins={topTenCoins}
-              coinList={coinList}
-              saveWatchlistCoin={saveWatchlistCoin}
-            />
-          </Grid>
-
           {user.id === "" ? (
             <Grid item xs={2}>
               <SignUpPage setUserInState={setUserInState} />
               <LoginPage setUserInState={setUserInState} />
             </Grid>
           ) : (
-            <Grid item xs={2}>
+            <Grid item xs={12}>
               <ProfilePage user={user} setUserInState={setUserInState} />
-              <Logout />
+              <CoinInformation
+                saveWatchlistCoin={saveWatchlistCoin}
+                profileCoinInfo={profileCoinInfo}
+                profileCoin={profileCoin}
+              />
+              <WatchlistPage
+                coinList={coinList}
+                coinWatchlist={coinWatchlist}
+                saveWatchlistCoin={saveWatchlistCoin}
+                coinWatchSymbol={coinWatchSymbol}
+              />
+              <TopCoins
+                topTenCoins={topTenCoins}
+                coinList={coinList}
+                saveWatchlistCoin={saveWatchlistCoin}
+              />
             </Grid>
           )}
         </Grid>
