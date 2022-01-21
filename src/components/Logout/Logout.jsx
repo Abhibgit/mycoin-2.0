@@ -12,7 +12,7 @@ export default class Logout extends Component {
   render() {
     return (
       <div onClick={this.handleSubmit}>
-        <button type="submit">Logout</button>;
+        <button type="submit">Logout</button>
       </div>
     );
   }
