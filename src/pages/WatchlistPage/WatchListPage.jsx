@@ -7,7 +7,7 @@ function WatchListPage(props) {
   return (
     <>
       <Grid container spacing={2}>
-        <Grid item xs={8}>
+        <Grid item xs={4}>
           <WatchlistForm coinWatchSymbol={props.coinWatchSymbol} />
         </Grid>
         <Grid item xs={4}>

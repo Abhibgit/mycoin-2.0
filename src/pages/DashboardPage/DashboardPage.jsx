@@ -15,7 +15,7 @@ function DashboardPage(props) {
           user={props.user}
         />
       </Grid>
-      <Grid item xs={8}>
+      <Grid item xs={4}>
         <WatchlistPage
           coinList={props.coinList}
           coinWatchlist={props.coinWatchlist}
