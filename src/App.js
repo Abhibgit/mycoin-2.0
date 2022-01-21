@@ -174,6 +174,7 @@ function App() {
               findProfileCoin={findProfileCoin}
               handleCoinProfileData={handleCoinProfileData}
               user={user}
+              setUserInState={setUserInState}
             />
           </Grid>
           <Grid item xs={8}>

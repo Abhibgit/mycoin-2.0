@@ -15,6 +15,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import SearchBar from "../components/SearchBar/SearchBar";
 //import user from "../../models/user";
+import { useParams, useNavigate } from "react-router-dom";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -77,6 +78,12 @@ function NavBar(props) {
 
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
+  };
+  let navigate = useNavigate();
+  const handleProfileShow = () => {
+    console.log("pROFILE clicked");
+    navigate("/user/profile");
+    handleMenuClose();
   };
 
   const menuId = "primary-search-account-menu";
