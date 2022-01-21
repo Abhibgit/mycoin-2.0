@@ -131,12 +131,12 @@ function App() {
     try {
       // 1. POST our new user info to the server
       console.log(user);
-      const fetchResponse = await fetch("/api/users/coins", {
+      const fetchResponse = await fetch("/api/coins", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          _id: user._id,
-          coin: symbol,
+          user: user._id,
+          name: symbol,
         }),
       });
 
