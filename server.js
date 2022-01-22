@@ -2,8 +2,9 @@ const express = require("express");
 const path = require("path");
 const favicon = require("serve-favicon");
 const logger = require("morgan");
-const dotenv = require("dotenv").config();
+const dotenv = require("dotenv").config("");
 require("./config/database.js");
+require("dotenv").config({ path: "ENV_FILENAME" });
 
 const app = express();
 

@@ -6,8 +6,7 @@ import Watchlist from "./components/Watchlist/Watchlist";
 import axios from "axios";
 import TopCoins from "./components/TopCoins/TopCoins";
 import { Grid } from "@mui/material";
-import SignUpPage from "./pages/SignUpPage/SignUpPage";
-import LoginPage from "./pages/LoginPage/LoginPage";
+import AuthPage from "./pages/AuthPage/AuthPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import WatchlistPage from "./pages/WatchlistPage/WatchListPage";
@@ -32,6 +31,8 @@ let coinWatchlistArray = [];
 let topTenSymbol = [];
 let topTen = [];
 let topTenArray = [];
+let token;
+let userDoc;
 
 function App() {
   const [isError, setIsError] = useState("");
@@ -42,7 +43,7 @@ function App() {
   const [tickerSymbol, setTickerSymbol] = useState("");
   const [coinWatchlist, setCoinWatchlist] = useState([]);
   const [topTenCoins, setTopTenCoins] = useState([]);
-  //same as coinWatchSymbol, however it's required due to the speed of data
+  //same as coinWatchSymbol, however it's required due to the speed of data renderering
   const [coinState, setCoinState] = useState({
     name: "",
     upperLimit: 0,
@@ -58,24 +59,9 @@ function App() {
   const setUserInState = (incomingUserData) => {
     setUser(incomingUserData);
   };
-
-  const [showLogin, setShowLogin] = useState(true);
-
-  function showSignup() {
-    console.log("Signup Clicked!!!");
-    setShowLogin(false);
-    // <SignUpPage setUserInState={setUserInState} />;
-  }
-
   let coinFeed = [];
-  // let token = localStorage.getItem("token");
 
-  // useEffect(() => {
-  //   if (token) {
-  //     const userDoc = JSON.parse(atob(token.split(".")[1])).user;
-  //     setUserInState(userDoc);
-  //   }
-  // }, [token]);
+  //
 
   useEffect(() => {
     axios
@@ -86,36 +72,17 @@ function App() {
         setCoinList(response.data);
         console.log("the api has been pinged");
         setIsLoading(false);
-        // grabUsercoins();
+        token = localStorage.getItem("token");
+        if (token) {
+          userDoc = JSON.parse(atob(token.split(".")[1])).user;
+          setUser({ userDoc });
+        }
       })
       .catch((err) => console.log(err));
     return () => {
       ticker.close();
     };
   }, []);
-
-  // async function grabUsercoins() {
-  //   try {
-  //     const fetchResponse = await fetch("/api/users/getuser", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({
-  //         user: user._id,
-  //       }),
-  //     });
-  //     if (!fetchResponse.ok) throw new Error("Fetch failed - Bad request");
-
-  //     let token = await fetchResponse.json();
-  //     localStorage.setItem("token", token);
-  //     console.log(token);
-
-  //     const userDoc = JSON.parse(atob(token.split(".")[1])).user;
-  //     setUserInState(userDoc);
-  //   } catch (err) {
-  //     console.log("LoginForm error", err);
-  //     setIsError("Get Coins Failed ");
-  //   }
-  // }
 
   //The ticker.onmessage is the websocket that provides the coinFeed with the realtime data.
   useEffect(() => {
@@ -221,15 +188,11 @@ function App() {
             />
           </Grid>
           <Grid item xs={2}>
-            <button onClick={() => showSignup()}>Sign Up</button>
+            <button>Sign Up</button>
           </Grid>
           {user.id === "" ? (
             <Grid item xs={2}>
-              {showLogin === true ? (
-                <LoginPage setUserInState={setUserInState} />
-              ) : (
-                <SignUpPage setUserInState={setUserInState} />
-              )}
+              <AuthPage setUserInState={setUserInState} />
             </Grid>
           ) : (
             <Grid item xs={12}>

@@ -2,7 +2,7 @@ import React from "react";
 import { Component } from "react";
 import { Input, Card, Button, CardContent, Typography } from "@mui/material";
 
-export default class SignUpForm extends Component {
+export default class SignUp extends Component {
   state = {
     name: "",
     email: "",
@@ -37,7 +37,7 @@ export default class SignUpForm extends Component {
       let token = await fetchResponse.json(); // 3. decode fetch response to get jwt from srv
       localStorage.setItem("token", token); // 4. Stick token into localStorage
 
-      const userDoc = JSON.parse(atob(token.split(".")[1])).user; // 5. Decode the token + put user document into state
+      let userDoc = JSON.parse(atob(token.split(".")[1])).user; // 5. Decode the token + put user document into state
       console.log("created_user: " + userDoc);
       this.props.setUserInState(userDoc);
     } catch (err) {

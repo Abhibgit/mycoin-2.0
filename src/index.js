@@ -4,9 +4,8 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import SignUpPage from "./pages/SignUpPage/SignUpPage";
+import AuthPage from "./pages/AuthPage/AuthPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
-import LoginPage from "./pages/LoginPage/LoginPage";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -15,8 +14,8 @@ ReactDOM.render(
         {" "}
       </Route>
       <Route path="/user/profile" element={<ProfilePage />} />
-      <Route path="/user/signup" element={<SignUpPage />} />
-      <Route path="/user/login" element={<LoginPage />} />
+      <Route path="/user/signup" element={<AuthPage />} />
+      <Route path="/user/login" element={<AuthPage />} />
     </Routes>
   </BrowserRouter>,
   document.getElementById("root")

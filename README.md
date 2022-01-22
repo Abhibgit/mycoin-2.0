@@ -4,7 +4,7 @@
 
 ## About
 
-> This is a app is MERN Stack application that tracks all crypto currencies using coingecko api.
+> This is a app is MERN Stack application that tracks all crypto currencies using coingecko api/Binance Websocket
 
 ## API
 
@@ -34,9 +34,11 @@ npm start or yarn start
 - React
 - Node.js
 - Express
+- MongoDB
 - HTML/CSS/Javascript
-- Materialize
-- JWT JsonWebToken
+- Material UI
+- JWT
+- bcrypt
 
 ### Contributors
 
