@@ -99,10 +99,15 @@ async function addCoinToUser(req, res) {
     const user = await User.findByIdAndUpdate(
       { _id: req.params.id },
       {
-        watchlist: req.body.coin_ids,
+        $push: { watchlist: req.body.name },
       },
       { returnDocument: "after" }
     );
+    console.log(user, "this is the user");
+    const token = jwt.sign({ user: newUser }, process.env.SECRET, {
+      expiresIn: "24h",
+    });
+    console.log(token);
     res.status(200).json(user);
   } catch (err) {
     console.log("user delete error", err);

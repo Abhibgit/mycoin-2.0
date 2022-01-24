@@ -11,16 +11,4 @@ const commentSchema = new Schema(
   }
 );
 
-const coinSchema = new Schema(
-  {
-    name: String,
-    upperPrice: Number,
-    lowerPrice: Number,
-    comment: [commentSchema],
-  },
-  {
-    timestamps: true,
-  }
-);
-
-module.exports = mongoose.model("Coin", coinSchema);
+module.exports = mongoose.model("Comment", commentSchema);
