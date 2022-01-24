@@ -16,7 +16,6 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "build")));
 // Put API routes here, before the "catch all" route
 
-app.use("/api/coins", require("./routes/api/coins.js"));
 app.use("/api/users", require("./routes/api/users.js"));
 
 // The following "catch all" route (note the *)is necessary
