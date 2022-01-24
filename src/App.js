@@ -73,9 +73,11 @@ function App() {
         console.log("the api has been pinged");
         setIsLoading(false);
         token = localStorage.getItem("token");
+        console.log(token);
         if (token) {
           userDoc = JSON.parse(atob(token.split(".")[1])).user;
-          setUser({ userDoc });
+          setUser(userDoc);
+          console.log(user);
         }
       })
       .catch((err) => console.log(err));

@@ -31,7 +31,9 @@ function TopCoins(props) {
               <TableRow sx={{ border: 0 }}>
                 <TableCell align="center">{row.s}</TableCell>
                 <TableCell align="center">${row.c}</TableCell>
-                <TableCell align="center">% {row.P}</TableCell>
+                <TableCell align="center" sx={{ color: "success.positive" }}>
+                  % {row.P}
+                </TableCell>
                 <TableCell align="center">${row.o}</TableCell>
                 <TableCell align="center">${row.h}</TableCell>
                 <TableCell align="center">${row.l}</TableCell>
