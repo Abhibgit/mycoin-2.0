@@ -189,9 +189,6 @@ function App() {
               setUserInState={setUserInState}
             />
           </Grid>
-          <Grid item xs={2}>
-            <button>Sign Up</button>
-          </Grid>
           {user.id === "" ? (
             <Grid item xs={2}>
               <AuthPage setUserInState={setUserInState} />

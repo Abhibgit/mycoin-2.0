@@ -45,7 +45,6 @@ export default class Login extends Component {
       <div>
         <Card sx={{ minWidth: 275 }}>
           <CardContent>
-            <h2>Login</h2>
             <div className="form-container" onSubmit={this.handleSubmit}>
               <form autoComplete="off">
                 <Input
