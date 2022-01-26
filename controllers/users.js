@@ -96,19 +96,18 @@ async function getUser(req, res) {
 async function addCoinToUser(req, res) {
   console.log("hi");
   try {
-    console.log("addCoinToUser");
+    console.log(req.body, "this is the req.body.name");
     const user = await User.findByIdAndUpdate(
       { _id: req.params.id },
       {
-        $push: { watchlist: req.body.name },
+        $push: { watchlist: req.body },
       },
       { returnDocument: "after" }
     );
     console.log(user, "this is the user");
-    const token = jwt.sign({ user: newUser }, process.env.SECRET, {
+    const token = jwt.sign({ user: user }, process.env.SECRET, {
       expiresIn: "24h",
     });
-    console.log(token);
     res.status(200).json(user);
   } catch (err) {
     console.log("user delete error", err);

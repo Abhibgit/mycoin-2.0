@@ -143,7 +143,7 @@ function App() {
   async function saveWatchlistCoin(symbol) {
     try {
       // 1. POST our new user info to the server
-      const fetchResponse = await fetch(`/api/users/coins`, {
+      const fetchResponse = await fetch(`/api/users/${user._id}/coins`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
