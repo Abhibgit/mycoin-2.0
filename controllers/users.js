@@ -96,11 +96,11 @@ async function getUser(req, res) {
 async function addCoinToUser(req, res) {
   console.log("hi");
   try {
-    console.log(req.body, "this is the req.body.name");
+    console.log(req.body.watchlist, "this is the req.body.name");
     const user = await User.findByIdAndUpdate(
       { _id: req.params.id },
       {
-        $push: { watchlist: req.body },
+        $push: { watchlist: req.body.watchlist },
       },
       { returnDocument: "after" }
     );
