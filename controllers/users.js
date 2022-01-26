@@ -96,19 +96,43 @@ async function getUser(req, res) {
 async function addCoinToUser(req, res) {
   try {
     console.log(req.body.watchlist, "this is the req.body.name");
-    const user = await User.findByIdAndUpdate(
-      { _id: req.params.id },
-      {
-        $push: { watchlist: req.body.watchlist },
-      },
-      { returnDocument: "after" }
-    );
+    let user;
+    const coinIsPresent = User.find({
+      _id: req.params.id,
+      watchlist: { $elemMatch: { name: { $eq: req.body.name } } },
+    });
+
+    if (coinIsPresent) {
+      console.log("Coin is present", coinIsPresent);
+      user = await User.updateOne(
+        {
+          _id: req.params.id,
+          watchlist: { $elemMatch: { name: { $eq: req.body.name } } },
+        },
+        {
+          $set: {
+            "watchlist.$.upperPrice": req.body.upperPrice, //todo fix that upperProce if nil in body is not overwirtting what is already present
+            "watchlist.$.lowerPrice": req.body.lowerPrice, //same
+          },
+        },
+        { returnDocument: "after" }
+      );
+      console.log("User on update ", user);
+    } else {
+      user = await User.findByIdAndUpdate(
+        { _id: req.params.id },
+        {
+          $push: { watchlist: req.body.watchlist },
+        },
+        { returnDocument: "after" }
+      );
+    }
     const token = jwt.sign({ user: user }, process.env.SECRET, {
       expiresIn: "24h",
     });
     res.status(200).json(token);
   } catch (err) {
-    console.log("user delete error", err);
+    console.log("user watchlist update error", err);
     res.status(400).json(err);
   }
 }
