@@ -27,9 +27,13 @@ const ticker = new WebSocket("wss://stream.binance.com:9443/ws/!ticker@arr");
 
 //coinWatchSymbol stores coins that are saved
 let coinWatchSymbol = [];
+//coinWatchlistArray is the variable that needs to have memory refreshed and current data reinserted
 let coinWatchlistArray = [];
+// Top 10 added at the beginning of the ticker
 let topTenSymbol = [];
+// Variable that holds the 10 objects in an array from API ping
 let topTen = [];
+// Holds the array that gets refreshed
 let topTenArray = [];
 let token;
 let userDoc;
@@ -73,11 +77,9 @@ function App() {
         console.log("the api has been pinged");
         setIsLoading(false);
         token = localStorage.getItem("token");
-        console.log(token);
         if (token) {
           userDoc = JSON.parse(atob(token.split(".")[1])).user;
           setUser(userDoc);
-          console.log(user);
         }
       })
       .catch((err) => console.log(err));
@@ -90,6 +92,13 @@ function App() {
   useEffect(() => {
     ticker.onopen = () => {
       console.log("Connected");
+      // Maps through the user's saved coinlist on load and pushes it into the "flow"
+      let userMap = user.watchlist.map((e) => e.name);
+      console.log(userMap);
+      userMap.forEach(function (e) {
+        coinWatchSymbol.push(e);
+      });
+      // Grabs the current top 10 from the API coinlist and maps through to set it into the "flow"
       topTen = coinList.slice(0, 11);
       let coinSymbolMap = topTen.map((e) => e.symbol.toUpperCase());
       coinSymbolMap.forEach(function (e) {
@@ -101,15 +110,17 @@ function App() {
         }
       });
     };
+    //Ticker "flow", pings every second.
     ticker.onmessage = (message) => {
       console.log(user);
-      //Maps the data to put the symbol from Binance
+      //Maps the data to grab the symbol from Binance so that the index can be located
       coinFeed = JSON.parse(message.data);
       let idxTemplate = coinFeed.map((e) => e.s);
-      //searches the mapped coinFeed for one symbol for the profile page, then sets it to ProfileCoin state
+      //searches the mapped coinFeed for one symbol for the profile page, then sets it to ProfileCoin state to be displayed
       let singleIdx = idxTemplate.indexOf(tickerSymbol);
       setProfileCoin(coinFeed[singleIdx]);
-      //clears the array (necessary for memory bottleneck), iterates through watchlist coins array to display multiple tickers
+      //clears the array (necessary for memory bottleneck with React State), iterates through watchlist coins array to display multiple tickers
+      // This will display the watchlist for the user, this is the main portion of the ticker "flow".
       coinWatchlistArray = [];
       coinWatchSymbol.forEach(function (e) {
         let watchSingleIdx = idxTemplate.indexOf(e);
@@ -118,7 +129,7 @@ function App() {
         setCoinWatchlist(coinWatchlistArray);
       });
       // For the top 10 coins saved from the API
-      // goes through each of them to repeat the above code for saved coins.
+      // goes through each of them to repeat the above code used for saved coins
       topTenArray = [];
       topTenSymbol.forEach(function (e) {
         if (e === "USDT") {
@@ -141,8 +152,8 @@ function App() {
   };
 
   async function saveWatchlistCoin(symbol) {
+    //saves the coin to the user, and add its to the "flow"
     try {
-      // 1. POST our new user info to the server
       const fetchResponse = await fetch(`/api/users/${user._id}/coins`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -151,13 +162,13 @@ function App() {
         }),
       });
       console.log(fetchResponse);
-      // 2. Check "fetchResponse.ok". False means status code was 4xx from the server/controller action
+
       if (!fetchResponse.ok) throw new Error("Fetch failed - Bad request");
 
-      let token = await fetchResponse.json(); // 3. decode fetch response to get jwt from srv
-      localStorage.setItem("token", token); // 4. Stick token into localStorage
+      let token = await fetchResponse.json();
+      localStorage.setItem("token", token);
 
-      const userDoc = JSON.parse(atob(token.split(".")[1])).user; // 5. Decode the token + put user document into state
+      const userDoc = JSON.parse(atob(token.split(".")[1])).user;
       console.log("created_coin: " + userDoc);
       setUserInState(userDoc);
     } catch (err) {
