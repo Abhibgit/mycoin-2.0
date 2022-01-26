@@ -88,7 +88,14 @@ function App() {
     };
   }, []);
 
-  //The ticker.onmessage is the websocket that provides the coinFeed with the realtime data.
+  // The ticker.onmessage is the websocket that provides the coinFeed with the realtime data.
+  // Due to the nature of what is happening with the websocket from Binance and the API calls from CoinGecko
+  // It was required for us to set it up in this way. Calling functions off of the websocket ping is
+  // not a possibility, as the data flow is too fast and the state with React would batch data together
+  // not rerendering. Ideally, if the data was being streamed from just Binance, this would have made it easier
+  // However, the search functionality with coin names, made it a requirement. Furthermore, because the
+  // indices are constantly changing with the websocket (a coin is only ever displayed IF it has been traded
+  // in that moment), the data would have to be wiped and reiterated through.
   useEffect(() => {
     ticker.onopen = () => {
       console.log("Connected");
