@@ -102,6 +102,7 @@ function App() {
       });
     };
     ticker.onmessage = (message) => {
+      console.log(user);
       //Maps the data to put the symbol from Binance
       coinFeed = JSON.parse(message.data);
       let idxTemplate = coinFeed.map((e) => e.s);
@@ -142,15 +143,14 @@ function App() {
   async function saveWatchlistCoin(symbol) {
     try {
       // 1. POST our new user info to the server
-      const fetchResponse = await fetch("/api/coins", {
+      const fetchResponse = await fetch(`/api/users/coins`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          user: user._id,
-          name: symbol,
+          watchlist: { name: symbol },
         }),
       });
-
+      console.log(fetchResponse);
       // 2. Check "fetchResponse.ok". False means status code was 4xx from the server/controller action
       if (!fetchResponse.ok) throw new Error("Fetch failed - Bad request");
 
@@ -188,6 +188,9 @@ function App() {
               user={user}
               setUserInState={setUserInState}
             />
+          </Grid>
+          <Grid item xs={2}>
+            <button>Sign Up</button>
           </Grid>
           {user.id === "" ? (
             <Grid item xs={2}>

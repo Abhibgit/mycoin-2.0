@@ -94,6 +94,7 @@ async function getUser(req, res) {
 }
 
 async function addCoinToUser(req, res) {
+  console.log("hi");
   try {
     console.log("addCoinToUser");
     const user = await User.findByIdAndUpdate(

@@ -7,10 +7,9 @@ export default function LoginPage(props) {
 
   return (
     <main className="LoginPage">
-      <button onClick={() => setShowLogin({})}>
+      <button onClick={() => setShowLogin(!showLogin)}>
         {showLogin ? "Show sign up" : "Show Login "}
       </button>
-      {console.log(showLogin)}
       {showLogin ? (
         <Login setUserInState={props.setUserInState} />
       ) : (
