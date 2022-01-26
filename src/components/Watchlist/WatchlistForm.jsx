@@ -23,14 +23,15 @@ function WatchlistForm(props) {
   };
 
   const handleSubmit = (e) => {
-    // console.log(e);
+    e.preventDefault();
+    console.log(e.target);
   };
 
   return (
     <div>
       {props.coinWatchSymbol.map((e, idx) => {
         return (
-          <>
+          <div key={e + idx}>
             <Accordion
               expanded={expanded === `panel + ${idx}`}
               onChange={handleAccordion(`panel + ${idx}`)}
@@ -48,40 +49,42 @@ function WatchlistForm(props) {
               </AccordionSummary>
               <AccordionDetails>
                 <AccordionDetails>
-                  <TextField
-                    sx={{ marginBottom: 0.5 }}
-                    label="Upper Threshold"
-                    size="small"
-                    name="upperLimit"
-                    type="number"
-                    onChange={handleChange}
-                    value={limit.upperLimit}
-                  >
-                    Upper Threshold
-                  </TextField>
-                  <TextField
-                    sx={{ marginBottom: 0.5 }}
-                    label="Lower Threshold"
-                    size="small"
-                    type="number"
-                    name="lowerLimit"
-                    onChange={handleChange}
-                    value={limit.lowerLimit}
-                  >
-                    Lower Threshold
-                  </TextField>
-                  <Button
-                    type="submit"
-                    variant="outlined"
-                    sx={{ margin: 0.5 }}
-                    size=""
-                  >
-                    Save Changes
-                  </Button>
+                  <form type="submit">
+                    <TextField
+                      sx={{ marginBottom: 0.5 }}
+                      label="Upper Threshold"
+                      size="small"
+                      name="upperLimit"
+                      type="number"
+                      onChange={handleChange}
+                      value={limit.upperLimit}
+                    >
+                      Upper Threshold
+                    </TextField>
+                    <TextField
+                      sx={{ marginBottom: 0.5 }}
+                      label="Lower Threshold"
+                      size="small"
+                      type="number"
+                      name="lowerLimit"
+                      onChange={handleChange}
+                      value={limit.lowerLimit}
+                    >
+                      Lower Threshold
+                    </TextField>
+                    <Button
+                      type="submit"
+                      variant="outlined"
+                      sx={{ margin: 0.5 }}
+                      onClick={handleSubmit}
+                    >
+                      Save Changes
+                    </Button>
+                  </form>
                 </AccordionDetails>
               </AccordionDetails>
             </Accordion>
-          </>
+          </div>
         );
       })}
     </div>

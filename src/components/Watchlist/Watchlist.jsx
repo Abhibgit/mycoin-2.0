@@ -7,10 +7,10 @@ function Watchlist(props) {
     <div>
       {props.coinWatchlist.map((e, idx) => {
         return (
-          <>
+          <div key={e + idx}>
             <h3>{e.s}</h3>
             <Card>${e.c}</Card>
-          </>
+          </div>
         );
       })}
     </div>

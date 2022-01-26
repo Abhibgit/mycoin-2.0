@@ -27,8 +27,8 @@ function TopCoins(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {props.topTenCoins.map((row) => (
-              <TableRow sx={{ border: 0 }}>
+            {props.topTenCoins.map((row, idx) => (
+              <TableRow sx={{ border: 0 }} key={row + idx}>
                 <TableCell align="center">{row.s}</TableCell>
                 <TableCell align="center">${row.c}</TableCell>
                 <TableCell align="center" sx={{ color: "success.positive" }}>
@@ -37,13 +37,12 @@ function TopCoins(props) {
                 <TableCell align="center">${row.o}</TableCell>
                 <TableCell align="center">${row.h}</TableCell>
                 <TableCell align="center">${row.l}</TableCell>
+                <BookmarkBorderIcon />
                 <IconButton
                   align="center"
                   onClick={() => props.saveWatchlistCoin(row.s)}
                   value={row.s}
-                >
-                  <BookmarkBorderIcon />
-                </IconButton>
+                ></IconButton>
               </TableRow>
             ))}
           </TableBody>
