@@ -48,11 +48,7 @@ function App() {
   const [coinWatchlist, setCoinWatchlist] = useState([]);
   const [topTenCoins, setTopTenCoins] = useState([]);
   //same as coinWatchSymbol, however it's required due to the speed of data renderering
-  const [coinState, setCoinState] = useState({
-    name: "",
-    upperLimit: 0,
-    lowerLimit: 0,
-  });
+  const [coinState, setCoinState] = useState([{}]);
   const [user, setUser] = useState({
     id: "",
     name: "",
@@ -100,11 +96,14 @@ function App() {
     ticker.onopen = () => {
       console.log("Connected");
       // Maps through the user's saved coinlist on load and pushes it into the "flow"
-      let userMap = user.watchlist.map((e) => e.name);
-      console.log(userMap);
-      userMap.forEach(function (e) {
-        coinWatchSymbol.push(e);
-      });
+      if (user) {
+        setCoinState(user.watchlist);
+        let userMap = user.watchlist.map((e) => e.name);
+        console.log(userMap);
+        userMap.forEach(function (e) {
+          coinWatchSymbol.push(e);
+        });
+      }
       // Grabs the current top 10 from the API coinlist and maps through to set it into the "flow"
       topTen = coinList.slice(0, 11);
       let coinSymbolMap = topTen.map((e) => e.symbol.toUpperCase());
@@ -119,7 +118,9 @@ function App() {
     };
     //Ticker "flow", pings every second.
     ticker.onmessage = (message) => {
-      console.log(user);
+      console.log(coinState, "this is the coinState");
+      console.log(user.watchlist);
+      // console.log(user, "this is the user");
       //Maps the data to grab the symbol from Binance so that the index can be located
       coinFeed = JSON.parse(message.data);
       let idxTemplate = coinFeed.map((e) => e.s);
@@ -149,6 +150,9 @@ function App() {
         }
       });
       setTopTenCoins(topTenArray);
+      if (user.watchlist.length !== coinState.length) {
+        setCoinState(user.watchlist);
+      }
     };
   }, [tickerSymbol, coinWatchSymbol, coinFeed]);
 
@@ -183,6 +187,37 @@ function App() {
       setIsError("CoinCreate Failed - Try Again");
     }
     coinWatchSymbol.push(symbol);
+  }
+
+  async function updateParams(params) {
+    let objIdx = coinState.map((e) => e.name).indexOf(params.name);
+    let objId = coinState[objIdx]._id;
+    try {
+      const fetchResponse = await fetch(`/api/users/${user._id}/coins`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          watchlist: {
+            _id: objId,
+            upperLimit: params.upperLimit,
+            lowerLimit: params.lowerLimit,
+          },
+        }),
+      });
+      console.log(fetchResponse);
+
+      if (!fetchResponse.ok) throw new Error("Fetch failed - Bad request");
+
+      let token = await fetchResponse.json();
+      localStorage.setItem("token", token);
+
+      const userDoc = JSON.parse(atob(token.split(".")[1])).user;
+      console.log("created_coin: " + userDoc);
+      setUserInState(userDoc);
+    } catch (err) {
+      console.log("CoinParams error", err);
+      setIsError("CoinParams Failed - Try Again");
+    }
   }
 
   const handleCoinProfileData = (name) => {
@@ -227,6 +262,8 @@ function App() {
                 coinWatchlist={coinWatchlist}
                 saveWatchlistCoin={saveWatchlistCoin}
                 coinWatchSymbol={coinWatchSymbol}
+                updateParams={updateParams}
+                coinState={coinState}
               />
               <TopCoins
                 topTenCoins={topTenCoins}

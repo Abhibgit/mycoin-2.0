@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 const coinSchema = new Schema(
   {
     name: String,
-    upperPrice: Number,
-    lowerPrice: Number,
+    upperLimit: Number,
+    lowerLimit: Number,
     // comment: [commentSchema],
   },
   {

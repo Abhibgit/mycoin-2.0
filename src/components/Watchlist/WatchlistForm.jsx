@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TextField, Button } from "@mui/material";
+import { TextField, Button, FormControl } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -8,23 +8,27 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Watchlist from "./Watchlist";
 
 function WatchlistForm(props) {
-  const [limit, setLimit] = useState({
-    upperLimit: 0,
-    lowerLimit: 0,
-  });
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [paramsState, setParamsState] = useState([]);
 
   const handleAccordion = (panel) => (event, isExpanded) => {
+    setParamsState([]);
     setExpanded(isExpanded ? panel : false);
   };
 
   const handleChange = (e) => {
-    setLimit({ ...limit, [e.target.name]: e.target.value });
+    console.log(e.target.value);
+    console.log(e.target.id);
+    setParamsState({
+      ...paramsState,
+      name: e.target.id,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(e.target);
+    props.updateParams(paramsState);
   };
 
   return (
@@ -49,15 +53,16 @@ function WatchlistForm(props) {
               </AccordionSummary>
               <AccordionDetails>
                 <AccordionDetails>
-                  <form type="submit">
+                  <form onSubmit={handleSubmit}>
                     <TextField
                       sx={{ marginBottom: 0.5 }}
                       label="Upper Threshold"
                       size="small"
                       name="upperLimit"
-                      type="number"
+                      type="input"
                       onChange={handleChange}
-                      value={limit.upperLimit}
+                      id={e}
+                      // value={props.coinState.upperLimit}
                     >
                       Upper Threshold
                     </TextField>
@@ -65,10 +70,12 @@ function WatchlistForm(props) {
                       sx={{ marginBottom: 0.5 }}
                       label="Lower Threshold"
                       size="small"
-                      type="number"
+                      type="input"
                       name="lowerLimit"
+                      id={props.coinState._id}
                       onChange={handleChange}
-                      value={limit.lowerLimit}
+                      id={e}
+                      // value={props.coinState.lowerLimit}
                     >
                       Lower Threshold
                     </TextField>
@@ -76,7 +83,6 @@ function WatchlistForm(props) {
                       type="submit"
                       variant="outlined"
                       sx={{ margin: 0.5 }}
-                      onClick={handleSubmit}
                     >
                       Save Changes
                     </Button>

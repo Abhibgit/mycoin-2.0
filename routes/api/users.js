@@ -10,5 +10,6 @@ router.post("/login", usersCtrl.login);
 router.post("/:id/edit", usersCtrl.edit);
 router.delete("/:id", usersCtrl.delete);
 router.post("/:id/coins", usersCtrl.addCoinToUser);
+router.put("/:id/coins", usersCtrl.addParams);
 
 module.exports = router;
