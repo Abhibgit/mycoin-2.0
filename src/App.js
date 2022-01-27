@@ -193,15 +193,13 @@ function App() {
     let objIdx = coinState.map((e) => e.name).indexOf(params.name);
     let objId = coinState[objIdx]._id;
     try {
-      const fetchResponse = await fetch(`/api/users/${user._id}/coins`, {
+      const fetchResponse = await fetch(`/api/users/coins/${user._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          watchlist: {
-            _id: objId,
-            upperLimit: params.upperLimit,
-            lowerLimit: params.lowerLimit,
-          },
+          _id: objId,
+          upperLimit: params.upperLimit,
+          lowerLimit: params.lowerLimit,
         }),
       });
       console.log(fetchResponse);
