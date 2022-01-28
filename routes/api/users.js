@@ -11,5 +11,6 @@ router.post("/:id/edit", usersCtrl.edit);
 router.delete("/:id", usersCtrl.delete);
 router.post("/:id/coins", usersCtrl.addCoinToUser);
 router.put("/coins/:id", usersCtrl.addParams);
+router.post("/:id/coins/notifications", usersCtrl.addNotification);
 
 module.exports = router;

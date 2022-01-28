@@ -18,6 +18,7 @@ import SearchBar from "../components/SearchBar/SearchBar";
 import { useParams, useNavigate } from "react-router-dom";
 import Logout from "../components/Logout/Logout";
 import { Button } from "@mui/material";
+import Notifications from "@mui/icons-material/Notifications";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -81,7 +82,9 @@ function NavBar(props) {
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+
   let navigate = useNavigate();
+
   const handleProfileShow = () => {
     console.log("pROFILE clicked");
     navigate("/user/profile");
@@ -190,7 +193,7 @@ function NavBar(props) {
               aria-label="show 17 new notifications"
               color="inherit"
             >
-              <Badge badgeContent="" color="error">
+              <Badge badgeContent={props.notifications.length} color="error">
                 <NotificationsIcon />
               </Badge>
             </IconButton>

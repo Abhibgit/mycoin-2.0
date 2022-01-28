@@ -28,7 +28,7 @@ const userSchema = new Schema(
     username: String,
     password: String,
     watchlist: [coinSchema],
-    notification: [notificationSchema],
+    notifications: [notificationSchema],
   },
   {
     timestamps: true,

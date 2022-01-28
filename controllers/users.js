@@ -12,6 +12,7 @@ module.exports = {
   addCoinToUser,
   getUser,
   addParams,
+  addNotification,
 };
 
 async function create(req, res) {
@@ -94,49 +95,6 @@ async function getUser(req, res) {
   }
 }
 
-// async function addCoinToUser(req, res) {
-//   try {
-//     console.log(req.body.watchlist, "this is the req.body.name");
-//     let user;
-//     const coinIsPresent = User.find({
-//       _id: req.params.id,
-//       watchlist: { $elemMatch: { name: { $eq: req.body.name } } },
-//     });
-
-//     if (coinIsPresent) {
-//       console.log("Coin is present", coinIsPresent);
-//       user = await User.updateOne(
-//         {
-//           _id: req.params.id,
-//           watchlist: { $elemMatch: { name: { $eq: req.body.name } } },
-//         },
-//         {
-//           $set: {
-//             "watchlist.$.upperPrice": req.body.upperPrice, //todo fix that upperProce if nil in body is not overwirtting what is already present
-//             "watchlist.$.lowerPrice": req.body.lowerPrice, //same
-//           },
-//         },
-//         { returnDocument: "after" }
-//       );
-//     } else {
-//       user = await User.findByIdAndUpdate(
-//         { _id: req.params.id },
-//         {
-//           $push: { watchlist: req.body.watchlist },
-//         },
-//         { returnDocument: "after" }
-//       );
-//     }
-//     const token = jwt.sign({ user: user }, process.env.SECRET, {
-//       expiresIn: "24h",
-//     });
-//     res.status(200).json(token);
-//   } catch (err) {
-//     console.log("user watchlist update error", err);
-//     res.status(400).json(err);
-//   }
-// }
-
 async function addCoinToUser(req, res) {
   try {
     console.log(req.body.watchlist, "this is the req.body.name");
@@ -183,6 +141,25 @@ async function addParams(req, res) {
     res.status(200).json(token);
   } catch (err) {
     console.log("coin update error", err);
+    res.status(400).json(err);
+  }
+}
+
+async function addNotification(req, res) {
+  try {
+    const user = await User.findByIdAndUpdate(
+      { _id: req.params.id },
+      {
+        $push: { notifications: req.body },
+      },
+      { returnDocument: "after" }
+    );
+    const token = jwt.sign({ user: user }, process.env.SECRET, {
+      expiresIn: "24h",
+    });
+    res.status(200).json(token);
+  } catch (err) {
+    console.log("user delete error", err);
     res.status(400).json(err);
   }
 }
