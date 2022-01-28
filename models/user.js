@@ -13,6 +13,14 @@ const coinSchema = new Schema(
   }
 );
 
+const notificationSchema = new Schema(
+  {
+    message: String,
+  },
+  {
+    timestamps: true,
+  }
+);
 const userSchema = new Schema(
   {
     name: String,
@@ -20,6 +28,7 @@ const userSchema = new Schema(
     username: String,
     password: String,
     watchlist: [coinSchema],
+    notification: [notificationSchema],
   },
   {
     timestamps: true,

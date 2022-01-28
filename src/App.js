@@ -150,6 +150,7 @@ function App() {
         }
       });
       setTopTenCoins(topTenArray);
+      checkParams();
       if (user.watchlist.length !== coinState.length) {
         setCoinState(user.watchlist);
       }
@@ -198,6 +199,7 @@ function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           _id: objId,
+          name: params.name,
           upperLimit: params.upperLimit,
           lowerLimit: params.lowerLimit,
         }),
@@ -217,6 +219,23 @@ function App() {
       setIsError("CoinParams Failed - Try Again");
     }
   }
+
+  const checkParams = () => {
+    console.log("this is working");
+    coinWatchlist.map(({ c, s }, idx) => {
+      console.log(c, s, idx, "this is the c and the s");
+      console.log(coinState[idx].upperLimit);
+      if (c > coinState[idx].upperLimit) {
+        console.log(
+          `${s} is above your threshold of ${coinState[idx].upperLimit}`
+        );
+      } else if (c < coinState[idx].lowerLimit) {
+        console.log(
+          `${s} is below your threshold of ${coinState[idx].lowerLimit}`
+        );
+      }
+    });
+  };
 
   const handleCoinProfileData = (name) => {
     let coinMap = coinList.map((e) => e.name);

@@ -62,7 +62,6 @@ function WatchlistForm(props) {
                       type="input"
                       onChange={handleChange}
                       id={e}
-                      // value={props.coinState.upperLimit}
                     >
                       Upper Threshold
                     </TextField>
@@ -75,7 +74,6 @@ function WatchlistForm(props) {
                       id={props.coinState._id}
                       onChange={handleChange}
                       id={e}
-                      // value={props.coinState.lowerLimit}
                     >
                       Lower Threshold
                     </TextField>

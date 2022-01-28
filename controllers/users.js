@@ -167,6 +167,7 @@ async function addParams(req, res) {
         $set: {
           watchlist: {
             _id: req.body._id,
+            name: req.body.name,
             upperLimit: req.body.upperLimit,
             lowerLimit: req.body.lowerLimit,
           },
