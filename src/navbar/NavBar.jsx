@@ -17,7 +17,7 @@ import SearchBar from "../components/SearchBar/SearchBar";
 //import user from "../../models/user";
 import { useParams, useNavigate } from "react-router-dom";
 import Logout from "../components/Logout/Logout";
-import { Button } from "@mui/material";
+import { Button, List, ListItem } from "@mui/material";
 import Notifications from "@mui/icons-material/Notifications";
 
 const Search = styled("div")(({ theme }) => ({
@@ -62,9 +62,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 function NavBar(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorElTwo, setAnchorElTwo] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const isNotificationOpen = Boolean(anchorElTwo);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -77,6 +79,13 @@ function NavBar(props) {
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
+  };
+
+  const handleNotificationOpen = (event) => {
+    setAnchorElTwo(event.currentTarget);
+  };
+  const handleNotificationClose = () => {
+    setAnchorElTwo(null);
   };
 
   const handleMobileMenuOpen = (event) => {
@@ -113,6 +122,36 @@ function NavBar(props) {
     </Menu>
   );
 
+  const notificationsMenuId = "primary-search-notification-menu";
+  const renderNotifications = (
+    <Menu
+      anchorEl={anchorElTwo}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      id={notificationsMenuId}
+      keepMounted
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      open={isNotificationOpen}
+      onClose={handleNotificationClose}
+    >
+      {props.notifications ? (
+        props.notifications.map(({ message, createdAt }, idx) => (
+          <ListItem key={message + idx}>
+            {message} - {createdAt}{" "}
+            <Button onClick={props.removeNotification}>X</Button>
+          </ListItem>
+        ))
+      ) : (
+        <ListItem>You have no notifications</ListItem>
+      )}
+    </Menu>
+  );
+
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
     <Menu
@@ -130,14 +169,6 @@ function NavBar(props) {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
       <MenuItem>
         <IconButton
           size="large"
@@ -192,8 +223,15 @@ function NavBar(props) {
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
+              aria-controls={notificationsMenuId}
+              onClick={handleNotificationOpen}
             >
-              <Badge badgeContent={props.notifications.length} color="error">
+              <Badge
+                badgeContent={
+                  props.notifications ? props.notifications.length : null
+                }
+                color="error"
+              >
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -225,6 +263,7 @@ function NavBar(props) {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
+      {renderNotifications}
     </Box>
   );
 }

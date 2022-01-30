@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import NavBar from "./navbar/NavBar";
-import DashboardPage from "./pages/DashboardPage/DashboardPage";
 import CoinInformation from "./components/CoinProfile/CoinInformation";
-import Watchlist from "./components/Watchlist/Watchlist";
 import axios from "axios";
 import TopCoins from "./components/TopCoins/TopCoins";
 import { Grid } from "@mui/material";
@@ -10,6 +8,8 @@ import AuthPage from "./pages/AuthPage/AuthPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import WatchlistPage from "./pages/WatchlistPage/WatchListPage";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const themeOptions = createTheme({
   palette: {
@@ -37,6 +37,7 @@ let topTen = [];
 let topTenArray = [];
 let token;
 let userDoc;
+let notificationsArray;
 
 function App() {
   const [isError, setIsError] = useState("");
@@ -105,6 +106,7 @@ function App() {
           coinWatchSymbol.push(e);
         });
         setNotifications(user.notifications);
+        notificationsArray = user.notifications;
         console.log(user.notifications);
       }
       // Grabs the current top 10 from the API coinlist and maps through to set it into the "flow"
@@ -121,9 +123,6 @@ function App() {
     };
     //Ticker "flow", pings every second.
     ticker.onmessage = (message) => {
-      console.log(coinState, "this is the coinState");
-      console.log(notifications);
-      console.log(user.notifications);
       //Maps the data to grab the symbol from Binance so that the index can be located
       coinFeed = JSON.parse(message.data);
       let idxTemplate = coinFeed.map((e) => e.s);
@@ -157,8 +156,14 @@ function App() {
       if (user.watchlist.length !== coinState.length) {
         setCoinState(user.watchlist);
       }
-      if (user.notifications.length !== notifications.length) {
-        setNotifications(user.notifications);
+      if (user.notifications) {
+        if (
+          Object.keys(user.notifications).length !== notificationsArray.length
+        ) {
+          notificationsArray = user.notfications;
+        } else {
+          console.log("no new notifications");
+        }
       }
       console.log(notifications);
     };
@@ -233,33 +238,61 @@ function App() {
         Object.keys(coinState[idx]).length >= 6 &&
         c > coinState[idx].upperLimit
       ) {
+        console.log("This is the upperlimit confirmation");
         notificationCheck(
-          `${s} is above your threshold of ${coinState[idx].upperLimit}`
+          `${s} is above your threshold of $${coinState[idx].upperLimit}`
         );
       }
       if (
         Object.keys(coinState[idx]).length >= 6 &&
         c < coinState[idx].lowerLimit
       ) {
+        console.log("This is the this is the lower limit confirmation");
         notificationCheck(
-          `${s} is below your threshold of ${coinState[idx].lowerLimit}`
+          `${s} is below your threshold of $${coinState[idx].lowerLimit}`
         );
       }
     });
   };
 
   const notificationCheck = (alertmsg) => {
-    let msgCheck = notifications.map((m) => m.message);
-    msgCheck.forEach((msg) => {
-      if (msg === alertmsg) {
-        console.log("this exists already");
-      } else {
-        sendNotification(alertmsg);
-      }
-    });
+    console.log(Object.keys(notifications).length, "this is the keys");
+    if (Object.keys(notifications).length === 0) {
+      console.log("this is hitting");
+      toast(alertmsg, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      sendNotification(alertmsg);
+    } else {
+      console.log("This is going through the duplication check");
+      let msgCheck = notifications.map((m) => m.message);
+      msgCheck.forEach((msg) => {
+        if (msg == alertmsg) {
+          console.log("this exists already");
+        } else {
+          toast(alertmsg, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          sendNotification(alertmsg);
+        }
+      });
+    }
   };
 
   async function sendNotification(alertmsg) {
+    console.log(alertmsg);
     try {
       const fetchResponse = await fetch(
         `/api/users/${user._id}/coins/notifications`,
@@ -299,6 +332,7 @@ function App() {
   return (
     <div>
       <ThemeProvider theme={themeOptions}>
+        <ToastContainer />
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <NavBar
