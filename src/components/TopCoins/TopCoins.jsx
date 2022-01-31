@@ -37,12 +37,13 @@ function TopCoins(props) {
                 <TableCell align="center">${row.o}</TableCell>
                 <TableCell align="center">${row.h}</TableCell>
                 <TableCell align="center">${row.l}</TableCell>
-                <BookmarkBorderIcon />
                 <IconButton
                   align="center"
                   onClick={() => props.saveWatchlistCoin(row.s)}
                   value={row.s}
-                ></IconButton>
+                >
+                  Save
+                </IconButton>
               </TableRow>
             ))}
           </TableBody>

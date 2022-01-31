@@ -13,6 +13,7 @@ module.exports = {
   getUser,
   addParams,
   addNotification,
+  deleteWatchlistItem,
 };
 
 async function create(req, res) {
@@ -160,6 +161,33 @@ async function addNotification(req, res) {
     res.status(200).json(token);
   } catch (err) {
     console.log("user delete error", err);
+    res.status(400).json(err);
+  }
+}
+
+async function deleteWatchlistItem(req, res) {
+  console.log(req.params, "this is the req.params");
+  console.log(req.params.id, "this is the req.params.id");
+  console.log(req.body, "this is the req.body");
+  try {
+    const coin = await User.updateOne(
+      { _id: req.params.id },
+      {
+        $pull: {
+          watchlist: {
+            _id: req.body,
+          },
+        },
+      },
+      { returnDocument: "after" }
+    );
+    const token = jwt.sign({ user: user }, process.env.SECRET, {
+      expiresIn: "24h",
+    });
+    console.log(coin, "this is the coin");
+    res.status(200).json(token);
+  } catch (err) {
+    console.log("coin update error", err);
     res.status(400).json(err);
   }
 }

@@ -15,7 +15,10 @@ function WatchListPage(props) {
           />
         </Grid>
         <Grid item xs={4}>
-          <Watchlist coinWatchlist={props.coinWatchlist} />
+          <Watchlist
+            coinWatchlist={props.coinWatchlist}
+            deleteWatchItem={props.deleteWatchItem}
+          />
         </Grid>
       </Grid>
     </>
