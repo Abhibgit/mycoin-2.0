@@ -170,6 +170,7 @@ async function deleteWatchlistItem(req, res) {
   console.log(req.params.id, "this is the req.params.id");
   console.log(req.body, "this is the req.body");
   try {
+    const user = await User.findById(req.params.id);
     const coin = await User.updateOne(
       { _id: req.params.id },
       {
@@ -181,10 +182,10 @@ async function deleteWatchlistItem(req, res) {
       },
       { returnDocument: "after" }
     );
+    console.log(coin, "this is the coin");
     const token = jwt.sign({ user: user }, process.env.SECRET, {
       expiresIn: "24h",
     });
-    console.log(coin, "this is the coin");
     res.status(200).json(token);
   } catch (err) {
     console.log("coin update error", err);

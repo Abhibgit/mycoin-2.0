@@ -99,6 +99,7 @@ function App() {
       console.log("Connected");
       // Maps through the user's saved coinlist on load and pushes it into the "flow"
       if (user) {
+        console.log("being set");
         setCoinState(user.watchlist);
         let userMap = user.watchlist.map((e) => e.name);
         userMap.forEach(function (e) {
@@ -121,6 +122,7 @@ function App() {
     };
     //Ticker "flow", pings every second.
     ticker.onmessage = (message) => {
+      console.log(notificationsArray);
       console.log(user);
       console.log(coinWatchlist, "this is the coinwatchlist");
       console.log(coinState, "this is the coinstate");
@@ -155,10 +157,12 @@ function App() {
       });
       setTopTenCoins(topTenArray);
       if (user.watchlist.length !== coinState.length) {
+        console.log(
+          "Checking to see if this watchlist is being hit constantly"
+        );
         setCoinState(user.watchlist);
       }
       if (user.notifications) {
-        notificationsArray = [];
         notificationsArray = user.notifications;
         setNotifications(notificationsArray);
       }
@@ -227,10 +231,17 @@ function App() {
       console.log("CoinParams error", err);
       setIsError("CoinParams Failed - Try Again");
     }
+    let updates = [...coinState];
+    let singleUpdate = { ...coinState[objIdx] };
+    singleUpdate.upperLimit = params.upperLimit;
+    singleUpdate.lowerLimit = params.lowerLimit;
+    updates[objIdx] = singleUpdate;
+    console.log(coinState);
+    console.log(updates);
+    setCoinState({ updates });
   }
 
   const checkParams = () => {
-    console.log("hello?????");
     coinWatchlist.map(({ c, s }, idx) => {
       if (
         Object.keys(coinState[idx]).length >= 6 &&
@@ -254,8 +265,11 @@ function App() {
   };
 
   const notificationCheck = (alertmsg) => {
+    console.log(alertmsg);
+    console.log(notificationsArray);
+    console.log(Object.keys(notificationsArray).length);
     if (Object.keys(notificationsArray).length === 0) {
-      console.log("THIS SHOULD NOT HIT");
+      console.log("this is being bypassed");
       toast(alertmsg, {
         position: "top-right",
         autoClose: 5000,
@@ -269,25 +283,22 @@ function App() {
     } else {
       console.log("This is going through the duplication check");
       let msgCheck = notificationsArray.map((m) => m.message);
-      msgCheck.forEach((msg) => {
-        if (msg !== alertmsg) {
-          console.log("THIS SHOULD NOT BE HITTING");
-          toast(alertmsg, {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-          sendNotification(alertmsg);
-        } else {
-          console.log(alertmsg);
-          console.log(msg);
-          console.log("this exists already");
-        }
-      });
+      if (msgCheck.includes(alertmsg) === false) {
+        console.log("this is sending a notification off");
+        toast(alertmsg, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        console.log(alertmsg, "this is bypassing the loop");
+        sendNotification(alertmsg);
+      } else {
+        console.log("this exists already");
+      }
     }
   };
 
@@ -329,6 +340,7 @@ function App() {
     let watchlistMap = coinState.map((e) => e.name);
     let itemIdx = watchlistMap.indexOf(params);
     let itemId = coinState[itemIdx]._id;
+    console.log(itemId);
     try {
       const fetchResponse = await fetch(`/api/users/coins/${user._id}`, {
         method: "DELETE",
