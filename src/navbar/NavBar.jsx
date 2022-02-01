@@ -36,30 +36,6 @@ const Search = styled("div")(({ theme }) => ({
   },
 }));
 
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "20ch",
-    },
-  },
-}));
-
 function NavBar(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorElTwo, setAnchorElTwo] = React.useState(null);
@@ -140,10 +116,10 @@ function NavBar(props) {
       onClose={handleNotificationClose}
     >
       {props.notifications ? (
-        props.notifications.map(({ message, createdAt }, idx) => (
+        props.notifications.map(({ message, createdAt, _id }, idx) => (
           <ListItem key={message + idx}>
             {message} - {createdAt}{" "}
-            <Button onClick={props.removeNotification}>X</Button>
+            <Button onClick={() => props.removeNotification(_id)}>X</Button>
           </ListItem>
         ))
       ) : (

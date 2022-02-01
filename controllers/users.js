@@ -14,6 +14,7 @@ module.exports = {
   addParams,
   addNotification,
   deleteWatchlistItem,
+  deleteNotification,
 };
 
 async function create(req, res) {
@@ -176,6 +177,31 @@ async function deleteWatchlistItem(req, res) {
       {
         $pull: {
           watchlist: {
+            _id: req.body,
+          },
+        },
+      },
+      { returnDocument: "after" }
+    );
+    console.log(coin, "this is the coin");
+    const token = jwt.sign({ user: user }, process.env.SECRET, {
+      expiresIn: "24h",
+    });
+    res.status(200).json(token);
+  } catch (err) {
+    console.log("coin update error", err);
+    res.status(400).json(err);
+  }
+}
+
+async function deleteNotification(req, res) {
+  try {
+    const user = await User.findById(req.params.id);
+    const coin = await User.updateOne(
+      { _id: req.params.id },
+      {
+        $pull: {
+          notifications: {
             _id: req.body,
           },
         },

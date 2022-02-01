@@ -366,6 +366,35 @@ function App() {
     setCoinWatchlist([]);
   }
 
+  async function removeNotification(params) {
+    try {
+      const fetchResponse = await fetch(
+        `/api/users/${user._id}/coins/notifications`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            _id: params,
+          }),
+        }
+      );
+      console.log(fetchResponse);
+
+      if (!fetchResponse.ok) throw new Error("Fetch failed - Bad request");
+
+      let token = await fetchResponse.json();
+      localStorage.setItem("token", token);
+
+      const userDoc = JSON.parse(atob(token.split(".")[1])).user;
+      setUserInState(userDoc);
+    } catch (err) {
+      console.log("Delete error", err);
+      setIsError("Delete error Failed - Try Again");
+    }
+    let filterNotification = notifications.filter((e) => e._id !== params);
+    setNotifications(filterNotification);
+  }
+
   if (isLoading) {
     return <span>Loading...</span>;
   }
@@ -382,6 +411,7 @@ function App() {
               user={user}
               setUserInState={setUserInState}
               notifications={notifications}
+              removeNotification={removeNotification}
             />
           </Grid>
           <Grid item xs={2}>
