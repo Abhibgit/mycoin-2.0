@@ -65,6 +65,10 @@ function NavBar(props) {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const handleMyCoinClick = (event) => {
+    navigate("/");
+  };
+
   const handleLogout = (evt) => {
     evt.preventDefault();
     localStorage.removeItem("token");
@@ -195,12 +199,17 @@ function NavBar(props) {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <img src={require("../assets/MyCoin.svg").default} alt="mySvgImage" />
+          <img
+            src={require("../assets/MyCoin.svg").default}
+            alt="mySvgImage"
+            onClick={handleMyCoinClick}
+          />
           <Typography
             variant="h6"
             noWrap
             component="div"
             sx={{ display: { xs: "none", sm: "block" }, m: 0.75, fontSize: 25 }}
+            onClick={handleMyCoinClick}
           >
             MyCoin
           </Typography>
