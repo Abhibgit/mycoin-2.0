@@ -19,15 +19,6 @@ function ProfilePage(props) {
   return (
     <div>
       <Profile user={user} setUserInState={setUserInState}></Profile>
-      <WatchlistPage
-        coinList={props.coinList}
-        coinWatchlist={props.coinWatchlist}
-        saveWatchlistCoin={props.saveWatchlistCoin}
-        coinWatchSymbol={props.coinWatchSymbol}
-        updateParams={props.updateParams}
-        coinState={props.coinState}
-        deleteWatchItem={props.deleteWatchItem}
-      />
     </div>
   );
 }
