@@ -1,3 +1,11 @@
+import {
+  Typography,
+  Card,
+  CardContent,
+  Button,
+  Input,
+  CardHeader,
+} from "@mui/material";
 import React from "react";
 import DeleteModal from "../DeleteModal/DeleteModal";
 
@@ -50,38 +58,45 @@ function Profile(props) {
 
   return (
     <div>
-      <form onSubmit={handleEditSubmit}>
-        <label>
-          <span>Name</span>
-          <input
-            name="name"
-            defaultValue={props.user.name}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <label>
-          <span>Email</span>
-          <input
-            name="email"
-            defaultValue={props.user.email}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <label>
-          <span>Password</span>
-          <input
-            name="password"
-            type="password"
-            defaultValue={props.user.password}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <button type="submit">Edit User</button>
-      </form>
-      <DeleteModal {...deleteProps} />
+      <Card>
+        <Typography sx={{ fontSize: 30 }}>Personal Information</Typography>
+        <CardContent>
+          <form onSubmit={handleEditSubmit}>
+            <Typography sx={{ padding: 2 }}>
+              <Typography>Username</Typography>
+              <Input
+                name="name"
+                defaultValue={props.user.name}
+                onChange={handleChange}
+                required
+              />
+            </Typography>
+            <Typography sx={{ padding: 2 }}>
+              <Typography>Email</Typography>
+              <Input
+                name="email"
+                defaultValue={props.user.email}
+                onChange={handleChange}
+                required
+              />
+            </Typography>
+            <Typography sx={{ padding: 2 }}>
+              <Typography>Password</Typography>
+              <Input
+                name="password"
+                type="password"
+                defaultValue={props.user.password}
+                onChange={handleChange}
+                required
+              />
+            </Typography>
+            <Button type="submit" variant="outlined" sx={{ margin: 5 }}>
+              Edit User
+            </Button>
+            <DeleteModal {...deleteProps} />
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }

@@ -1,32 +1,32 @@
 import React from "react";
-import CoinInformation from "../../components/CoinProfile/CoinInformation";
-import Watchlist from "../../components/Watchlist/Watchlist";
 import TopCoins from "../../components/TopCoins/TopCoins";
 import { Grid } from "@mui/material";
+
+import AuthPage from "../AuthPage/AuthPage";
 
 function DashboardPage(props) {
   return (
     <>
-      <Grid item xs={8}>
-        <CoinInformation
-          profileCoinInfo={props.profileCoinInfo}
-          profileCoin={props.profileCoin}
-        />
-      </Grid>
-      <Grid item xs={8}>
-        <TopCoins
-          topTenCoins={props.topTenCoins}
-          coinList={props.coinList}
-          saveWatchlistCoin={props.saveWatchlistCoin}
-        />
-      </Grid>
-      <Grid item xs={4}>
-        <Watchlist
-          coinList={props.coinList}
-          coinWatchlist={props.coinWatchlist}
-          saveWatchlistCoin={props.saveWatchlistCoin}
-          handleCoinProfileData={props.handleCoinProfileData}
-        />
+      <Grid
+        container
+        spacing={2}
+        direction="column"
+        justifyContent="center"
+        style={{ minHeight: "100vh" }}
+      >
+        {props.user ? (
+          <Grid item xs={12}>
+            <TopCoins
+              topTenCoins={props.topTenCoins}
+              coinList={props.coinList}
+              saveWatchlistCoin={props.saveWatchlistCoin}
+            />
+          </Grid>
+        ) : (
+          <Grid item xs={12}>
+            <AuthPage />
+          </Grid>
+        )}
       </Grid>
     </>
   );

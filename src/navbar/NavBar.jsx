@@ -1,24 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import InputBase from "@mui/material/InputBase";
 import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import SearchBar from "../components/SearchBar/SearchBar";
-//import user from "../../models/user";
-import { useParams, useNavigate } from "react-router-dom";
-import Logout from "../components/Logout/Logout";
 import { Button, List, ListItem } from "@mui/material";
-import Notifications from "@mui/icons-material/Notifications";
+import { useNavigate } from "react-router-dom";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -44,6 +39,8 @@ function NavBar(props) {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const isNotificationOpen = Boolean(anchorElTwo);
 
+  const navigate = useNavigate();
+
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -68,14 +65,18 @@ function NavBar(props) {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  let navigate = useNavigate();
-
-  const handleProfileShow = () => {
-    console.log("pROFILE clicked");
-    navigate("/user/profile");
+  const handleLogout = (evt) => {
+    evt.preventDefault();
+    localStorage.removeItem("token");
+    window.location.reload(false);
     handleMenuClose();
   };
 
+  const handleProfileLink = (evt) => {
+    evt.preventDefault();
+    handleMenuClose();
+    navigate("/user/profile");
+  };
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -93,8 +94,15 @@ function NavBar(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      {props.user !== "" ? (
+        <div>
+          <MenuItem onClick={handleProfileLink}>Profile</MenuItem>
+          <MenuItem onClick={handleMenuClose}>Watchlist</MenuItem>
+          <MenuItem onClick={handleLogout}>Logout</MenuItem>
+        </div>
+      ) : (
+        <MenuItem>Please Login</MenuItem>
+      )}
     </Menu>
   );
 
@@ -192,7 +200,6 @@ function NavBar(props) {
               handleCoinProfileData={props.handleCoinProfileData}
             />
           </Search>
-          <Logout />
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton

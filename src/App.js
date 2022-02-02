@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import NavBar from "./navbar/NavBar";
-import CoinInformation from "./components/CoinProfile/CoinInformation";
 import axios from "axios";
-import TopCoins from "./components/TopCoins/TopCoins";
 import { Grid } from "@mui/material";
 import AuthPage from "./pages/AuthPage/AuthPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
@@ -10,6 +8,9 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import WatchlistPage from "./pages/WatchlistPage/WatchListPage";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import DashboardPage from "./pages/DashboardPage/DashboardPage";
+import CoinProfilePage from "./pages/CoinProfilePage/CoinProfilePage";
 
 export const themeOptions = createTheme({
   palette: {
@@ -400,53 +401,72 @@ function App() {
   }
   return (
     <div>
-      <ThemeProvider theme={themeOptions}>
-        <ToastContainer />
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <NavBar
-              coinList={coinList}
-              findProfileCoin={findProfileCoin}
-              handleCoinProfileData={handleCoinProfileData}
-              user={user}
-              setUserInState={setUserInState}
-              notifications={notifications}
-              removeNotification={removeNotification}
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <button>Sign Up</button>
-          </Grid>
-          {user.id === "" ? (
-            <Grid item xs={2}>
-              <AuthPage setUserInState={setUserInState} />
-            </Grid>
-          ) : (
+      <Router>
+        <ThemeProvider theme={themeOptions}>
+          <ToastContainer />
+          <Grid
+            container
+            spacing={2}
+            direction="column"
+            justifyContent="center"
+            style={{ minHeight: "100vh" }}
+          >
             <Grid item xs={12}>
-              <ProfilePage user={user} setUserInState={setUserInState} />
-              <CoinInformation
-                saveWatchlistCoin={saveWatchlistCoin}
-                profileCoinInfo={profileCoinInfo}
-                profileCoin={profileCoin}
-              />
-              <WatchlistPage
+              <NavBar
                 coinList={coinList}
-                coinWatchlist={coinWatchlist}
-                saveWatchlistCoin={saveWatchlistCoin}
-                coinWatchSymbol={coinWatchSymbol}
-                updateParams={updateParams}
-                coinState={coinState}
-                deleteWatchItem={deleteWatchItem}
-              />
-              <TopCoins
-                topTenCoins={topTenCoins}
-                coinList={coinList}
-                saveWatchlistCoin={saveWatchlistCoin}
+                findProfileCoin={findProfileCoin}
+                handleCoinProfileData={handleCoinProfileData}
+                user={user}
+                setUserInState={setUserInState}
+                notifications={notifications}
+                removeNotification={removeNotification}
               />
             </Grid>
-          )}
-        </Grid>
-      </ThemeProvider>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <DashboardPage
+                    topTenCoins={topTenCoins}
+                    coinList={coinList}
+                    saveWatchlistCoin={saveWatchlistCoin}
+                  />
+                }
+              />
+              <Route
+                path={"/user/profile"}
+                element={
+                  <ProfilePage user={user} setUserInState={setUserInState} />
+                }
+              />
+              <Route
+                path={"/coin/profile"}
+                element={
+                  <CoinProfilePage
+                    saveWatchlistCoin={saveWatchlistCoin}
+                    profileCoinInfo={profileCoinInfo}
+                    profileCoin={profileCoin}
+                  />
+                }
+              />
+              <Route
+                path={"/watchlist"}
+                element={
+                  <WatchlistPage
+                    coinList={coinList}
+                    coinWatchlist={coinWatchlist}
+                    saveWatchlistCoin={saveWatchlistCoin}
+                    coinWatchSymbol={coinWatchSymbol}
+                    updateParams={updateParams}
+                    coinState={coinState}
+                    deleteWatchItem={deleteWatchItem}
+                  />
+                }
+              />
+            </Routes>
+          </Grid>
+        </ThemeProvider>
+      </Router>
     </div>
   );
 }
