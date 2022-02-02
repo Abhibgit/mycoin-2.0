@@ -77,6 +77,17 @@ function NavBar(props) {
     handleMenuClose();
     navigate("/user/profile");
   };
+
+  const handleWatchlistLink = (evt) => {
+    evt.preventDefault();
+    handleMenuClose();
+    navigate("/watchlist");
+  };
+  const handleDashboardLink = (evt) => {
+    evt.preventDefault();
+    handleMenuClose();
+    navigate("/");
+  };
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -97,7 +108,8 @@ function NavBar(props) {
       {props.user !== "" ? (
         <div>
           <MenuItem onClick={handleProfileLink}>Profile</MenuItem>
-          <MenuItem onClick={handleMenuClose}>Watchlist</MenuItem>
+          <MenuItem onClick={handleDashboardLink}>Dashboard</MenuItem>
+          <MenuItem onClick={handleWatchlistLink}>Watchlist</MenuItem>
           <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </div>
       ) : (

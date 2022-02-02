@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { TextField, Button, FormControl } from "@mui/material";
+import { TextField, Button, Card, CardContent } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Watchlist from "./Watchlist";
 
 function WatchlistForm(props) {
   const [expanded, setExpanded] = useState(false);
@@ -33,64 +32,71 @@ function WatchlistForm(props) {
 
   return (
     <div>
-      {props.coinWatchSymbol.map((e, idx) => {
-        return (
-          <div key={e + idx}>
-            <Accordion
-              expanded={expanded === `panel + ${idx}`}
-              onChange={handleAccordion(`panel + ${idx}`)}
-              style={{ marginTop: 30, marginBottom: 15 }}
-            >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1bh-content"
-                id="panel1bh-header"
-              >
-                <Typography sx={{ width: "33%", flexShrink: 0 }}>
-                  {e}
-                </Typography>
-                <Typography sx={{ color: "text.secondary" }}></Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <AccordionDetails>
-                  <form onSubmit={handleSubmit}>
-                    <TextField
-                      sx={{ marginBottom: 0.5 }}
-                      label="Upper Threshold"
-                      size="small"
-                      name="upperLimit"
-                      type="input"
-                      onChange={handleChange}
-                      id={e}
-                    >
-                      Upper Threshold
-                    </TextField>
-                    <TextField
-                      sx={{ marginBottom: 0.5 }}
-                      label="Lower Threshold"
-                      size="small"
-                      type="input"
-                      name="lowerLimit"
-                      id={props.coinState._id}
-                      onChange={handleChange}
-                      id={e}
-                    >
-                      Lower Threshold
-                    </TextField>
-                    <Button
-                      type="submit"
-                      variant="outlined"
-                      sx={{ margin: 0.5 }}
-                    >
-                      Save Changes
-                    </Button>
-                  </form>
-                </AccordionDetails>
-              </AccordionDetails>
-            </Accordion>
-          </div>
-        );
-      })}
+      <Card sx={{ boxShadow: 3, backgroundColor: "#fcfaed" }}>
+        <CardContent>
+          <Typography style={{ margin: 20, fontSize: 45 }}>
+            Watchlist Parameters
+          </Typography>
+          {props.coinWatchSymbol.map((e, idx) => {
+            return (
+              <div key={e + idx}>
+                <Accordion
+                  expanded={expanded === `panel + ${idx}`}
+                  onChange={handleAccordion(`panel + ${idx}`)}
+                  style={{ marginTop: 30, marginBottom: 15 }}
+                >
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1bh-content"
+                    id="panel1bh-header"
+                  >
+                    <Typography sx={{ width: "33%", flexShrink: 0 }}>
+                      {e}
+                    </Typography>
+                    <Typography sx={{ color: "text.secondary" }}></Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <AccordionDetails>
+                      <form onSubmit={handleSubmit}>
+                        <TextField
+                          sx={{ marginBottom: 0.5, marginRight: 5 }}
+                          label="Upper Threshold"
+                          size="small"
+                          name="upperLimit"
+                          type="input"
+                          onChange={handleChange}
+                          id={e}
+                        >
+                          Upper Threshold
+                        </TextField>
+                        <TextField
+                          sx={{ marginBottom: 0.5, marginRight: 5 }}
+                          label="Lower Threshold"
+                          size="small"
+                          type="input"
+                          name="lowerLimit"
+                          id={props.coinState._id}
+                          onChange={handleChange}
+                          id={e}
+                        >
+                          Lower Threshold
+                        </TextField>
+                        <Button
+                          type="submit"
+                          variant="contained"
+                          sx={{ backgroundColor: "#6dbf71" }}
+                        >
+                          Save Changes
+                        </Button>
+                      </form>
+                    </AccordionDetails>
+                  </AccordionDetails>
+                </Accordion>
+              </div>
+            );
+          })}
+        </CardContent>
+      </Card>
     </div>
   );
 }
