@@ -431,6 +431,8 @@ function App() {
                     coinList={coinList}
                     saveWatchlistCoin={saveWatchlistCoin}
                     setUserInState={setUserInState}
+                    coinWatchlist={coinWatchlist}
+                    deleteWatchItem={deleteWatchItem}
                   />
                 }
               />
@@ -447,6 +449,9 @@ function App() {
                     saveWatchlistCoin={saveWatchlistCoin}
                     profileCoinInfo={profileCoinInfo}
                     profileCoin={profileCoin}
+                    coinWatchSymbol={coinWatchSymbol}
+                    updateParams={updateParams}
+                    coinState={coinState}
                   />
                 }
               />

@@ -1,8 +1,8 @@
 import React from "react";
 import TopCoins from "../../components/TopCoins/TopCoins";
 import { Grid } from "@mui/material";
-
 import AuthPage from "../AuthPage/AuthPage";
+import Watchlist from "../../components/Watchlist/Watchlist";
 
 function DashboardPage(props) {
   return (
@@ -10,22 +10,30 @@ function DashboardPage(props) {
       <Grid
         container
         spacing={2}
-        direction="column"
-        justifyContent="center"
+        direction="row"
+        justifyContent="left"
         style={{ minHeight: "100vh" }}
       >
-        {props.user ? (
-          <Grid item xs={12}>
-            <TopCoins
-              topTenCoins={props.topTenCoins}
-              coinList={props.coinList}
-              saveWatchlistCoin={props.saveWatchlistCoin}
-            />
-          </Grid>
-        ) : (
+        {props.user === "" ? (
           <Grid item xs={12}>
             <AuthPage setUserInState={props.setUserInState} />
           </Grid>
+        ) : (
+          <>
+            <Grid item xs={8} style={{ margin: 50 }}>
+              <TopCoins
+                topTenCoins={props.topTenCoins}
+                coinList={props.coinList}
+                saveWatchlistCoin={props.saveWatchlistCoin}
+              />
+            </Grid>
+            <Grid item xs={2} style={{ margin: 50 }}>
+              <Watchlist
+                coinWatchlist={props.coinWatchlist}
+                deleteWatchItem={props.deleteWatchItem}
+              />
+            </Grid>
+          </>
         )}
       </Grid>
     </>

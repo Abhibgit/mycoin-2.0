@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Button } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -7,17 +6,20 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { IconButton, Typography } from "@mui/material";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
-import { IconButton } from "@mui/material";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
 
 function TopCoins(props) {
   return (
     <div>
       <TableContainer component={Paper}>
-        <h1>Top Performing Coins</h1>
+        <Typography style={{ margin: 20, fontSize: 45 }}>
+          Top Performing Coins
+        </Typography>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
-            <TableRow>
+            <TableRow style={{ textDecoration: "underline" }}>
               <TableCell align="center">Symbol</TableCell>
               <TableCell align="center">Price</TableCell>
               <TableCell align="center">Price Change %</TableCell>
@@ -30,19 +32,30 @@ function TopCoins(props) {
             {props.topTenCoins.map((row, idx) => (
               <TableRow sx={{ border: 0 }} key={row + idx}>
                 <TableCell align="center">{row.s}</TableCell>
-                <TableCell align="center">${row.c}</TableCell>
-                <TableCell align="center" sx={{ color: "success.positive" }}>
+                <TableCell align="center">
+                  ${parseInt(row.c).toFixed(2)}
+                </TableCell>
+                <TableCell
+                  align="center"
+                  sx={{ color: row.P > 0 ? "green" : "red" }}
+                >
                   % {row.P}
                 </TableCell>
-                <TableCell align="center">${row.o}</TableCell>
-                <TableCell align="center">${row.h}</TableCell>
-                <TableCell align="center">${row.l}</TableCell>
+                <TableCell align="center">
+                  ${parseInt(row.o).toFixed(2)}
+                </TableCell>
+                <TableCell align="center">
+                  ${parseInt(row.h).toFixed(2)}
+                </TableCell>
+                <TableCell align="center">
+                  ${parseInt(row.l).toFixed(2)}
+                </TableCell>
                 <IconButton
                   align="center"
                   onClick={() => props.saveWatchlistCoin(row.s)}
                   value={row.s}
                 >
-                  Save
+                  <BookmarkIcon />
                 </IconButton>
               </TableRow>
             ))}

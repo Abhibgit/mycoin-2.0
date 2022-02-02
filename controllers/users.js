@@ -100,7 +100,6 @@ async function getUser(req, res) {
 
 async function addCoinToUser(req, res) {
   try {
-    console.log(req.body.watchlist, "this is the req.body.name");
     const user = await User.findByIdAndUpdate(
       { _id: req.params.id },
       {
@@ -119,8 +118,6 @@ async function addCoinToUser(req, res) {
 }
 
 async function addParams(req, res) {
-  console.log(req.body, "this is the body");
-  console.log(req.params.id, "this is the params user ID");
   try {
     const coin = await User.findByIdAndUpdate(
       { _id: req.params.id },
@@ -168,9 +165,6 @@ async function addNotification(req, res) {
 }
 
 async function deleteWatchlistItem(req, res) {
-  console.log(req.params, "this is the req.params");
-  console.log(req.params.id, "this is the req.params.id");
-  console.log(req.body, "this is the req.body");
   try {
     const user = await User.findById(req.params.id);
     const coin = await User.updateOne(
