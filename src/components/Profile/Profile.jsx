@@ -4,7 +4,7 @@ import {
   CardContent,
   Button,
   Input,
-  CardHeader,
+  CardActions,
 } from "@mui/material";
 import React from "react";
 import DeleteModal from "../DeleteModal/DeleteModal";
@@ -58,8 +58,10 @@ function Profile(props) {
 
   return (
     <div>
-      <Card>
-        <Typography sx={{ fontSize: 30 }}>Personal Information</Typography>
+      <Card sx={{ boxShadow: 3, backgroundColor: "#fcfaed" }}>
+        <Typography style={{ margin: 20, fontSize: 45 }}>
+          Personal Information
+        </Typography>
         <CardContent>
           <form onSubmit={handleEditSubmit}>
             <Typography sx={{ padding: 2 }}>
@@ -90,10 +92,12 @@ function Profile(props) {
                 required
               />
             </Typography>
-            <Button type="submit" variant="outlined" sx={{ margin: 5 }}>
-              Edit User
-            </Button>
-            <DeleteModal {...deleteProps} />
+            <CardActions sx={{ justifyContent: "right" }}>
+              <Button type="submit" variant="outlined" sx={{ margin: 5 }}>
+                Submit
+              </Button>
+              <DeleteModal {...deleteProps} />
+            </CardActions>
           </form>
         </CardContent>
       </Card>

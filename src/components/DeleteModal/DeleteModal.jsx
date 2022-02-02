@@ -46,7 +46,9 @@ export default function DeleteModal(props) {
 
   return (
     <div>
-      <Button onClick={handleOpen}>Delete User</Button>
+      <Button onClick={handleOpen} variant="outlined">
+        Delete User
+      </Button>
       <Modal
         open={open}
         onClose={handleClose}

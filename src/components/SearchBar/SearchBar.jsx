@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Autocomplete, Button, TextField, Grid } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function Search(props) {
   const [coinName, setCoinName] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -18,6 +20,7 @@ function Search(props) {
       props.findProfileCoin(newCoinSymbol);
       props.handleCoinProfileData(coinName);
     }
+    navigate("/coin/profile");
   };
 
   const handleAutocomplete = (event, value) => {

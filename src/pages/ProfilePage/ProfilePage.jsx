@@ -1,11 +1,11 @@
 import React from "react";
 import Profile from "../../components/Profile/Profile";
 import { useLocation, useNavigate } from "react-router-dom";
-import WatchlistPage from "../WatchlistPage/WatchListPage";
+import Watchlist from "../../components/Watchlist/Watchlist";
+import { Grid } from "@mui/material";
 
 function ProfilePage(props) {
   const { state } = useLocation();
-  // console.log("Profile Page", state);
   let user = "";
   let setUserInState = "";
   if (state === null) {
@@ -18,7 +18,23 @@ function ProfilePage(props) {
 
   return (
     <div>
-      <Profile user={user} setUserInState={setUserInState}></Profile>
+      <Grid
+        container
+        spacing={2}
+        direction="row"
+        justifyContent="left"
+        style={{ minHeight: "100vh" }}
+      >
+        <Grid item xs={8} style={{ margin: 50 }}>
+          <Profile user={user} setUserInState={setUserInState} />
+        </Grid>
+        <Grid item xs={2} style={{ margin: 50 }}>
+          <Watchlist
+            coinWatchlist={props.coinWatchlist}
+            deleteWatchItem={props.deleteWatchItem}
+          />
+        </Grid>
+      </Grid>
     </div>
   );
 }

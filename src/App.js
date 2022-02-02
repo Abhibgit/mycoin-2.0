@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import NavBar from "./navbar/NavBar";
 import axios from "axios";
 import { Grid } from "@mui/material";
-import AuthPage from "./pages/AuthPage/AuthPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import WatchlistPage from "./pages/WatchlistPage/WatchListPage";
@@ -11,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import DashboardPage from "./pages/DashboardPage/DashboardPage";
 import CoinProfilePage from "./pages/CoinProfilePage/CoinProfilePage";
+import "./App.css";
 
 export const themeOptions = createTheme({
   palette: {
@@ -439,7 +439,12 @@ function App() {
               <Route
                 path={"/user/profile"}
                 element={
-                  <ProfilePage user={user} setUserInState={setUserInState} />
+                  <ProfilePage
+                    user={user}
+                    setUserInState={setUserInState}
+                    coinWatchlist={coinWatchlist}
+                    deleteWatchItem={deleteWatchItem}
+                  />
                 }
               />
               <Route
@@ -452,6 +457,8 @@ function App() {
                     coinWatchSymbol={coinWatchSymbol}
                     updateParams={updateParams}
                     coinState={coinState}
+                    coinWatchlist={coinWatchlist}
+                    deleteWatchItem={deleteWatchItem}
                   />
                 }
               />
