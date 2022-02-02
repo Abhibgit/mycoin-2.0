@@ -430,6 +430,7 @@ function App() {
                     topTenCoins={topTenCoins}
                     coinList={coinList}
                     saveWatchlistCoin={saveWatchlistCoin}
+                    setUserInState={setUserInState}
                   />
                 }
               />

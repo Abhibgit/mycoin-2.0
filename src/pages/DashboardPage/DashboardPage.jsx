@@ -24,7 +24,7 @@ function DashboardPage(props) {
           </Grid>
         ) : (
           <Grid item xs={12}>
-            <AuthPage />
+            <AuthPage setUserInState={props.setUserInState} />
           </Grid>
         )}
       </Grid>
