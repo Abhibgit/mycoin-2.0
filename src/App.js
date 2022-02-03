@@ -39,7 +39,8 @@ let topTenArray = [];
 let token;
 let userDoc;
 let notificationsArray;
-
+let coinState = [];
+let coinWatchlist = [];
 function App() {
   const [isError, setIsError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -47,11 +48,11 @@ function App() {
   const [profileCoin, setProfileCoin] = useState({});
   const [profileCoinInfo, setProfileCoinInfo] = useState({});
   const [tickerSymbol, setTickerSymbol] = useState("");
-  const [coinWatchlist, setCoinWatchlist] = useState([]);
+
   const [topTenCoins, setTopTenCoins] = useState([]);
   //same as coinWatchSymbol, however it's required due to the speed of data renderering
   const [notifications, setNotifications] = useState([{}]);
-  const [coinState, setCoinState] = useState([{}]);
+  // const [coinState, setCoinState] = useState([{}]);
   const [user, setUser] = useState({
     id: "",
     name: "",
@@ -101,7 +102,7 @@ function App() {
       // Maps through the user's saved coinlist on load and pushes it into the "flow"
       if (user) {
         console.log("being set");
-        setCoinState(user.watchlist);
+        coinState = user.watchlist;
         let userMap = user.watchlist.map((e) => e.name);
         userMap.forEach(function (e) {
           coinWatchSymbol.push(e);
@@ -132,12 +133,10 @@ function App() {
       //clears the array (necessary for memory bottleneck with React State), iterates through watchlist coins array to display multiple tickers
       // This will display the watchlist for the user, this is the main portion of the ticker "flow".
       coinWatchlistArray = [];
-      console.log(coinWatchSymbol, "this is the coinwatchsymbol");
       coinWatchSymbol.forEach(function (e) {
         let watchSingleIdx = idxTemplate.indexOf(e);
         coinWatchlistArray = [...coinWatchlistArray, coinFeed[watchSingleIdx]];
-        // setCoinWatchlist([]);
-        setCoinWatchlist([...coinWatchlistArray, coinWatchlistArray]);
+        coinWatchlist = coinWatchlistArray;
       });
       // For the top 10 coins saved from the API
       // goes through each of them to repeat the above code used for saved coins
@@ -156,12 +155,9 @@ function App() {
         }
       });
       setTopTenCoins(topTenArray);
-      if (user.watchlist.length !== coinState.length) {
-        console.log(
-          "Checking to see if this watchlist is being hit constantly"
-        );
-        setCoinState(user.watchlist);
-      }
+      // if (user.watchlist.length !== coinState.length) {
+      //   coinState = user.watchlist;
+      // }
       if (user.notifications) {
         notificationsArray = user.notifications;
         setNotifications(notificationsArray);
@@ -245,38 +241,34 @@ function App() {
       console.log("CoinParams error", err);
       setIsError("CoinParams Failed - Try Again");
     }
+
     let updates = [...coinState];
     let singleUpdate = { ...coinState[objIdx] };
     singleUpdate.upperLimit = params.upperLimit;
     singleUpdate.lowerLimit = params.lowerLimit;
     updates[objIdx] = singleUpdate;
-    setCoinState({ updates });
+    coinState = updates;
+    console.log(coinState);
+    console.log(typeof coinState);
+    checkParams();
   }
 
   const checkParams = () => {
-    console.log(coinState, "this is the coin state");
     coinWatchlist.map(({ c, s }, idx) => {
-      console.log(
-        Object.keys(coinState[idx]).length,
-        "this is the check for keys"
-      );
-      if (
-        Object.keys(coinState[idx]).length >= 6 &&
-        c > coinState[idx].upperLimit
-      ) {
-        notificationCheck(
-          `${s} is above your threshold of $${coinState[idx].upperLimit}`
-        );
-      }
-      if (
-        Object.keys(coinState[idx]).length >= 6 &&
-        c < coinState[idx].lowerLimit
-      ) {
-        notificationCheck(
-          `${s} is below your threshold of $${coinState[idx].lowerLimit}`
-        );
-      } else {
-        console.log("something is wrong");
+      console.log(coinState);
+      console.log(coinState[idx]);
+      console.log(typeof coinState[idx]);
+      if (Object.keys(coinState[idx]).length >= 6) {
+        if (parseInt(c) < coinState[idx].lowerLimit) {
+          notificationCheck(
+            `${s} is below your threshold of $${coinState[idx].lowerLimit}`
+          );
+        }
+        if (parseInt(c) > coinState[idx].upperLimit) {
+          notificationCheck(
+            `${s} is above your threshold of $${coinState[idx].upperLimit}`
+          );
+        }
       }
     });
   };
@@ -374,7 +366,6 @@ function App() {
       setIsError("Delete error Failed - Try Again");
     }
     coinWatchSymbol = coinWatchSymbol.filter((e) => e !== params);
-    setCoinWatchlist([]);
   }
 
   async function removeNotification(params) {
