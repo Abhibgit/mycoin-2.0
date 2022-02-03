@@ -18,11 +18,10 @@ function WatchlistForm(props) {
   useEffect(() => {
     setTimeout(() => {
       if (Object.keys(props.coinWatchSymbol).length !== 0) {
-        console.log(props.coinWatchSymbol);
         const obj = Object.values(props.coinWatchSymbol);
         obj.map((e) => {
           let reduce = e.replace(/USDT/gm, "");
-          console.log(reduce);
+
           reverse.push(reduce.toLowerCase());
         });
         const apiMap = props.coinList.map((e) => e.symbol);
@@ -30,7 +29,7 @@ function WatchlistForm(props) {
           let idxMap = apiMap.indexOf(e);
           mapped.push(idxMap);
         });
-        console.log(mapped, "this is the coinidx");
+
         mapped.map((e) => {
           apiInfo.push(props.coinList[e]);
         });
@@ -48,8 +47,6 @@ function WatchlistForm(props) {
   };
 
   const handleChange = (e) => {
-    console.log(e.target.value);
-    console.log(e.target.id);
     setParamsState({
       ...paramsState,
       name: e.target.id,
@@ -102,28 +99,26 @@ function WatchlistForm(props) {
                   <AccordionDetails>
                     <AccordionDetails>
                       <form onSubmit={handleSubmit}>
+                        <Typography>Upper Threshold</Typography>
                         <TextField
                           sx={{ marginBottom: 0.5, marginRight: 5 }}
-                          label="Upper Threshold"
+                          placeholder={`$${props.coinState[idx].upperLimit}`}
                           size="small"
                           name="upperLimit"
                           type="input"
                           onChange={handleChange}
                           id={e}
-                        >
-                          Upper Threshold
-                        </TextField>
+                        />
+                        <Typography>Lower Threshold</Typography>
                         <TextField
                           sx={{ marginBottom: 0.5, marginRight: 5 }}
-                          label="Lower Threshold"
+                          placeholder={`$${props.coinState[idx].lowerLimit}`}
                           size="small"
                           type="input"
                           name="lowerLimit"
                           onChange={handleChange}
                           id={e}
-                        >
-                          Lower Threshold
-                        </TextField>
+                        />
                         <Button
                           type="submit"
                           variant="contained"

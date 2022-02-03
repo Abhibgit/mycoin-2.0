@@ -17,8 +17,6 @@ export default class Login extends Component {
 
   handleSubmit = async (evt) => {
     evt.preventDefault();
-    console.log(this.state.name);
-    console.log(this.state.password);
     try {
       const fetchResponse = await fetch("/api/users/login", {
         method: "POST",

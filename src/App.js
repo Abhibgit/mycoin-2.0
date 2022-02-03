@@ -74,7 +74,7 @@ function App() {
       )
       .then((response) => {
         setCoinList(response.data);
-        console.log("the api has been pinged");
+
         setIsLoading(false);
         token = localStorage.getItem("token");
         if (token) {
@@ -98,10 +98,8 @@ function App() {
   // in that moment), the data would have to be wiped and reiterated through.
   useEffect(() => {
     ticker.onopen = () => {
-      console.log("Connected");
       // Maps through the user's saved coinlist on load and pushes it into the "flow"
       if (user) {
-        console.log("being set");
         coinState = user.watchlist;
         let userMap = user.watchlist.map((e) => e.name);
         userMap.forEach(function (e) {
@@ -158,10 +156,6 @@ function App() {
       // if (user.watchlist.length !== coinState.length) {
       //   coinState = user.watchlist;
       // }
-      if (user.notifications) {
-        notificationsArray = user.notifications;
-        setNotifications(notificationsArray);
-      }
       checkParams();
     };
   }, [tickerSymbol, coinWatchSymbol, coinFeed]);
@@ -248,16 +242,11 @@ function App() {
     singleUpdate.lowerLimit = params.lowerLimit;
     updates[objIdx] = singleUpdate;
     coinState = updates;
-    console.log(coinState);
-    console.log(typeof coinState);
     checkParams();
   }
 
   const checkParams = () => {
     coinWatchlist.map(({ c, s }, idx) => {
-      console.log(coinState);
-      console.log(coinState[idx]);
-      console.log(typeof coinState[idx]);
       if (Object.keys(coinState[idx]).length >= 6) {
         if (parseInt(c) < coinState[idx].lowerLimit) {
           notificationCheck(
@@ -300,7 +289,7 @@ function App() {
 
         sendNotification(alertmsg);
       } else {
-        console.log("this exists already");
+        console.log("duplicate notification");
       }
     }
   };

@@ -8,9 +8,9 @@ function Search(props) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(coinName);
+
     const idx = props.coinList.map((e) => e.name).indexOf(coinName);
-    console.log(idx);
+
     const coinSymbol = props.coinList[idx].symbol.toUpperCase();
     if (coinSymbol === "USDT") {
       props.findLiveCoin(coinSymbol);
