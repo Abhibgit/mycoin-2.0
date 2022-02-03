@@ -51,7 +51,7 @@ function Search(props) {
           variant="contained"
           type="submit"
           size="small"
-          style={{ backgroundColor: "#fcfaed", color: "black" }}
+          style={{ backgroundColor: "#fcfaed", color: "black", width: 300 }}
         >
           Search
         </Button>
