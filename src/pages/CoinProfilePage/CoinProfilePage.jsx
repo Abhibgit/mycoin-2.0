@@ -1,8 +1,8 @@
 import React from "react";
 import CoinInformation from "../../components/CoinProfile/CoinInformation";
-import WatchlistPage from "../WatchlistPage/WatchListPage";
 import { Grid } from "@mui/material";
 import Watchlist from "../../components/Watchlist/Watchlist";
+
 function CoinProfilePage(props) {
   return (
     <>

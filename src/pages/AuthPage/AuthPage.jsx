@@ -10,18 +10,19 @@ export default function AuthPage(props) {
   return (
     <Grid
       item
-      xs={6}
-      justifyContent="center"
-      style={{ minHeight: "100vh", margin: 250 }}
+      xs={5}
+      style={{ minHeight: "100vh", marginLeft: 400, marginTop: 200 }}
     >
-      <Card alignItems="center">
-        <Typography>Welcome! Please log in below</Typography>
+      <Card sx={{ backgroundColor: "#fcfaed" }}>
         {showLogin ? (
           <Login setUserInState={props.setUserInState} />
         ) : (
           <SignUp setUserInState={props.setUserInState} />
         )}
-        <Button onClick={() => setShowLogin(!showLogin)}>
+        <Button
+          onClick={() => setShowLogin(!showLogin)}
+          sx={{ justifyContent: "center" }}
+        >
           {showLogin
             ? "Not a member? Click here to sign up"
             : "Already a member? Click here to log in"}

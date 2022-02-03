@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TextField, Button, Card, CardContent } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -6,9 +6,39 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
+let apiInfo = [];
+let mapped = [];
 function WatchlistForm(props) {
   const [expanded, setExpanded] = useState(false);
   const [paramsState, setParamsState] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  let reverse = [];
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (Object.keys(props.coinWatchSymbol).length !== 0) {
+        console.log(props.coinWatchSymbol);
+        const obj = Object.values(props.coinWatchSymbol);
+        obj.map((e) => {
+          let reduce = e.replace(/USDT/gm, "");
+          console.log(reduce);
+          reverse.push(reduce.toLowerCase());
+        });
+        const apiMap = props.coinList.map((e) => e.symbol);
+        reverse.map((e) => {
+          let idxMap = apiMap.indexOf(e);
+          mapped.push(idxMap);
+        });
+        console.log(mapped, "this is the coinidx");
+        mapped.map((e) => {
+          apiInfo.push(props.coinList[e]);
+        });
+        setIsLoading(false);
+      } else {
+        console.log("works");
+      }
+    }, 1000);
+  }, [props.coinWatchSymbol]);
 
   const handleAccordion = (panel) => (event, isExpanded) => {
     setParamsState([]);
@@ -30,6 +60,9 @@ function WatchlistForm(props) {
     props.updateParams(paramsState);
   };
 
+  if (isLoading) {
+    return <span>Loading...</span>;
+  }
   return (
     <div>
       <Card sx={{ boxShadow: 3, backgroundColor: "#fcfaed" }}>
@@ -50,8 +83,10 @@ function WatchlistForm(props) {
                     aria-controls="panel1bh-content"
                     id="panel1bh-header"
                   >
-                    <Typography sx={{ width: "33%", flexShrink: 0 }}>
-                      {e}
+                    <Typography
+                      sx={{ width: "33%", flexShrink: 0, fontSize: 22 }}
+                    >
+                      {apiInfo[idx].name} - {e}
                     </Typography>
                     <Typography sx={{ color: "text.secondary" }}></Typography>
                   </AccordionSummary>

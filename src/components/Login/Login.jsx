@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { Card, Input, CardContent, Button } from "@mui/material";
+import { Card, Input, CardContent, Button, Typography } from "@mui/material";
 
 export default class Login extends Component {
   state = {
@@ -43,8 +43,13 @@ export default class Login extends Component {
   render() {
     return (
       <div>
-        <Card sx={{ minWidth: 275 }}>
+        <Card sx={{ minWidth: 275, backgroundColor: "#fcfaed", boxShadow: 2 }}>
           <CardContent>
+            <Typography
+              sx={{ margin: 1, marginBottom: 5, marginLeft: 10, fontSize: 25 }}
+            >
+              Welcome! Please log in below
+            </Typography>
             <div className="form-container" onSubmit={this.handleSubmit}>
               <form autoComplete="off">
                 <Input
@@ -56,6 +61,7 @@ export default class Login extends Component {
                   required
                   label="Username"
                   placeholder="Username"
+                  sx={{ margin: 3 }}
                 />
                 <Input
                   type="password"
@@ -64,6 +70,7 @@ export default class Login extends Component {
                   onChange={this.handleChange}
                   required
                   placeholder="Password"
+                  sx={{ marginRight: 3 }}
                 />
                 <Button type="submit" variant="outlined">
                   LOG IN

@@ -18,6 +18,7 @@ function WatchListPage(props) {
             coinWatchSymbol={props.coinWatchSymbol}
             updateParams={props.updateParams}
             coinState={props.coinState}
+            coinList={props.coinList}
           />
         </Grid>
         <Grid item xs={2} style={{ margin: 50 }}>

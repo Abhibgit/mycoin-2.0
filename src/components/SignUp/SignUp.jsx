@@ -50,8 +50,13 @@ export default class SignUp extends Component {
     const disable = this.state.password !== this.state.confirm;
     return (
       <div>
-        <Card sx={{ minWidth: 275 }}>
+        <Card sx={{ minWidth: 275, backgroundColor: "#fcfaed" }}>
           <CardContent>
+            <Typography
+              sx={{ margin: 1, marginBottom: 5, marginLeft: 13, fontSize: 25 }}
+            >
+              Get started with MyCoin
+            </Typography>
             <div className="form-container"></div>
             <form autoComplete="off" onSubmit={this.handleSubmit}>
               <Input
@@ -60,7 +65,8 @@ export default class SignUp extends Component {
                 value={this.state.name}
                 onChange={this.handleChange}
                 required
-                placeholder="Name"
+                placeholder="Username"
+                sx={{ marginLeft: 20, marginBottom: 2 }}
               />
               <br />
               <Input
@@ -70,6 +76,7 @@ export default class SignUp extends Component {
                 onChange={this.handleChange}
                 required
                 placeholder="Email"
+                sx={{ marginLeft: 20, marginBottom: 2 }}
               />
               <br />
 
@@ -80,6 +87,7 @@ export default class SignUp extends Component {
                 onChange={this.handleChange}
                 required
                 placeholder="Password"
+                sx={{ marginLeft: 20, marginBottom: 2 }}
               />
               <br />
 
@@ -90,9 +98,15 @@ export default class SignUp extends Component {
                 onChange={this.handleChange}
                 required
                 placeholder="Confirm Password"
+                sx={{ marginLeft: 20, marginBottom: 2 }}
               />
               <br />
-              <Button type="submit" disabled={disable} variant="outlined">
+              <Button
+                type="submit"
+                disabled={disable}
+                variant="outlined"
+                sx={{ marginLeft: 25 }}
+              >
                 SIGN UP
               </Button>
             </form>

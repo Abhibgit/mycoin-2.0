@@ -14,27 +14,19 @@ function DashboardPage(props) {
         justifyContent="left"
         style={{ minHeight: "100vh" }}
       >
-        {props.user === "" ? (
-          <Grid item xs={12}>
-            <AuthPage setUserInState={props.setUserInState} />
-          </Grid>
-        ) : (
-          <>
-            <Grid item xs={8} style={{ margin: 50 }}>
-              <TopCoins
-                topTenCoins={props.topTenCoins}
-                coinList={props.coinList}
-                saveWatchlistCoin={props.saveWatchlistCoin}
-              />
-            </Grid>
-            <Grid item xs={2} style={{ margin: 50 }}>
-              <Watchlist
-                coinWatchlist={props.coinWatchlist}
-                deleteWatchItem={props.deleteWatchItem}
-              />
-            </Grid>
-          </>
-        )}
+        <Grid item xs={8} style={{ margin: 50 }}>
+          <TopCoins
+            topTenCoins={props.topTenCoins}
+            coinList={props.coinList}
+            saveWatchlistCoin={props.saveWatchlistCoin}
+          />
+        </Grid>
+        <Grid item xs={2} style={{ margin: 50 }}>
+          <Watchlist
+            coinWatchlist={props.coinWatchlist}
+            deleteWatchItem={props.deleteWatchItem}
+          />
+        </Grid>
       </Grid>
     </>
   );

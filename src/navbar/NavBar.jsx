@@ -14,6 +14,7 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import SearchBar from "../components/SearchBar/SearchBar";
 import { Button, List, ListItem } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -141,8 +142,14 @@ function NavBar(props) {
     >
       {props.notifications ? (
         props.notifications.map(({ message, createdAt, _id }, idx) => (
-          <ListItem key={message + idx}>
-            {message} - {createdAt}{" "}
+          <ListItem
+            key={message + idx}
+            sx={{
+              boxShadow: 1,
+              margin: 1,
+            }}
+          >
+            {message} - {moment(createdAt).format("YYYY-MM-DD hh:mm:ss")}
             <Button onClick={() => props.removeNotification(_id)}>X</Button>
           </ListItem>
         ))
