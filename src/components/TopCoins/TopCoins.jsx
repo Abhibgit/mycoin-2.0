@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -7,7 +7,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { IconButton, Typography } from "@mui/material";
-import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 
 function TopCoins(props) {

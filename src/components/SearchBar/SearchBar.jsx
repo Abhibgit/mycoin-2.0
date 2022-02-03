@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Autocomplete, Button, TextField, Grid } from "@mui/material";
+import { Autocomplete, Button, TextField, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 function Search(props) {
@@ -33,7 +33,7 @@ function Search(props) {
         <Autocomplete
           freeSolo
           placeholder="Search…"
-          sx={{ width: 300, backgroundColor: "beige" }}
+          sx={{ width: 300, backgroundColor: "#fcfaed" }}
           options={props.coinList.map((e) => e.name)}
           onChange={handleAutocomplete}
           renderInput={(params) => (
@@ -50,7 +50,8 @@ function Search(props) {
         <Button
           variant="contained"
           type="submit"
-          style={{ backgroundColor: "beige", color: "black" }}
+          size="small"
+          style={{ backgroundColor: "#fcfaed", color: "black" }}
         >
           Search
         </Button>
