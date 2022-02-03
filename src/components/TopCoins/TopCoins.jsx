@@ -36,7 +36,7 @@ function TopCoins(props) {
               <TableRow sx={{ border: 0 }} key={row + idx}>
                 <TableCell align="center">{row.s}</TableCell>
                 <TableCell align="center">
-                  ${parseInt(row.c).toFixed(2)}
+                  ${parseInt(row.c).toFixed(4)}
                 </TableCell>
                 <TableCell
                   align="center"

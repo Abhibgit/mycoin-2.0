@@ -53,7 +53,6 @@ export default class Login extends Component {
             <div className="form-container" onSubmit={this.handleSubmit}>
               <form autoComplete="off">
                 <Input
-                  color="secondary"
                   type="text"
                   name="name"
                   value={this.state.name}

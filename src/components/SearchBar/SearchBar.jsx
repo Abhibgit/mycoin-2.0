@@ -40,7 +40,7 @@ function Search(props) {
             <TextField
               id="searchfield"
               {...params}
-              label="Enter coin name..."
+              placeholder="Enter coin name..."
               sx={{ colour: "secondary" }}
               type="search"
               value={coinName}

@@ -11,7 +11,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import DashboardPage from "./pages/DashboardPage/DashboardPage";
 import CoinProfilePage from "./pages/CoinProfilePage/CoinProfilePage";
 import AuthPage from "./pages/AuthPage/AuthPage";
-import "./App.css";
 
 export const themeOptions = createTheme({
   palette: {
@@ -111,7 +110,7 @@ function App() {
         notificationsArray = user.notifications;
       }
       // Grabs the current top 10 from the API coinlist and maps through to set it into the "flow"
-      topTen = coinList.slice(0, 11);
+      topTen = coinList.slice(0, 12);
       let coinSymbolMap = topTen.map((e) => e.symbol.toUpperCase());
       coinSymbolMap.forEach(function (e) {
         if (e === "USDT") {
@@ -133,22 +132,26 @@ function App() {
       //clears the array (necessary for memory bottleneck with React State), iterates through watchlist coins array to display multiple tickers
       // This will display the watchlist for the user, this is the main portion of the ticker "flow".
       coinWatchlistArray = [];
+      console.log(coinWatchSymbol, "this is the coinwatchsymbol");
       coinWatchSymbol.forEach(function (e) {
         let watchSingleIdx = idxTemplate.indexOf(e);
         coinWatchlistArray = [...coinWatchlistArray, coinFeed[watchSingleIdx]];
-        setCoinWatchlist([]);
-        setCoinWatchlist(coinWatchlistArray);
+        // setCoinWatchlist([]);
+        setCoinWatchlist([...coinWatchlistArray, coinWatchlistArray]);
       });
       // For the top 10 coins saved from the API
       // goes through each of them to repeat the above code used for saved coins
       topTenArray = [];
+      let topTenIndex = [];
       topTenSymbol.forEach(function (e) {
-        if (e === "USDT") {
-          console.log("this is USDT");
-        } else if (e === "USDCUSDT") {
+        if (e === "USDCUSDT") {
           console.log("this is USDC");
         } else {
-          let topTenIndex = idxTemplate.indexOf(e);
+          if (idxTemplate.indexOf(e) === -1) {
+            console.log("undefined");
+          } else {
+            topTenIndex = idxTemplate.indexOf(e);
+          }
           return (topTenArray = [...topTenArray, coinFeed[topTenIndex]]);
         }
       });
@@ -175,33 +178,47 @@ function App() {
 
   async function saveWatchlistCoin(symbol) {
     //saves the coin to the user, and add its to the "flow"
-    try {
-      const fetchResponse = await fetch(`/api/users/${user._id}/coins`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          watchlist: { name: symbol },
-        }),
+    if (coinWatchSymbol.includes(symbol) === true) {
+      toast(`You've already saved ${symbol}`, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
       });
-      console.log(fetchResponse);
+    } else {
+      try {
+        const fetchResponse = await fetch(`/api/users/${user._id}/coins`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            watchlist: { name: symbol },
+          }),
+        });
+        console.log(fetchResponse);
 
-      if (!fetchResponse.ok) throw new Error("Fetch failed - Bad request");
+        if (!fetchResponse.ok) throw new Error("Fetch failed - Bad request");
 
-      let token = await fetchResponse.json();
-      localStorage.setItem("token", token);
+        let token = await fetchResponse.json();
+        localStorage.setItem("token", token);
 
-      const userDoc = JSON.parse(atob(token.split(".")[1])).user;
-      console.log("created_coin: " + userDoc);
-      setUserInState(userDoc);
-    } catch (err) {
-      console.log("CoinCreate error", err);
-      setIsError("CoinCreate Failed - Try Again");
+        const userDoc = JSON.parse(atob(token.split(".")[1])).user;
+        console.log("created_coin: " + userDoc);
+        setUserInState(userDoc);
+      } catch (err) {
+        console.log("CoinCreate error", err);
+        setIsError("CoinCreate Failed - Try Again");
+      }
+      coinWatchSymbol.push(symbol);
     }
-    coinWatchSymbol.push(symbol);
   }
 
   async function updateParams(params) {
+    console.log(params);
     let objIdx = coinState.map((e) => e.name).indexOf(params.name);
+    console.log(objIdx);
     let objId = coinState[objIdx]._id;
     try {
       const fetchResponse = await fetch(`/api/users/coins/${user._id}`, {
@@ -233,18 +250,20 @@ function App() {
     singleUpdate.upperLimit = params.upperLimit;
     singleUpdate.lowerLimit = params.lowerLimit;
     updates[objIdx] = singleUpdate;
-    console.log(coinState);
-    console.log(updates);
     setCoinState({ updates });
   }
 
   const checkParams = () => {
+    console.log(coinState, "this is the coin state");
     coinWatchlist.map(({ c, s }, idx) => {
+      console.log(
+        Object.keys(coinState[idx]).length,
+        "this is the check for keys"
+      );
       if (
         Object.keys(coinState[idx]).length >= 6 &&
         c > coinState[idx].upperLimit
       ) {
-        console.log("This is the upperlimit confirmation");
         notificationCheck(
           `${s} is above your threshold of $${coinState[idx].upperLimit}`
         );
@@ -253,20 +272,17 @@ function App() {
         Object.keys(coinState[idx]).length >= 6 &&
         c < coinState[idx].lowerLimit
       ) {
-        console.log("This is the this is the lower limit confirmation");
         notificationCheck(
           `${s} is below your threshold of $${coinState[idx].lowerLimit}`
         );
+      } else {
+        console.log("something is wrong");
       }
     });
   };
 
   const notificationCheck = (alertmsg) => {
-    console.log(alertmsg);
-    console.log(notificationsArray);
-    console.log(Object.keys(notificationsArray).length);
     if (Object.keys(notificationsArray).length === 0) {
-      console.log("this is being bypassed");
       toast(alertmsg, {
         position: "top-right",
         autoClose: 5000,
@@ -278,10 +294,8 @@ function App() {
       });
       sendNotification(alertmsg);
     } else {
-      console.log("This is going through the duplication check");
       let msgCheck = notificationsArray.map((m) => m.message);
       if (msgCheck.includes(alertmsg) === false) {
-        console.log("this is sending a notification off");
         toast(alertmsg, {
           position: "top-right",
           autoClose: 5000,
@@ -291,7 +305,7 @@ function App() {
           draggable: true,
           progress: undefined,
         });
-        console.log(alertmsg, "this is bypassing the loop");
+
         sendNotification(alertmsg);
       } else {
         console.log("this exists already");
@@ -337,7 +351,7 @@ function App() {
     let watchlistMap = coinState.map((e) => e.name);
     let itemIdx = watchlistMap.indexOf(params);
     let itemId = coinState[itemIdx]._id;
-    console.log(itemId);
+
     try {
       const fetchResponse = await fetch(`/api/users/coins/${user._id}`, {
         method: "DELETE",
@@ -405,7 +419,9 @@ function App() {
             spacing={2}
             direction="column"
             justifyContent="center"
-            style={{ minHeight: "100vh" }}
+            style={{
+              minHeight: "100vh",
+            }}
           >
             <Grid item xs={12}>
               <NavBar

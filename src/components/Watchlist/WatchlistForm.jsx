@@ -12,6 +12,7 @@ function WatchlistForm(props) {
   const [expanded, setExpanded] = useState(false);
   const [paramsState, setParamsState] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [noWatchlist, setNoWatchlist] = useState(true);
   let reverse = [];
 
   useEffect(() => {
@@ -34,8 +35,9 @@ function WatchlistForm(props) {
           apiInfo.push(props.coinList[e]);
         });
         setIsLoading(false);
+        setNoWatchlist(false);
       } else {
-        console.log("works");
+        setIsLoading(false);
       }
     }, 1000);
   }, [props.coinWatchSymbol]);
@@ -62,6 +64,13 @@ function WatchlistForm(props) {
 
   if (isLoading) {
     return <span>Loading...</span>;
+  }
+  if (noWatchlist) {
+    return (
+      <Typography sx={{ fontSize: 25 }}>
+        Sorry, you don't have any watchlist items saved to set alerts for.
+      </Typography>
+    );
   }
   return (
     <div>
@@ -110,7 +119,6 @@ function WatchlistForm(props) {
                           size="small"
                           type="input"
                           name="lowerLimit"
-                          id={props.coinState._id}
                           onChange={handleChange}
                           id={e}
                         >
