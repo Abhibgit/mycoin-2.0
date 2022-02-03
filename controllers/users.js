@@ -72,8 +72,9 @@ async function deleteUser(req, res) {
 }
 
 async function login(req, res) {
+  console.log(req.body.name);
   try {
-    const user = await User.findOne({ email: req.body.name });
+    const user = await User.findOne({ name: req.body.name });
     console.log(user);
     // check password. if it's bad throw an error.
     if (!(await bcrypt.compare(req.body.password, user.password)))
