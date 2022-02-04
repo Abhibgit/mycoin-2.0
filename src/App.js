@@ -63,8 +63,8 @@ function App() {
   const setUserInState = (incomingUserData) => {
     setUser(incomingUserData);
   };
-  let coinFeed = [];
 
+  let coinFeed = [];
   //
 
   useEffect(() => {
@@ -74,7 +74,7 @@ function App() {
       )
       .then((response) => {
         setCoinList(response.data);
-
+        console.log("api pinged");
         setIsLoading(false);
         token = localStorage.getItem("token");
         if (token) {
@@ -88,6 +88,17 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    console.log("useEffect triggered");
+    coinState = user.watchlist;
+    setNotifications(user.notifications);
+    notificationsArray = user.notifications;
+    let userMap = user.watchlist.map((e) => e.name);
+    userMap.forEach(function (e) {
+      coinWatchSymbol.push(e);
+    });
+  }, [user.id]);
+
   // The ticker.onmessage is the websocket that provides the coinFeed with the realtime data.
   // Due to the nature of what is happening with the websocket from Binance and the API calls from CoinGecko
   // It was required for us to set it up in this way. Calling functions off of the websocket ping is
@@ -98,16 +109,7 @@ function App() {
   // in that moment), the data would have to be wiped and reiterated through.
   useEffect(() => {
     ticker.onopen = () => {
-      // Maps through the user's saved coinlist on load and pushes it into the "flow"
-      if (user) {
-        coinState = user.watchlist;
-        let userMap = user.watchlist.map((e) => e.name);
-        userMap.forEach(function (e) {
-          coinWatchSymbol.push(e);
-        });
-        setNotifications(user.notifications);
-        notificationsArray = user.notifications;
-      }
+      console.log("websocket connected");
       // Grabs the current top 10 from the API coinlist and maps through to set it into the "flow"
       topTen = coinList.slice(0, 12);
       let coinSymbolMap = topTen.map((e) => e.symbol.toUpperCase());
@@ -122,6 +124,7 @@ function App() {
     };
     //Ticker "flow", pings every second.
     ticker.onmessage = (message) => {
+      console.log(coinWatchlist, "this is the ticker list");
       //Maps the data to grab the symbol from Binance so that the index can be located
       coinFeed = JSON.parse(message.data);
       let idxTemplate = coinFeed.map((e) => e.s);
@@ -153,10 +156,8 @@ function App() {
         }
       });
       setTopTenCoins(topTenArray);
-      // if (user.watchlist.length !== coinState.length) {
-      //   coinState = user.watchlist;
-      // }
       checkParams();
+      console.log(coinWatchlist, "this is the ticker list");
     };
   }, [tickerSymbol, coinWatchSymbol, coinFeed]);
 
@@ -201,7 +202,8 @@ function App() {
         console.log("CoinCreate error", err);
         setIsError("CoinCreate Failed - Try Again");
       }
-      coinWatchSymbol.push(symbol);
+      coinWatchSymbol.push(symbol, "check the symbol");
+      console.log(coinWatchlist, "this is the ticker list");
     }
   }
 
@@ -246,8 +248,10 @@ function App() {
   }
 
   const checkParams = () => {
+    console.log(coinState[0]);
+    console.log(Object.values(coinState));
     coinWatchlist.map(({ c, s }, idx) => {
-      if (Object.keys(coinState[idx]).length >= 6) {
+      if (Object.values(coinState[idx]).length >= 6) {
         if (parseInt(c) < coinState[idx].lowerLimit) {
           notificationCheck(
             `${s} is below your threshold of $${coinState[idx].lowerLimit}`
@@ -354,7 +358,20 @@ function App() {
       console.log("Delete error", err);
       setIsError("Delete error Failed - Try Again");
     }
+
     coinWatchSymbol = coinWatchSymbol.filter((e) => e !== params);
+    let idxTemplate = coinFeed.map((e) => e.s);
+    coinWatchlistArray = [];
+    if (coinWatchSymbol.length > 0) {
+      coinWatchSymbol.forEach(function (e) {
+        console.log(e);
+        let watchSingleIdx = idxTemplate.indexOf(e);
+        coinWatchlistArray = [...coinWatchlistArray, coinFeed[watchSingleIdx]];
+        coinWatchlist = coinWatchlistArray;
+      });
+    } else {
+      coinWatchlist = [];
+    }
   }
 
   async function removeNotification(params) {

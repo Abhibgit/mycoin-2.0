@@ -1,5 +1,4 @@
-import React from "react";
-
+import React, { useEffect } from "react";
 import {
   Card,
   Button,
@@ -14,6 +13,11 @@ function Watchlist(props) {
     props.deleteWatchItem(event.target.id);
   };
 
+  useEffect(() => {
+    console.log(props.coinWatchlist);
+  }, [props.coinWatchlist]);
+
+  console.log(props.coinWatchlist, "this is the page list");
   return (
     <div>
       <Typography style={{ fontSize: 40, color: "#202020" }}>

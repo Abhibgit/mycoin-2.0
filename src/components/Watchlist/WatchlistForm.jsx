@@ -62,13 +62,6 @@ function WatchlistForm(props) {
   if (isLoading) {
     return <span>Loading...</span>;
   }
-  if (noWatchlist) {
-    return (
-      <Typography sx={{ fontSize: 25 }}>
-        Sorry, you don't have any watchlist items saved to set alerts for.
-      </Typography>
-    );
-  }
   return (
     <div>
       <Card sx={{ boxShadow: 3, backgroundColor: "#fcfaed" }}>
@@ -102,7 +95,11 @@ function WatchlistForm(props) {
                         <Typography>Upper Threshold</Typography>
                         <TextField
                           sx={{ marginBottom: 0.5, marginRight: 5 }}
-                          placeholder={`$${props.coinState[idx].upperLimit}`}
+                          placeholder={
+                            props.coinState[idx]
+                              ? `$${props.coinState[idx].upperLimit}`
+                              : "Set a limit"
+                          }
                           size="small"
                           name="upperLimit"
                           type="input"
@@ -112,7 +109,11 @@ function WatchlistForm(props) {
                         <Typography>Lower Threshold</Typography>
                         <TextField
                           sx={{ marginBottom: 0.5, marginRight: 5 }}
-                          placeholder={`$${props.coinState[idx].lowerLimit}`}
+                          placeholder={
+                            props.coinState[idx]
+                              ? `$${props.coinState[idx].lowerLimit}`
+                              : "Set a limit"
+                          }
                           size="small"
                           type="input"
                           name="lowerLimit"
