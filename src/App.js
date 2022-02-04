@@ -39,6 +39,8 @@ let topTenArray = [];
 let token;
 let userDoc;
 let notificationsArray;
+//Aware that this is not considered React best practices, however due to the nature of the data streams it was
+//the only option to handle the data.
 let coinState;
 let coinWatchlist = [];
 
@@ -51,7 +53,7 @@ function App() {
   const [tickerSymbol, setTickerSymbol] = useState("");
   const [topTenCoins, setTopTenCoins] = useState([]);
   //same as coinWatchSymbol, however it's required due to the speed of data renderering
-  const [notifications, setNotifications] = useState([{}]);
+  const [notifications, setNotifications] = useState([]);
   // const [coinState, setCoinState] = useState([{}]);
   const [user, setUser] = useState({
     id: "",
@@ -111,6 +113,7 @@ function App() {
   useEffect(() => {
     ticker.onopen = () => {
       console.log("websocket connected");
+      console.log(notifications);
       // Grabs the current top 10 from the API coinlist and maps through to set it into the "flow"
       topTen = coinList.slice(0, 12);
       let coinSymbolMap = topTen.map((e) => e.symbol.toUpperCase());
@@ -125,9 +128,23 @@ function App() {
     };
     //Ticker "flow", pings every second.
     ticker.onmessage = (message) => {
-      coinState = user.watchlist;
-      notificationsArray = user.notifications;
+      console.log(coinWatchlist);
+      console.log(user.watchlist);
       console.log(coinState);
+      console.log(coinWatchlist.length);
+      console.log(coinState.length);
+      console.log(coinWatchlist.length !== coinState.length);
+      if (coinWatchlist.length !== coinState.length) {
+        coinState = [];
+        coinState = user.watchlist;
+        console.log(coinState);
+        console.log(coinWatchlist);
+        console.log(user.watchlist);
+      }
+      if (Object.keys(coinState).length < 6) {
+        coinState = user.watchlist;
+      }
+      notificationsArray = user.notifications;
       //Maps the data to grab the symbol from Binance so that the index can be located
       coinFeed = JSON.parse(message.data);
       let idxTemplate = coinFeed.map((e) => e.s);
@@ -208,8 +225,10 @@ function App() {
   }
 
   async function updateParams(params) {
+    console.log(coinState);
     let objIdx = coinState.map((e) => e.name).indexOf(params.name);
     let objId = coinState[objIdx]._id;
+
     try {
       const fetchResponse = await fetch(`/api/users/coins/${user._id}`, {
         method: "PUT",
@@ -235,45 +254,39 @@ function App() {
       console.log("CoinParams error", err);
       setIsError("CoinParams Failed - Try Again");
     }
-
-    let updates = [...coinState];
-    let singleUpdate = { ...coinState[objIdx] };
-    singleUpdate.upperLimit = params.upperLimit;
-    singleUpdate.lowerLimit = params.lowerLimit;
-    updates[objIdx] = singleUpdate;
-    coinState = updates;
     checkParams();
   }
 
   const checkParams = () => {
-    console.log(coinState);
-    console.log(coinWatchlist);
-    coinWatchlist.map(({ c, s }, idx) => {
-      if (Object.keys(coinState[idx]).includes("lowerLimit")) {
-        console.log("this hits");
-        if (parseInt(c) < coinState[idx].lowerLimit) {
-          notificationCheck(
-            `${s} is below your threshold of $${coinState[idx].lowerLimit}`
-          );
-        } else {
-          console.log("not lower");
-        }
-        if (Object.keys(coinState[idx]).includes("upperLimit"))
-          if (parseInt(c) > coinState[idx].upperLimit) {
-            console.log("should triggers");
-            notificationCheck(
-              `${s} is above your threshold of $${coinState[idx].upperLimit}`
-            );
-          } else {
-            console.log("not lower");
+    if (coinWatchlist.length === coinState.length) {
+      coinWatchlist.map(({ c, s }, idx) => {
+        if (Object.keys(coinState[idx])) {
+          if (Object.keys(coinState[idx]).includes("lowerLimit")) {
+            if (parseInt(c) < coinState[idx].lowerLimit) {
+              notificationCheck(
+                `${s} is below your threshold of $${coinState[idx].lowerLimit}`
+              );
+            } else {
+              console.log("not lower");
+            }
+            if (Object.keys(coinState[idx]).includes("upperLimit")) {
+              if (parseInt(c) > coinState[idx].upperLimit) {
+                notificationCheck(
+                  `${s} is above your threshold of $${coinState[idx].upperLimit}`
+                );
+              } else {
+                console.log("not higher");
+              }
+            }
           }
-      }
-    });
+        }
+      });
+    } else {
+      console.log("these don't match FOOL!");
+    }
   };
 
   const notificationCheck = (alertmsg) => {
-    console.log(notificationsArray);
-    console.log(user);
     if (Object.keys(notificationsArray).length === 0) {
       console.log("this is hitting");
       toast(alertmsg, {
@@ -288,7 +301,6 @@ function App() {
       sendNotification(alertmsg);
     } else {
       let msgCheck = notificationsArray.map((m) => m.message);
-      console.log(msgCheck);
       if (msgCheck.includes(alertmsg) === false) {
         console.log("this is bypassing");
         toast(alertmsg, {
@@ -300,7 +312,6 @@ function App() {
           draggable: true,
           progress: undefined,
         });
-
         sendNotification(alertmsg);
       } else {
         console.log("duplicate notification");
@@ -392,7 +403,7 @@ function App() {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            _id: params,
+            message: params,
           }),
         }
       );
@@ -410,7 +421,7 @@ function App() {
       setIsError("Delete error Failed - Try Again");
     }
     let filterNotification = notifications.filter((e) => e._id !== params);
-    setNotifications(filterNotification);
+    setNotifications(...notifications, filterNotification);
   }
 
   if (isLoading) {

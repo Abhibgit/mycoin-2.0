@@ -140,7 +140,7 @@ function NavBar(props) {
       open={isNotificationOpen}
       onClose={handleNotificationClose}
     >
-      {props.notifications ? (
+      {/* {props.notifications ? (
         props.notifications.map(({ message, createdAt, _id }, idx) => (
           <ListItem
             key={message + idx}
@@ -150,12 +150,12 @@ function NavBar(props) {
             }}
           >
             {message} - {moment(createdAt).format("YYYY-MM-DD hh:mm:ss")}
-            <Button onClick={() => props.removeNotification(_id)}>X</Button>
+            <Button onClick={() => props.removeNotification(message)}>X</Button>
           </ListItem>
         ))
       ) : (
         <ListItem>You have no notifications</ListItem>
-      )}
+      )} */}
     </Menu>
   );
 

@@ -12,7 +12,6 @@ function Watchlist(props) {
     props.deleteWatchItem(event.target.id);
   };
 
-  console.log(props.coinWatchlist, "this is the page list");
   return (
     <div>
       <Typography style={{ fontSize: 40, color: "#202020" }}>

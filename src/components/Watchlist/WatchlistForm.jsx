@@ -50,7 +50,7 @@ function WatchlistForm(props) {
     setParamsState({
       ...paramsState,
       name: e.target.id,
-      [e.target.name]: e.target.value,
+      [e.target.name]: parseInt(e.target.value),
     });
   };
 
@@ -70,9 +70,6 @@ function WatchlistForm(props) {
             Watchlist Parameters
           </Typography>
           {props.coinWatchSymbol.map((e, idx) => {
-            {
-              console.log(props.coinState[idx]);
-            }
             return (
               <div key={e + idx}>
                 <Accordion
