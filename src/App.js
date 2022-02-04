@@ -39,8 +39,9 @@ let topTenArray = [];
 let token;
 let userDoc;
 let notificationsArray;
-let coinState = [];
+let coinState;
 let coinWatchlist = [];
+
 function App() {
   const [isError, setIsError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -48,7 +49,6 @@ function App() {
   const [profileCoin, setProfileCoin] = useState({});
   const [profileCoinInfo, setProfileCoinInfo] = useState({});
   const [tickerSymbol, setTickerSymbol] = useState("");
-
   const [topTenCoins, setTopTenCoins] = useState([]);
   //same as coinWatchSymbol, however it's required due to the speed of data renderering
   const [notifications, setNotifications] = useState([{}]);
@@ -65,6 +65,7 @@ function App() {
   };
 
   let coinFeed = [];
+  let coinWatchlistArray = [];
   //
 
   useEffect(() => {
@@ -124,21 +125,22 @@ function App() {
     };
     //Ticker "flow", pings every second.
     ticker.onmessage = (message) => {
-      console.log(coinWatchlist, "this is the ticker list");
+      coinState = user.watchlist;
+      notificationsArray = user.notifications;
+      console.log(coinState);
       //Maps the data to grab the symbol from Binance so that the index can be located
       coinFeed = JSON.parse(message.data);
       let idxTemplate = coinFeed.map((e) => e.s);
       //searches the mapped coinFeed for one symbol for the profile page, then sets it to ProfileCoin state to be displayed
       let singleIdx = idxTemplate.indexOf(tickerSymbol);
       setProfileCoin(coinFeed[singleIdx]);
-      //clears the array (necessary for memory bottleneck with React State), iterates through watchlist coins array to display multiple tickers
-      // This will display the watchlist for the user, this is the main portion of the ticker "flow".
-      coinWatchlistArray = [];
       coinWatchSymbol.forEach(function (e) {
         let watchSingleIdx = idxTemplate.indexOf(e);
         coinWatchlistArray = [...coinWatchlistArray, coinFeed[watchSingleIdx]];
         coinWatchlist = coinWatchlistArray;
       });
+      //clears the array (necessary for memory bottleneck with React State), iterates through watchlist coins array to display multiple tickers
+      // This will display the watchlist for the user, this is the main portion of the ticker "flow".
       // For the top 10 coins saved from the API
       // goes through each of them to repeat the above code used for saved coins
       topTenArray = [];
@@ -157,7 +159,6 @@ function App() {
       });
       setTopTenCoins(topTenArray);
       checkParams();
-      console.log(coinWatchlist, "this is the ticker list");
     };
   }, [tickerSymbol, coinWatchSymbol, coinFeed]);
 
@@ -202,15 +203,12 @@ function App() {
         console.log("CoinCreate error", err);
         setIsError("CoinCreate Failed - Try Again");
       }
-      coinWatchSymbol.push(symbol, "check the symbol");
-      console.log(coinWatchlist, "this is the ticker list");
+      coinWatchSymbol.push(symbol);
     }
   }
 
   async function updateParams(params) {
-    console.log(params);
     let objIdx = coinState.map((e) => e.name).indexOf(params.name);
-    console.log(objIdx);
     let objId = coinState[objIdx]._id;
     try {
       const fetchResponse = await fetch(`/api/users/coins/${user._id}`, {
@@ -248,26 +246,36 @@ function App() {
   }
 
   const checkParams = () => {
-    console.log(coinState[0]);
-    console.log(Object.values(coinState));
+    console.log(coinState);
+    console.log(coinWatchlist);
     coinWatchlist.map(({ c, s }, idx) => {
-      if (Object.values(coinState[idx]).length >= 6) {
+      if (Object.keys(coinState[idx]).includes("lowerLimit")) {
+        console.log("this hits");
         if (parseInt(c) < coinState[idx].lowerLimit) {
           notificationCheck(
             `${s} is below your threshold of $${coinState[idx].lowerLimit}`
           );
+        } else {
+          console.log("not lower");
         }
-        if (parseInt(c) > coinState[idx].upperLimit) {
-          notificationCheck(
-            `${s} is above your threshold of $${coinState[idx].upperLimit}`
-          );
-        }
+        if (Object.keys(coinState[idx]).includes("upperLimit"))
+          if (parseInt(c) > coinState[idx].upperLimit) {
+            console.log("should triggers");
+            notificationCheck(
+              `${s} is above your threshold of $${coinState[idx].upperLimit}`
+            );
+          } else {
+            console.log("not lower");
+          }
       }
     });
   };
 
   const notificationCheck = (alertmsg) => {
+    console.log(notificationsArray);
+    console.log(user);
     if (Object.keys(notificationsArray).length === 0) {
+      console.log("this is hitting");
       toast(alertmsg, {
         position: "top-right",
         autoClose: 5000,
@@ -280,7 +288,9 @@ function App() {
       sendNotification(alertmsg);
     } else {
       let msgCheck = notificationsArray.map((m) => m.message);
+      console.log(msgCheck);
       if (msgCheck.includes(alertmsg) === false) {
+        console.log("this is bypassing");
         toast(alertmsg, {
           position: "top-right",
           autoClose: 5000,

@@ -9,13 +9,8 @@ import {
 
 function Watchlist(props) {
   const handleSubmit = (event) => {
-    event.preventDefault();
     props.deleteWatchItem(event.target.id);
   };
-
-  useEffect(() => {
-    console.log(props.coinWatchlist);
-  }, [props.coinWatchlist]);
 
   console.log(props.coinWatchlist, "this is the page list");
   return (
