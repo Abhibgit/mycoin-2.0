@@ -148,6 +148,7 @@ function App() {
         "this is the array of notifications from the user.notifications"
       );
       console.log(notifications, "another log of notifications");
+      console.log(user.notifications, "this is the user's notifications");
       //Maps the data to grab the symbol from Binance so that the index can be located
       //searches the mapped coinFeed for one symbol for the profile page, then sets it to ProfileCoin state to be displayed
       let singleIdx = idxTemplate.indexOf(tickerSymbol);
@@ -398,6 +399,7 @@ function App() {
   }
 
   async function removeNotification(params) {
+    console.log(params);
     try {
       const fetchResponse = await fetch(
         `/api/users/${user._id}/coins/notifications`,
@@ -424,6 +426,7 @@ function App() {
     }
     let filterNotification = notifications.filter((e) => e._id !== params);
     setNotifications(filterNotification);
+    console.log(filterNotification);
   }
 
   if (isLoading) {

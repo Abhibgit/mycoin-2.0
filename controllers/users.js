@@ -120,7 +120,7 @@ async function addCoinToUser(req, res) {
 
 async function addParams(req, res) {
   try {
-    const coin = await User.findOneAndUpdate(
+    const coin = await User.findByIdAndUpdate(
       { _id: req.params.id },
       {
         $set: {
@@ -132,7 +132,7 @@ async function addParams(req, res) {
           },
         },
       },
-      { returnDocument: "after", upsert: true }
+      { returnDocument: "after" }
     );
     console.log(coin);
     const token = jwt.sign({ user: coin }, process.env.SECRET, {
@@ -191,12 +191,12 @@ async function deleteWatchlistItem(req, res) {
 
 async function deleteNotification(req, res) {
   try {
-    const coin = await User.updateOne(
+    const coin = await User.findByIdAndUpdate(
       { _id: req.params.id },
       {
         $pull: {
           notifications: {
-            _id: req.body.id,
+            _id: req.body._id,
           },
         },
       },
