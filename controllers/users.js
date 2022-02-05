@@ -121,10 +121,11 @@ async function addCoinToUser(req, res) {
 async function addParams(req, res) {
   try {
     const coin = await User.findOneAndUpdate(
-      { _id: req.params.id, "watchlist._id": req.body._id },
+      { _id: req.params.id },
       {
         $set: {
           watchlist: {
+            _id: req.body._id,
             name: req.body.name,
             upperLimit: req.body.upperLimit,
             lowerLimit: req.body.lowerLimit,
@@ -166,22 +167,19 @@ async function addNotification(req, res) {
 
 async function deleteWatchlistItem(req, res) {
   try {
-    const user = await User.findById(req.params.id);
-    const coin = await User.updateOne(
+    const coin = await User.findByIdAndUpdate(
       { _id: req.params.id },
       {
         $pull: {
           watchlist: {
-            name: req.body.name,
-            upperLimit: req.body.lowerLimit,
-            lowerLimit: req.body.lowerLimit,
+            _id: req.body._id,
           },
         },
       },
       { returnDocument: "after" }
     );
     console.log(coin, "this is the coin");
-    const token = jwt.sign({ user: user }, process.env.SECRET, {
+    const token = jwt.sign({ user: coin }, process.env.SECRET, {
       expiresIn: "24h",
     });
     res.status(200).json(token);
@@ -193,20 +191,19 @@ async function deleteWatchlistItem(req, res) {
 
 async function deleteNotification(req, res) {
   try {
-    const user = await User.findById(req.params.id);
     const coin = await User.updateOne(
       { _id: req.params.id },
       {
         $pull: {
           notifications: {
-            message: req.body,
+            _id: req.body.id,
           },
         },
       },
       { returnDocument: "after" }
     );
     console.log(coin, "this is the coin");
-    const token = jwt.sign({ user: user }, process.env.SECRET, {
+    const token = jwt.sign({ user: coin }, process.env.SECRET, {
       expiresIn: "24h",
     });
     res.status(200).json(token);

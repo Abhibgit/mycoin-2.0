@@ -28,8 +28,6 @@ const ticker = new WebSocket("wss://stream.binance.com:9443/ws/!ticker@arr");
 
 //coinWatchSymbol stores coins that are saved
 let coinWatchSymbol = [];
-//coinWatchlistArray is the variable that needs to have memory refreshed and current data reinserted
-let coinWatchlistArray = [];
 // Top 10 added at the beginning of the ticker
 let topTenSymbol = [];
 // Variable that holds the 10 objects in an array from API ping
@@ -102,6 +100,10 @@ function App() {
     });
   }, [user.id]);
 
+  const addNotifications = () => {
+    setNotifications(user.notifications);
+  };
+
   // The ticker.onmessage is the websocket that provides the coinFeed with the realtime data.
   // Due to the nature of what is happening with the websocket from Binance and the API calls from CoinGecko
   // It was required for us to set it up in this way. Calling functions off of the websocket ping is
@@ -113,7 +115,7 @@ function App() {
   useEffect(() => {
     ticker.onopen = () => {
       console.log("websocket connected");
-      console.log(notifications);
+      console.log(notifications, "these are notifications state");
       // Grabs the current top 10 from the API coinlist and maps through to set it into the "flow"
       topTen = coinList.slice(0, 12);
       let coinSymbolMap = topTen.map((e) => e.symbol.toUpperCase());
@@ -128,34 +130,28 @@ function App() {
     };
     //Ticker "flow", pings every second.
     ticker.onmessage = (message) => {
-      console.log(coinWatchlist);
-      console.log(user.watchlist);
-      console.log(coinState);
-      console.log(coinWatchlist.length);
-      console.log(coinState.length);
-      console.log(coinWatchlist.length !== coinState.length);
-      if (coinWatchlist.length !== coinState.length) {
-        coinState = [];
-        coinState = user.watchlist;
-        console.log(coinState);
-        console.log(coinWatchlist);
-        console.log(user.watchlist);
-      }
-      if (Object.keys(coinState).length < 6) {
-        coinState = user.watchlist;
-      }
-      notificationsArray = user.notifications;
-      //Maps the data to grab the symbol from Binance so that the index can be located
       coinFeed = JSON.parse(message.data);
       let idxTemplate = coinFeed.map((e) => e.s);
+      if (coinWatchSymbol.length !== coinState.length) {
+        updateCoinState(idxTemplate);
+        updateWatchlist(idxTemplate);
+      }
+      if (Object.keys(coinState).length < 6) {
+        updateCoinState(idxTemplate);
+      }
+      if (coinWatchlist.length <= 0) {
+        updateWatchlist(idxTemplate);
+      }
+      notificationsArray = user.notifications;
+      console.log(
+        notificationsArray,
+        "this is the array of notifications from the user.notifications"
+      );
+      console.log(notifications, "another log of notifications");
+      //Maps the data to grab the symbol from Binance so that the index can be located
       //searches the mapped coinFeed for one symbol for the profile page, then sets it to ProfileCoin state to be displayed
       let singleIdx = idxTemplate.indexOf(tickerSymbol);
       setProfileCoin(coinFeed[singleIdx]);
-      coinWatchSymbol.forEach(function (e) {
-        let watchSingleIdx = idxTemplate.indexOf(e);
-        coinWatchlistArray = [...coinWatchlistArray, coinFeed[watchSingleIdx]];
-        coinWatchlist = coinWatchlistArray;
-      });
       //clears the array (necessary for memory bottleneck with React State), iterates through watchlist coins array to display multiple tickers
       // This will display the watchlist for the user, this is the main portion of the ticker "flow".
       // For the top 10 coins saved from the API
@@ -176,8 +172,24 @@ function App() {
       });
       setTopTenCoins(topTenArray);
       checkParams();
+      addNotifications();
     };
   }, [tickerSymbol, coinWatchSymbol, coinFeed]);
+
+  const updateWatchlist = (idx) => {
+    coinWatchSymbol.forEach(function (e) {
+      let watchSingleIdx = idx.indexOf(e);
+      coinWatchlistArray = [...coinWatchlistArray, coinFeed[watchSingleIdx]];
+      coinWatchlist = coinWatchlistArray;
+      console.log(coinWatchlist, "this is the coinwatchlist");
+    });
+  };
+
+  const updateCoinState = () => {
+    coinState = [];
+    coinState = user.watchlist;
+    console.log(user.watchlist);
+  };
 
   const findProfileCoin = (symbol) => {
     setProfileCoin({});
@@ -228,7 +240,6 @@ function App() {
     console.log(coinState);
     let objIdx = coinState.map((e) => e.name).indexOf(params.name);
     let objId = coinState[objIdx]._id;
-
     try {
       const fetchResponse = await fetch(`/api/users/coins/${user._id}`, {
         method: "PUT",
@@ -258,6 +269,7 @@ function App() {
   }
 
   const checkParams = () => {
+    console.log("checking params");
     if (coinWatchlist.length === coinState.length) {
       coinWatchlist.map(({ c, s }, idx) => {
         if (Object.keys(coinState[idx])) {
@@ -287,6 +299,7 @@ function App() {
   };
 
   const notificationCheck = (alertmsg) => {
+    console.log("notification hit");
     if (Object.keys(notificationsArray).length === 0) {
       console.log("this is hitting");
       toast(alertmsg, {
@@ -345,6 +358,7 @@ function App() {
       console.log("CoinParams error", err);
       setIsError("CoinParams Failed - Try Again");
     }
+    addNotifications();
   }
 
   const handleCoinProfileData = (name) => {
@@ -381,18 +395,6 @@ function App() {
     }
 
     coinWatchSymbol = coinWatchSymbol.filter((e) => e !== params);
-    let idxTemplate = coinFeed.map((e) => e.s);
-    coinWatchlistArray = [];
-    if (coinWatchSymbol.length > 0) {
-      coinWatchSymbol.forEach(function (e) {
-        console.log(e);
-        let watchSingleIdx = idxTemplate.indexOf(e);
-        coinWatchlistArray = [...coinWatchlistArray, coinFeed[watchSingleIdx]];
-        coinWatchlist = coinWatchlistArray;
-      });
-    } else {
-      coinWatchlist = [];
-    }
   }
 
   async function removeNotification(params) {
@@ -403,7 +405,7 @@ function App() {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            message: params,
+            _id: params,
           }),
         }
       );
@@ -421,7 +423,7 @@ function App() {
       setIsError("Delete error Failed - Try Again");
     }
     let filterNotification = notifications.filter((e) => e._id !== params);
-    setNotifications(...notifications, filterNotification);
+    setNotifications(filterNotification);
   }
 
   if (isLoading) {
