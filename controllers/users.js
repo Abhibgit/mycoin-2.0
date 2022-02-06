@@ -120,25 +120,25 @@ async function addCoinToUser(req, res) {
 
 async function addParams(req, res) {
   try {
-    const coin = await User.findByIdAndUpdate(
-      { _id: req.params.id },
+    console.log(req.body);
+    const coin = await User.findOneAndUpdate(
+      {
+        _id: req.params.id,
+        "watchlist._id": req.body._id,
+      },
       {
         $set: {
-          watchlist: {
-            _id: req.body._id,
-            name: req.body.name,
-            upperLimit: req.body.upperLimit,
-            lowerLimit: req.body.lowerLimit,
-          },
+          "watchlist.$.upperLimit": req.body.upperLimit,
+          "watchlist.$.lowerLimit": req.body.lowerLimit,
         },
-      },
-      { returnDocument: "after" }
+      }
     );
-    console.log(coin);
-    const token = jwt.sign({ user: coin }, process.env.SECRET, {
+    console.log("coin:", coin);
+    const user = await User.findById(req.params.id);
+    console.log("user", user);
+    const token = jwt.sign({ user: user }, process.env.SECRET, {
       expiresIn: "24h",
     });
-    console.log(coin, "this is the coin");
     res.status(200).json(token);
   } catch (err) {
     console.log("coin update error", err);
