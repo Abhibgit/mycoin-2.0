@@ -57,7 +57,13 @@ function Profile(props) {
 
   return (
     <div>
-      <Typography sx={{ margin: 2, fontSize: { xs: 30, md: 40 } }}>
+      <Typography
+        sx={{
+          margin: { xs: 2 },
+          fontSize: { xs: 30, md: 40 },
+          textDecoration: "underline",
+        }}
+      >
         Personal Information
       </Typography>
       <Card sx={{ boxShadow: 3, borderRadius: 5 }}>

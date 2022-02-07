@@ -15,8 +15,8 @@ function CoinInformation(props) {
     <>
       <Typography
         sx={{
-          margin: { xs: 2, md: 20 },
-          fontSize: { xs: 30, md: 60 },
+          margin: { xs: 2 },
+          fontSize: { xs: 30, md: 40 },
           textDecoration: "underline",
         }}
       >
@@ -128,6 +128,7 @@ function CoinInformation(props) {
           label="Save Coin"
           variant="outlined"
           onClick={props.handleNavigateSearch}
+          sx={{ display: { xs: "block", md: "none" } }}
         >
           <SearchIcon />
           Search New Coin

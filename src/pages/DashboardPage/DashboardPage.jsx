@@ -7,8 +7,8 @@ import SearchBar from "../../components/SearchBar/SearchBar";
 function DashboardPage(props) {
   return (
     <>
-      <Grid container spacing={2} direction="row" justifyContent="center">
-        <Grid item xs={8} sx={{ marginTop: 4 }}>
+      <Grid container spacing={4} direction="row" justifyContent="center">
+        <Grid item xs={8} md={6} sx={{ marginTop: { xs: 4, md: 6 } }}>
           <SearchBar
             coinList={props.coinList}
             ticker={props.ticker}
@@ -16,7 +16,7 @@ function DashboardPage(props) {
             handleCoinProfileData={props.handleCoinProfileData}
           />
         </Grid>
-        <Grid item xs={11}>
+        <Grid item xs={11} md={5} sx={{ marginTop: { md: 2 } }}>
           <Watchlist
             coinWatchlist={props.coinWatchlist}
             deleteWatchItem={props.deleteWatchItem}
@@ -24,7 +24,7 @@ function DashboardPage(props) {
         </Grid>
         <Grid
           item
-          xs={8}
+          xs={11}
           sx={{ display: { xs: "none", sm: "block", md: "block" } }}
         >
           <TopCoins

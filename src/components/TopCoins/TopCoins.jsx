@@ -15,8 +15,8 @@ function TopCoins(props) {
     <div>
       <Typography
         sx={{
-          margin: { xs: 2, md: 20 },
-          fontSize: { xs: 30, md: 60 },
+          marginBottom: { xs: 2, md: 2 },
+          fontSize: { xs: 30, md: 40 },
           textDecoration: "underline",
         }}
       >

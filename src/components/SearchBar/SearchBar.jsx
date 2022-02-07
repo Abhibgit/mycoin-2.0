@@ -37,7 +37,7 @@ function Search(props) {
 
   return (
     <>
-      <Card sx={{ borderRadius: 5 }}>
+      <Card sx={{ borderRadius: 5, marginTop: { md: 8 }, maxWidth: 500 }}>
         <CardContent>
           <Typography
             sx={{

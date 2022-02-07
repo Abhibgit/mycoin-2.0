@@ -472,6 +472,9 @@ function App() {
                       setUserInState={setUserInState}
                       coinWatchlist={coinWatchlist}
                       deleteWatchItem={deleteWatchItem}
+                      topTenCoins={topTenCoins}
+                      coinList={coinList}
+                      saveWatchlistCoin={saveWatchlistCoin}
                     />
                   }
                 />
@@ -487,6 +490,10 @@ function App() {
                       coinState={coinState}
                       coinWatchlist={coinWatchlist}
                       deleteWatchItem={deleteWatchItem}
+                      coinList={coinList}
+                      ticker={ticker}
+                      findProfileCoin={findProfileCoin}
+                      handleCoinProfileData={handleCoinProfileData}
                     />
                   }
                 />
@@ -501,6 +508,9 @@ function App() {
                       updateParams={updateParams}
                       coinState={coinState}
                       deleteWatchItem={deleteWatchItem}
+                      topTenCoins={topTenCoins}
+                      coinList={coinList}
+                      saveWatchlistCoin={saveWatchlistCoin}
                     />
                   }
                 />

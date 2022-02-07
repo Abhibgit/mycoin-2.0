@@ -121,7 +121,7 @@ function NavBar(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      {props.user !== "" ? (
+      {props.user.name !== "" ? (
         <div>
           <MenuItem onClick={handleProfileLink}>
             <IconButton size="large" color="inherit">
@@ -208,7 +208,7 @@ function NavBar(props) {
         open={isMobileMenuOpen}
         onClose={handleMobileMenuClose}
       >
-        {props.user !== "" ? (
+        {props.user.name !== "" ? (
           <div>
             <MenuItem onClick={handleNotificationOpen}>
               <IconButton size="large" color="inherit">

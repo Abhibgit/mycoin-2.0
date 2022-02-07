@@ -21,7 +21,7 @@ function Watchlist(props) {
         sx={{
           fontSize: { xs: 30, md: 40 },
           textDecoration: "underline",
-          margin: { xs: 2, md: 20 },
+          margin: 2,
         }}
       >
         Watchlist
@@ -36,8 +36,8 @@ function Watchlist(props) {
                     key={e + idx}
                     sx={{
                       marginBottom: 5,
-                      height: { xs: 225, md: 300 },
-                      width: { xs: 175, md: 200 },
+                      height: { xs: 225, md: 250 },
+                      width: 175,
                       boxShadow: 3,
                       borderRadius: 5,
                     }}

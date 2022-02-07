@@ -7,9 +7,15 @@ export default function AuthPage(props) {
   const [showLogin, setShowLogin] = useState(true);
 
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={7} md={5}>
-        <Card className="auth-page-login">
+    <Grid
+      container
+      spacing={2}
+      direction="column"
+      justifyContent="center"
+      alignItems="center"
+    >
+      <Grid item xs={10} md={5} sx={{ margin: 10 }}>
+        <div>
           {showLogin ? (
             <Login setUserInState={props.setUserInState} />
           ) : (
@@ -23,7 +29,7 @@ export default function AuthPage(props) {
               ? "Not a member? Click here to sign up"
               : "Already a member? Click here to log in"}
           </Button>
-        </Card>
+        </div>
       </Grid>
     </Grid>
   );

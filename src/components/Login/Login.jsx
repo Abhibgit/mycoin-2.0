@@ -1,5 +1,13 @@
 import { Component } from "react";
-import { Card, Input, CardContent, Button, Typography } from "@mui/material";
+import {
+  Card,
+  Input,
+  CardContent,
+  Button,
+  Typography,
+  Grid,
+  CardActions,
+} from "@mui/material";
 
 export default class Login extends Component {
   state = {
@@ -74,9 +82,18 @@ export default class Login extends Component {
                   placeholder="Password"
                   sx={{ marginTop: { xs: 3, md: 10 } }}
                 />
-                <Button type="submit" variant="outlined" sx={{ marginTop: 5 }}>
-                  LOG IN
-                </Button>
+                <CardActions>
+                  <Button
+                    type="submit"
+                    variant="outlined"
+                    sx={{
+                      marginTop: 3,
+                      marginBottom: -5,
+                    }}
+                  >
+                    LOG IN
+                  </Button>
+                </CardActions>
               </form>
             </div>
             <p className="error-message">&nbsp;{this.state.error}</p>

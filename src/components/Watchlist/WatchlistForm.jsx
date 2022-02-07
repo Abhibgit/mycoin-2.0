@@ -66,14 +66,14 @@ function WatchlistForm(props) {
     <div>
       <Typography
         sx={{
-          margin: { xs: 2, md: 20 },
-          fontSize: { xs: 30, md: 60 },
+          margin: { xs: 2, md: 2 },
+          fontSize: { xs: 30, md: 40 },
           textDecoration: "underline",
         }}
       >
         Watchlist Parameters
       </Typography>
-      <Card sx={{ boxShadow: 3 }}>
+      <Card sx={{ boxShadow: 3, borderRadius: 5 }}>
         <CardContent>
           {props.coinWatchSymbol.map((e, idx) => {
             return (
