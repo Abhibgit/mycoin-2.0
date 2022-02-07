@@ -31,9 +31,8 @@ function Watchlist(props) {
           <>
             {props.coinWatchlist.map((e, idx) => {
               return (
-                <Grid item xs={6}>
+                <Grid item xs={6} key={e + idx}>
                   <Card
-                    key={e + idx}
                     sx={{
                       marginBottom: 5,
                       height: { xs: 225, md: 250 },

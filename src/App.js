@@ -75,8 +75,16 @@ function App() {
         "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=false"
       )
       .then((response) => {
-        setCoinList(response.data);
-        console.log("api pinged");
+        let data = response.data;
+        let removal = [];
+        data.forEach((e) => {
+          if (e.symbol === "usdt") {
+          } else if (e.symbol === "usdc") {
+          } else {
+            removal.push(e);
+          }
+        });
+        setCoinList(removal);
         setIsLoading(false);
         token = localStorage.getItem("token");
         if (token) {
@@ -91,7 +99,6 @@ function App() {
   }, []);
 
   useEffect(() => {
-    console.log("useEffect triggered");
     coinState = user.watchlist;
     setNotifications(user.notifications);
     notificationsArray = user.notifications;
@@ -115,8 +122,6 @@ function App() {
   // in that moment), the data would have to be wiped and reiterated through.
   useEffect(() => {
     ticker.onopen = () => {
-      console.log("websocket connected");
-      console.log(notifications, "these are notifications state");
       // Grabs the current top 10 from the API coinlist and maps through to set it into the "flow"
       topTen = coinList.slice(0, 12);
       let coinSymbolMap = topTen.map((e) => e.symbol.toUpperCase());
@@ -140,13 +145,9 @@ function App() {
       if (Object.keys(coinState).length < 6) {
         updateCoinState(idxTemplate);
       }
-      if (coinWatchlist.length <= 0) {
-        console.log("the watchlist is updating");
-      }
       updateWatchlist(idxTemplate);
       notificationsArray = user.notifications;
 
-      console.log(coinWatchlist, "this is the coinwatchlist");
       //Maps the data to grab the symbol from Binance so that the index can be located
       //searches the mapped coinFeed for one symbol for the profile page, then sets it to ProfileCoin state to be displayed
       let singleIdx = idxTemplate.indexOf(tickerSymbol);
@@ -159,10 +160,8 @@ function App() {
       let topTenIndex = [];
       topTenSymbol.forEach(function (e) {
         if (e === "USDCUSDT") {
-          console.log("this is USDC");
         } else {
           if (idxTemplate.indexOf(e) === -1) {
-            console.log("undefined");
           } else {
             topTenIndex = idxTemplate.indexOf(e);
           }
@@ -180,14 +179,12 @@ function App() {
       let watchSingleIdx = idx.indexOf(e);
       coinWatchlistArray = [...coinWatchlistArray, coinFeed[watchSingleIdx]];
       coinWatchlist = coinWatchlistArray;
-      console.log(coinWatchlist, "this is the coinwatchlist");
     });
   };
 
   const updateCoinState = () => {
     coinState = [];
     coinState = user.watchlist;
-    console.log(user.watchlist);
   };
 
   const findProfileCoin = (symbol) => {
@@ -217,7 +214,6 @@ function App() {
             watchlist: { name: symbol },
           }),
         });
-        console.log(fetchResponse);
 
         if (!fetchResponse.ok) throw new Error("Fetch failed - Bad request");
 
@@ -225,7 +221,6 @@ function App() {
         localStorage.setItem("token", token);
 
         const userDoc = JSON.parse(atob(token.split(".")[1])).user;
-        console.log("created_coin: " + userDoc);
         setUserInState(userDoc);
       } catch (err) {
         console.log("CoinCreate error", err);
@@ -236,7 +231,6 @@ function App() {
   }
 
   async function updateParams(params) {
-    console.log(coinState);
     let objIdx = coinState.map((e) => e.name).indexOf(params.name);
     let objId = coinState[objIdx]._id;
     try {
@@ -250,7 +244,6 @@ function App() {
           lowerLimit: params.lowerLimit,
         }),
       });
-      console.log(fetchResponse);
 
       if (!fetchResponse.ok) throw new Error("Fetch failed - Bad request");
 
@@ -258,7 +251,7 @@ function App() {
       localStorage.setItem("token", token);
 
       const userDoc = JSON.parse(atob(token.split(".")[1])).user;
-      console.log("created_coin: " + userDoc);
+
       setUserInState(userDoc);
     } catch (err) {
       console.log("CoinParams error", err);
@@ -268,7 +261,6 @@ function App() {
   }
 
   const checkParams = () => {
-    console.log("checking params");
     if (coinWatchlist.length === coinState.length) {
       coinWatchlist.map(({ c, s }, idx) => {
         if (Object.keys(coinState[idx])) {
@@ -278,7 +270,6 @@ function App() {
                 `${s} is below your threshold of $${coinState[idx].lowerLimit}`
               );
             } else {
-              console.log("not lower");
             }
             if (Object.keys(coinState[idx]).includes("upperLimit")) {
               if (parseInt(c) > coinState[idx].upperLimit) {
@@ -286,21 +277,17 @@ function App() {
                   `${s} is above your threshold of $${coinState[idx].upperLimit}`
                 );
               } else {
-                console.log("not higher");
               }
             }
           }
         }
       });
     } else {
-      console.log("these don't match FOOL!");
     }
   };
 
   const notificationCheck = (alertmsg) => {
-    console.log("notification hit");
     if (Object.keys(notificationsArray).length === 0) {
-      console.log("this is hitting");
       toast(alertmsg, {
         position: "top-right",
         autoClose: 5000,
@@ -314,7 +301,6 @@ function App() {
     } else {
       let msgCheck = notificationsArray.map((m) => m.message);
       if (msgCheck.includes(alertmsg) === false) {
-        console.log("this is bypassing");
         toast(alertmsg, {
           position: "top-right",
           autoClose: 5000,
@@ -326,7 +312,6 @@ function App() {
         });
         sendNotification(alertmsg);
       } else {
-        console.log("duplicate notification");
       }
     }
   };
@@ -343,7 +328,6 @@ function App() {
           }),
         }
       );
-      console.log(fetchResponse);
 
       if (!fetchResponse.ok) throw new Error("Fetch failed - Bad request");
 
@@ -351,7 +335,7 @@ function App() {
       localStorage.setItem("token", token);
 
       const userDoc = JSON.parse(atob(token.split(".")[1])).user;
-      console.log("created_coin: " + userDoc);
+
       setUserInState(userDoc);
     } catch (err) {
       console.log("CoinParams error", err);
@@ -379,7 +363,6 @@ function App() {
           _id: itemId,
         }),
       });
-      console.log(fetchResponse);
 
       if (!fetchResponse.ok) throw new Error("Fetch failed - Bad request");
 
@@ -397,7 +380,6 @@ function App() {
   }
 
   async function removeNotification(params) {
-    console.log(params);
     try {
       const fetchResponse = await fetch(
         `/api/users/${user._id}/coins/notifications`,
@@ -409,7 +391,6 @@ function App() {
           }),
         }
       );
-      console.log(fetchResponse);
 
       if (!fetchResponse.ok) throw new Error("Fetch failed - Bad request");
 
@@ -424,7 +405,6 @@ function App() {
     }
     let filterNotification = notifications.filter((e) => e._id !== params);
     setNotifications(filterNotification);
-    console.log(filterNotification);
   }
 
   if (isLoading) {
