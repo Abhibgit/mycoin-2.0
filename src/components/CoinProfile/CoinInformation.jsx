@@ -128,7 +128,7 @@ function CoinInformation(props) {
           label="Save Coin"
           variant="outlined"
           onClick={props.handleNavigateSearch}
-          sx={{ display: { xs: "block", md: "none" } }}
+          sx={{ display: { md: "none" } }}
         >
           <SearchIcon />
           Search New Coin
