@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import DeleteModal from "../DeleteModal/DeleteModal";
+import PublishIcon from "@mui/icons-material/Publish";
 
 function Profile(props) {
   const [formState, setFormState] = React.useState({
@@ -19,7 +20,6 @@ function Profile(props) {
   const handleEditSubmit = async (evt) => {
     evt.preventDefault();
     try {
-      // 1. POST our new user info to the server
       const fetchResponse = await fetch(`/api/users/${props.user._id}/edit`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -30,13 +30,12 @@ function Profile(props) {
         }),
       });
 
-      // 2. Check "fetchResponse.ok". False means status code was 4xx from the server/controller action
       if (!fetchResponse.ok) throw new Error("Fetch failed - Bad request");
 
-      let token = await fetchResponse.json(); // 3. decode fetch response to get jwt from srv
-      localStorage.setItem("token", token); // 4. Stick token into localStorage
+      let token = await fetchResponse.json();
+      localStorage.setItem("token", token);
 
-      const userDoc = JSON.parse(atob(token.split(".")[1])).user; // 5. Decode the token + put user document into state
+      const userDoc = JSON.parse(atob(token.split(".")[1])).user;
       props.setUserInState(userDoc);
     } catch (err) {
       console.log("Edit Form error", err);
@@ -58,10 +57,10 @@ function Profile(props) {
 
   return (
     <div>
-      <Card sx={{ boxShadow: 3, backgroundColor: "#fcfaed" }}>
-        <Typography style={{ margin: 20, fontSize: 45 }}>
-          Personal Information
-        </Typography>
+      <Typography sx={{ margin: 2, fontSize: { xs: 30, md: 40 } }}>
+        Personal Information
+      </Typography>
+      <Card sx={{ boxShadow: 3, borderRadius: 5 }}>
         <CardContent>
           <form onSubmit={handleEditSubmit}>
             <Typography sx={{ padding: 2 }}>
@@ -92,8 +91,9 @@ function Profile(props) {
                 required
               />
             </Typography>
-            <CardActions sx={{ justifyContent: "right" }}>
-              <Button type="submit" variant="outlined" sx={{ margin: 5 }}>
+            <CardActions>
+              <Button type="submit" variant="outlined" sx={{ margin: 1 }}>
+                <PublishIcon />
                 Submit
               </Button>
               <DeleteModal {...deleteProps} />

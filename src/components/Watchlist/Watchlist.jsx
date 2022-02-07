@@ -5,7 +5,10 @@ import {
   Typography,
   CardContent,
   CardActions,
+  Grid,
 } from "@mui/material";
+
+import BookmarkRemoveIcon from "@mui/icons-material/BookmarkRemove";
 
 function Watchlist(props) {
   const handleSubmit = (event) => {
@@ -13,56 +16,69 @@ function Watchlist(props) {
   };
 
   return (
-    <div>
-      <Typography style={{ fontSize: 40, color: "#202020" }}>
+    <>
+      <Typography
+        sx={{
+          fontSize: { xs: 30, md: 40 },
+          textDecoration: "underline",
+          margin: { xs: 2, md: 20 },
+        }}
+      >
         Watchlist
       </Typography>
-      {Object.keys(props.coinWatchlist).length !== 0 ? (
-        <>
-          {props.coinWatchlist.map((e, idx) => {
-            return (
-              <Card
-                key={e + idx}
-                style={{
-                  marginBottom: 15,
-                  backgroundColor: idx % 2 ? "#F6F0D8" : "#D6E5ED",
-                  maxHeight: 300,
-                }}
-                sx={{ boxShadow: 3 }}
-              >
-                <CardContent>
-                  <Typography>{e.s}</Typography>
-                  <br />
-                  <Typography>Price</Typography>
-                  <Typography style={{ margin: 2 }}>
-                    ${parseInt(e.c).toFixed(2)}
-                  </Typography>
-                  <Typography>Price Change</Typography>
-                  <Typography sx={{ color: e.P > 0 ? "#4BA582" : "#f74a4a" }}>
-                    % {e.P}
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button
-                    size="small"
-                    variant="outlined"
-                    onClick={handleSubmit}
-                    id={e.s}
-                    style={{ justifyContent: "right" }}
+      <Grid container spacing={2} direction="row" justifyContent="left">
+        {Object.keys(props.coinWatchlist).length !== 0 ? (
+          <>
+            {props.coinWatchlist.map((e, idx) => {
+              return (
+                <Grid item xs={6}>
+                  <Card
+                    key={e + idx}
+                    sx={{
+                      marginBottom: 5,
+                      height: { xs: 225, md: 300 },
+                      width: { xs: 175, md: 200 },
+                      boxShadow: 3,
+                      borderRadius: 5,
+                    }}
                   >
-                    Remove
-                  </Button>
-                </CardActions>
-              </Card>
-            );
-          })}
-        </>
-      ) : (
-        <>
-          <h4>You have no saved coins...</h4>
-        </>
-      )}
-    </div>
+                    <CardContent>
+                      <Typography>{e.s}</Typography>
+                      <br />
+                      <Typography>Price</Typography>
+                      <Typography style={{ margin: { md: 2 } }}>
+                        ${parseInt(e.c).toFixed(2)}
+                      </Typography>
+                      <Typography>Price Change</Typography>
+                      <Typography
+                        sx={{ color: e.P > 0 ? "#4BA582" : "#f74a4a" }}
+                      >
+                        % {e.P}
+                      </Typography>
+                    </CardContent>
+                    <CardActions>
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        onClick={handleSubmit}
+                        id={e.s}
+                      >
+                        <BookmarkRemoveIcon sx={{ fontSize: 20 }} />
+                        Remove
+                      </Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              );
+            })}
+          </>
+        ) : (
+          <>
+            <h4>You have no saved coins...</h4>
+          </>
+        )}
+      </Grid>
+    </>
   );
 }
 

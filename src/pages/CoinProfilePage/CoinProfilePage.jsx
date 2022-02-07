@@ -6,21 +6,15 @@ import Watchlist from "../../components/Watchlist/Watchlist";
 function CoinProfilePage(props) {
   return (
     <>
-      <Grid
-        container
-        spacing={2}
-        direction="row"
-        justifyContent="left"
-        style={{ minHeight: "100vh" }}
-      >
-        <Grid item xs={8} style={{ margin: 50 }}>
+      <Grid container spacing={2} direction="row" justifyContent="center">
+        <Grid item xs={11} sx={{ marginTop: { xs: 1, md: 10 } }}>
           <CoinInformation
             saveWatchlistCoin={props.saveWatchlistCoin}
             profileCoinInfo={props.profileCoinInfo}
             profileCoin={props.profileCoin}
           />
         </Grid>
-        <Grid item xs={2} style={{ margin: 50 }}>
+        <Grid item xs={11}>
           <Watchlist
             coinWatchlist={props.coinWatchlist}
             deleteWatchItem={props.deleteWatchItem}

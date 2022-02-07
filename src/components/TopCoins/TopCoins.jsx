@@ -13,14 +13,20 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 function TopCoins(props) {
   return (
     <div>
-      <TableContainer
-        component={Paper}
-        sx={{ boxShadow: 3, backgroundColor: "#fcfaed" }}
+      <Typography
+        sx={{
+          margin: { xs: 2, md: 20 },
+          fontSize: { xs: 30, md: 60 },
+          textDecoration: "underline",
+        }}
       >
-        <Typography style={{ margin: 20, fontSize: 45 }}>
-          Top Performing Coins
-        </Typography>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        Top Performing Coins
+      </Typography>
+      <TableContainer component={Paper} sx={{ boxShadow: 3, borderRadius: 5 }}>
+        <Table
+          sx={{ minWidth: { xs: 100, md: 600 } }}
+          aria-label="simple table"
+        >
           <TableHead>
             <TableRow style={{ textDecoration: "underline" }}>
               <TableCell align="center">Symbol</TableCell>

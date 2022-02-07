@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const style = {
   position: "absolute",
@@ -47,6 +48,7 @@ export default function DeleteModal(props) {
   return (
     <div>
       <Button onClick={handleOpen} variant="outlined">
+        <DeleteIcon />
         Delete User
       </Button>
       <Modal

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import NavBar from "./navbar/NavBar";
 import axios from "axios";
-import { Grid } from "@mui/material";
+import { Grid, Box } from "@mui/material";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import WatchlistPage from "./pages/WatchlistPage/WatchListPage";
@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import DashboardPage from "./pages/DashboardPage/DashboardPage";
 import CoinProfilePage from "./pages/CoinProfilePage/CoinProfilePage";
+import TopPerformingMobile from "./pages/TopPerformingMobile/TopPerformingMobile";
 import AuthPage from "./pages/AuthPage/AuthPage";
 
 export const themeOptions = createTheme({
@@ -140,15 +141,12 @@ function App() {
         updateCoinState(idxTemplate);
       }
       if (coinWatchlist.length <= 0) {
-        updateWatchlist(idxTemplate);
+        console.log("the watchlist is updating");
       }
+      updateWatchlist(idxTemplate);
       notificationsArray = user.notifications;
-      console.log(
-        notificationsArray,
-        "this is the array of notifications from the user.notifications"
-      );
-      console.log(notifications, "another log of notifications");
-      console.log(user.notifications, "this is the user's notifications");
+
+      console.log(coinWatchlist, "this is the coinwatchlist");
       //Maps the data to grab the symbol from Binance so that the index can be located
       //searches the mapped coinFeed for one symbol for the profile page, then sets it to ProfileCoin state to be displayed
       let singleIdx = idxTemplate.indexOf(tickerSymbol);
@@ -433,100 +431,103 @@ function App() {
     return <span>Loading...</span>;
   }
   return (
-    <div>
+    <Box sx={{ backgroundColor: "#fcfbf5" }}>
       <Router>
         <ThemeProvider theme={themeOptions}>
           <ToastContainer />
-          <Grid
-            container
-            spacing={2}
-            direction="column"
-            justifyContent="center"
-            style={{
-              minHeight: "100vh",
-            }}
-          >
-            <Grid item xs={12}>
-              <NavBar
-                coinList={coinList}
-                findProfileCoin={findProfileCoin}
-                handleCoinProfileData={handleCoinProfileData}
-                user={user}
-                setUserInState={setUserInState}
-                notifications={notifications}
-                removeNotification={removeNotification}
-              />
-            </Grid>
-
-            {user.id !== "" ? (
-              <>
-                <Routes>
-                  <Route
-                    path="/"
-                    element={
-                      <DashboardPage
-                        topTenCoins={topTenCoins}
-                        coinList={coinList}
-                        saveWatchlistCoin={saveWatchlistCoin}
-                        setUserInState={setUserInState}
-                        coinWatchlist={coinWatchlist}
-                        deleteWatchItem={deleteWatchItem}
-                      />
-                    }
-                  />
-                  <Route
-                    path={"/user/profile"}
-                    element={
-                      <ProfilePage
-                        user={user}
-                        setUserInState={setUserInState}
-                        coinWatchlist={coinWatchlist}
-                        deleteWatchItem={deleteWatchItem}
-                      />
-                    }
-                  />
-                  <Route
-                    path={"/coin/profile"}
-                    element={
-                      <CoinProfilePage
-                        saveWatchlistCoin={saveWatchlistCoin}
-                        profileCoinInfo={profileCoinInfo}
-                        profileCoin={profileCoin}
-                        coinWatchSymbol={coinWatchSymbol}
-                        updateParams={updateParams}
-                        coinState={coinState}
-                        coinWatchlist={coinWatchlist}
-                        deleteWatchItem={deleteWatchItem}
-                      />
-                    }
-                  />
-                  <Route
-                    path={"/watchlist"}
-                    element={
-                      <WatchlistPage
-                        coinList={coinList}
-                        coinWatchlist={coinWatchlist}
-                        saveWatchlistCoin={saveWatchlistCoin}
-                        coinWatchSymbol={coinWatchSymbol}
-                        updateParams={updateParams}
-                        coinState={coinState}
-                        deleteWatchItem={deleteWatchItem}
-                      />
-                    }
-                  />
-                </Routes>
-              </>
-            ) : (
-              <>
-                <Grid>
-                  <AuthPage setUserInState={setUserInState} />
-                </Grid>
-              </>
-            )}
-          </Grid>
+          <NavBar
+            coinList={coinList}
+            findProfileCoin={findProfileCoin}
+            handleCoinProfileData={handleCoinProfileData}
+            user={user}
+            setUserInState={setUserInState}
+            notifications={notifications}
+            removeNotification={removeNotification}
+          />
+          {user.id !== "" ? (
+            <>
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    <DashboardPage
+                      topTenCoins={topTenCoins}
+                      coinList={coinList}
+                      saveWatchlistCoin={saveWatchlistCoin}
+                      setUserInState={setUserInState}
+                      coinWatchlist={coinWatchlist}
+                      deleteWatchItem={deleteWatchItem}
+                      coinList={coinList}
+                      ticker={ticker}
+                      findProfileCoin={findProfileCoin}
+                      handleCoinProfileData={handleCoinProfileData}
+                    />
+                  }
+                />
+                <Route
+                  path={"/user/profile"}
+                  element={
+                    <ProfilePage
+                      user={user}
+                      setUserInState={setUserInState}
+                      coinWatchlist={coinWatchlist}
+                      deleteWatchItem={deleteWatchItem}
+                    />
+                  }
+                />
+                <Route
+                  path={"/coin/profile"}
+                  element={
+                    <CoinProfilePage
+                      saveWatchlistCoin={saveWatchlistCoin}
+                      profileCoinInfo={profileCoinInfo}
+                      profileCoin={profileCoin}
+                      coinWatchSymbol={coinWatchSymbol}
+                      updateParams={updateParams}
+                      coinState={coinState}
+                      coinWatchlist={coinWatchlist}
+                      deleteWatchItem={deleteWatchItem}
+                    />
+                  }
+                />
+                <Route
+                  path={"/watchlist"}
+                  element={
+                    <WatchlistPage
+                      coinList={coinList}
+                      coinWatchlist={coinWatchlist}
+                      saveWatchlistCoin={saveWatchlistCoin}
+                      coinWatchSymbol={coinWatchSymbol}
+                      updateParams={updateParams}
+                      coinState={coinState}
+                      deleteWatchItem={deleteWatchItem}
+                    />
+                  }
+                />
+                <Route
+                  path={"/topperforming"}
+                  element={
+                    <TopPerformingMobile
+                      topTenCoins={topTenCoins}
+                      coinList={coinList}
+                      saveWatchlistCoin={saveWatchlistCoin}
+                      coinWatchlist={coinWatchlist}
+                      deleteWatchItem={deleteWatchItem}
+                    />
+                  }
+                />
+              </Routes>
+            </>
+          ) : (
+            <>
+              <Grid>
+                <AuthPage setUserInState={setUserInState} />
+              </Grid>
+            </>
+          )}
         </ThemeProvider>
       </Router>
-    </div>
+    </Box>
   );
 }
 

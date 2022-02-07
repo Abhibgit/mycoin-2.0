@@ -11,9 +11,15 @@ import Menu from "@mui/material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import SearchBar from "../components/SearchBar/SearchBar";
+import SearchIcon from "@mui/icons-material/Search";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import TableChartIcon from "@mui/icons-material/TableChart";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { Button, List, ListItem } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import MenuIcon from "@mui/icons-material/Menu";
 import moment from "moment";
 
 const Search = styled("div")(({ theme }) => ({
@@ -70,6 +76,11 @@ function NavBar(props) {
     navigate("/");
   };
 
+  const handleTopTen = (event) => {
+    event.preventDefault();
+    handleMenuClose();
+    navigate("/topperforming");
+  };
   const handleLogout = (evt) => {
     evt.preventDefault();
     localStorage.removeItem("token");
@@ -112,10 +123,30 @@ function NavBar(props) {
     >
       {props.user !== "" ? (
         <div>
-          <MenuItem onClick={handleProfileLink}>Profile</MenuItem>
-          <MenuItem onClick={handleDashboardLink}>Dashboard</MenuItem>
-          <MenuItem onClick={handleWatchlistLink}>Watchlist</MenuItem>
-          <MenuItem onClick={handleLogout}>Logout</MenuItem>
+          <MenuItem onClick={handleProfileLink}>
+            <IconButton size="large" color="inherit">
+              <AccountCircleIcon />
+            </IconButton>
+            <p>Profile</p>
+          </MenuItem>
+          <MenuItem onClick={handleDashboardLink}>
+            <IconButton size="large" color="inherit">
+              <DashboardIcon />
+            </IconButton>
+            <p>Dashboard</p>
+          </MenuItem>
+          <MenuItem onClick={handleWatchlistLink}>
+            <IconButton size="large" color="inherit">
+              <VisibilityIcon />
+            </IconButton>
+            <p>Watchlist</p>
+          </MenuItem>
+          <MenuItem onClick={handleLogout}>
+            <IconButton size="large" color="inherit">
+              <LogoutIcon />
+            </IconButton>
+            <p>Logout</p>
+          </MenuItem>
         </div>
       ) : (
         <MenuItem>Please Login</MenuItem>
@@ -140,7 +171,6 @@ function NavBar(props) {
       open={isNotificationOpen}
       onClose={handleNotificationClose}
     >
-      {console.log(props.notifications || "false")}
       {props.notifications ? (
         props.notifications.map(({ message, createdAt, _id }, idx) => (
           <ListItem
@@ -162,46 +192,73 @@ function NavBar(props) {
 
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
-    </Menu>
+    <>
+      <Menu
+        anchorEl={mobileMoreAnchorEl}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        id={mobileMenuId}
+        keepMounted
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        open={isMobileMenuOpen}
+        onClose={handleMobileMenuClose}
+      >
+        {props.user !== "" ? (
+          <div>
+            <MenuItem onClick={handleNotificationOpen}>
+              <IconButton size="large" color="inherit">
+                <Badge
+                  badgeContent={
+                    props.notifications ? props.notifications.length : null
+                  }
+                  color="error"
+                >
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+              <p>Notifications</p>
+            </MenuItem>
+            <MenuItem onClick={handleProfileLink}>
+              <IconButton size="large" color="inherit">
+                <AccountCircleIcon />
+              </IconButton>
+              <p>Profile</p>
+            </MenuItem>
+            <MenuItem onClick={handleTopTen}>
+              <IconButton size="large" color="inherit">
+                <DashboardIcon />
+              </IconButton>
+              <p>Top Performing</p>
+            </MenuItem>
+            <MenuItem onClick={handleDashboardLink}>
+              <IconButton size="large" color="inherit">
+                <SearchIcon />
+              </IconButton>
+              <p>Search</p>
+            </MenuItem>
+            <MenuItem onClick={handleWatchlistLink}>
+              <IconButton size="large" color="inherit">
+                <VisibilityIcon />
+              </IconButton>
+              <p>Watchlist</p>
+            </MenuItem>
+            <MenuItem onClick={handleLogout}>
+              <IconButton size="large" color="inherit">
+                <LogoutIcon />
+              </IconButton>
+              <p>Logout</p>
+            </MenuItem>
+          </div>
+        ) : (
+          <MenuItem>Please Login</MenuItem>
+        )}
+      </Menu>
+    </>
   );
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -221,19 +278,10 @@ function NavBar(props) {
           >
             MyCoin
           </Typography>
-          <Search>
-            <SearchBar
-              coinList={props.coinList}
-              ticker={props.ticker}
-              findProfileCoin={props.findProfileCoin}
-              handleCoinProfileData={props.handleCoinProfileData}
-            />
-          </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton
               size="large"
-              aria-label="show 17 new notifications"
               color="inherit"
               aria-controls={notificationsMenuId}
               onClick={handleNotificationOpen}
@@ -250,13 +298,12 @@ function NavBar(props) {
             <IconButton
               size="large"
               edge="end"
-              aria-label="account of current user"
               aria-controls={menuId}
               aria-haspopup="true"
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <AccountCircle />
+              <MenuIcon />
             </IconButton>
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>

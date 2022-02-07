@@ -43,10 +43,13 @@ export default class Login extends Component {
   render() {
     return (
       <div>
-        <Card sx={{ minWidth: 275, backgroundColor: "#fcfaed", boxShadow: 2 }}>
+        <Card sx={{ boxShadow: 1, borderRadius: 5 }}>
           <CardContent>
             <Typography
-              sx={{ margin: 1, marginBottom: 5, marginLeft: 10, fontSize: 25 }}
+              sx={{
+                fontSize: { xs: 20, md: 25 },
+                marginTop: { xs: 1, md: 3 },
+              }}
             >
               Welcome! Please log in below
             </Typography>
@@ -60,7 +63,7 @@ export default class Login extends Component {
                   required
                   label="Username"
                   placeholder="Username"
-                  sx={{ margin: 3 }}
+                  sx={{ marginTop: { xs: 3, md: 10 }, marginRight: { md: 2 } }}
                 />
                 <Input
                   type="password"
@@ -69,9 +72,9 @@ export default class Login extends Component {
                   onChange={this.handleChange}
                   required
                   placeholder="Password"
-                  sx={{ marginRight: 3 }}
+                  sx={{ marginTop: { xs: 3, md: 10 } }}
                 />
-                <Button type="submit" variant="outlined">
+                <Button type="submit" variant="outlined" sx={{ marginTop: 5 }}>
                   LOG IN
                 </Button>
               </form>

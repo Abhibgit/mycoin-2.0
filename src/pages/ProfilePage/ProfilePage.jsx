@@ -18,17 +18,11 @@ function ProfilePage(props) {
 
   return (
     <div>
-      <Grid
-        container
-        spacing={2}
-        direction="row"
-        justifyContent="left"
-        style={{ minHeight: "100vh" }}
-      >
-        <Grid item xs={8} style={{ margin: 50 }}>
+      <Grid container spacing={2} direction="row" justifyContent="center">
+        <Grid item xs={11} sx={{ marginTop: 4 }}>
           <Profile user={user} setUserInState={setUserInState} />
         </Grid>
-        <Grid item xs={2} style={{ margin: 50 }}>
+        <Grid item xs={11}>
           <Watchlist
             coinWatchlist={props.coinWatchlist}
             deleteWatchItem={props.deleteWatchItem}

@@ -64,18 +64,24 @@ function WatchlistForm(props) {
   }
   return (
     <div>
-      <Card sx={{ boxShadow: 3, backgroundColor: "#fcfaed" }}>
+      <Typography
+        sx={{
+          margin: { xs: 2, md: 20 },
+          fontSize: { xs: 30, md: 60 },
+          textDecoration: "underline",
+        }}
+      >
+        Watchlist Parameters
+      </Typography>
+      <Card sx={{ boxShadow: 3 }}>
         <CardContent>
-          <Typography style={{ margin: 20, fontSize: 45 }}>
-            Watchlist Parameters
-          </Typography>
           {props.coinWatchSymbol.map((e, idx) => {
             return (
               <div key={e + idx}>
                 <Accordion
                   expanded={expanded === `panel + ${idx}`}
                   onChange={handleAccordion(`panel + ${idx}`)}
-                  style={{ marginTop: 30, marginBottom: 15 }}
+                  sx={{ marginBottom: { xs: 3 } }}
                 >
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
@@ -83,7 +89,7 @@ function WatchlistForm(props) {
                     id="panel1bh-header"
                   >
                     <Typography
-                      sx={{ width: "33%", flexShrink: 0, fontSize: 22 }}
+                      sx={{ width: "33%", flexShrink: 0, fontSize: 18 }}
                     >
                       {apiInfo[idx].name} - {e}
                     </Typography>
@@ -95,11 +101,11 @@ function WatchlistForm(props) {
                         <Typography>Upper Threshold</Typography>
                         <TextField
                           sx={{ marginBottom: 0.5, marginRight: 5 }}
-                          // placeholder={
-                          //   props.coinState[idx]
-                          //     ? `$${props.coinState[idx].upperLimit}`
-                          //     : "Set a limit"
-                          // }
+                          placeholder={
+                            props.coinState[idx]
+                              ? `$${props.coinState[idx].upperLimit}`
+                              : "Set a limit"
+                          }
                           size="small"
                           name="upperLimit"
                           type="input"
@@ -109,11 +115,11 @@ function WatchlistForm(props) {
                         <Typography>Lower Threshold</Typography>
                         <TextField
                           sx={{ marginBottom: 0.5, marginRight: 5 }}
-                          // placeholder={
-                          //   props.coinState[idx]
-                          //     ? `$${props.coinState[idx].lowerLimit}`
-                          //     : "Set a limit"
-                          // }
+                          placeholder={
+                            props.coinState[idx]
+                              ? `$${props.coinState[idx].lowerLimit}`
+                              : "Set a limit"
+                          }
                           size="small"
                           type="input"
                           name="lowerLimit"

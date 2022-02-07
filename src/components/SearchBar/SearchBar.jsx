@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Autocomplete, Button, TextField, Box } from "@mui/material";
+import {
+  Autocomplete,
+  Button,
+  TextField,
+  CardContent,
+  Card,
+  Typography,
+} from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router-dom";
 
 function Search(props) {
@@ -29,33 +37,43 @@ function Search(props) {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <Autocomplete
-          freeSolo
-          placeholder="Search…"
-          sx={{ width: 300, backgroundColor: "#fcfaed" }}
-          options={props.coinList.map((e) => e.name)}
-          onChange={handleAutocomplete}
-          renderInput={(params) => (
-            <TextField
-              id="searchfield"
-              {...params}
-              placeholder="Enter coin name..."
-              sx={{ colour: "secondary" }}
-              type="search"
-              value={coinName}
+      <Card sx={{ borderRadius: 5 }}>
+        <CardContent>
+          <Typography
+            sx={{
+              fontSize: { xs: 18, md: 25 },
+              marginBottom: { xs: 2, md: 5 },
+            }}
+          >
+            Search for a coin
+          </Typography>
+          <form onSubmit={handleSubmit}>
+            <Autocomplete
+              freeSolo
+              sx={{ width: { xs: 200, md: 300 } }}
+              options={props.coinList.map((e) => e.name)}
+              onChange={handleAutocomplete}
+              renderInput={(params) => (
+                <TextField
+                  id="searchfield"
+                  {...params}
+                  placeholder="Enter coin name..."
+                  value={coinName}
+                />
+              )}
             />
-          )}
-        />
-        <Button
-          variant="contained"
-          type="submit"
-          size="small"
-          style={{ backgroundColor: "#fcfaed", color: "black", width: 300 }}
-        >
-          Search
-        </Button>
-      </form>
+            <Button
+              variant="outlined"
+              type="submit"
+              size="small"
+              sx={{ marginTop: { xs: 2, md: 5 } }}
+            >
+              <SearchIcon />
+              Search
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </>
   );
 }
