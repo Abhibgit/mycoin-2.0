@@ -102,9 +102,9 @@ function WatchlistForm(props) {
                         <TextField
                           sx={{ marginBottom: 0.5, marginRight: 5 }}
                           placeholder={
-                            props.coinState[idx]
-                              ? `$${props.coinState[idx].upperLimit}`
-                              : "Set a limit"
+                            props.coinState[idx].upperLimit === undefined
+                              ? "Set an amount"
+                              : `$${props.coinState[idx].upperLimit}`
                           }
                           size="small"
                           name="upperLimit"
@@ -116,9 +116,9 @@ function WatchlistForm(props) {
                         <TextField
                           sx={{ marginBottom: 0.5, marginRight: 5 }}
                           placeholder={
-                            props.coinState[idx]
-                              ? `$${props.coinState[idx].lowerLimit}`
-                              : "Set a limit"
+                            props.coinState[idx].lowerLimit === undefined
+                              ? "Set an amount"
+                              : `$${props.coinState[idx].lowerLimit}`
                           }
                           size="small"
                           type="input"
