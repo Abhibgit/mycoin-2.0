@@ -414,7 +414,7 @@ function App() {
     return <span>Loading...</span>;
   }
   return (
-    <Box sx={{ backgroundColor: "#fcfbf5" }}>
+    <Box sx={{ backgroundColor: "#fcfbf5", height: "100vh", width: "100vw" }}>
       <Router>
         <ThemeProvider theme={themeOptions}>
           <ToastContainer />
