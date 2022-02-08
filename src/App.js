@@ -140,7 +140,6 @@ function App() {
       let idxTemplate = coinFeed.map((e) => e.s);
       if (coinWatchSymbol.length !== coinState.length) {
         updateCoinState(idxTemplate);
-        updateWatchlist(idxTemplate);
       }
       if (Object.keys(coinState).length < 6) {
         updateCoinState(idxTemplate);
@@ -175,11 +174,15 @@ function App() {
   }, [tickerSymbol, coinWatchSymbol, coinFeed]);
 
   const updateWatchlist = (idx) => {
+    coinWatchlist = [];
     coinWatchSymbol.forEach(function (e) {
       let watchSingleIdx = idx.indexOf(e);
-      coinWatchlistArray = [...coinWatchlistArray, coinFeed[watchSingleIdx]];
-      coinWatchlist = coinWatchlistArray;
+      return (coinWatchlistArray = [
+        ...coinWatchlistArray,
+        coinFeed[watchSingleIdx],
+      ]);
     });
+    coinWatchlist = coinWatchlistArray;
   };
 
   const updateCoinState = () => {
