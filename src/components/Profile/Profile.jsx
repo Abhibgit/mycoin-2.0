@@ -5,17 +5,23 @@ import {
   Button,
   Input,
   CardActions,
+  Slide,
 } from "@mui/material";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import DeleteModal from "../DeleteModal/DeleteModal";
 import PublishIcon from "@mui/icons-material/Publish";
 
 function Profile(props) {
-  const [formState, setFormState] = React.useState({
+  const [formState, setFormState] = useState({
     name: props.user.name,
     email: props.user.email,
     password: props.user.password,
   });
+  const [checked, setChecked] = useState(false);
+
+  useEffect(() => {
+    setChecked(true);
+  }, []);
 
   const handleEditSubmit = async (evt) => {
     evt.preventDefault();
@@ -66,47 +72,53 @@ function Profile(props) {
       >
         Personal Information
       </Typography>
-      <Card sx={{ boxShadow: 3, borderRadius: 5 }}>
-        <CardContent>
-          <form onSubmit={handleEditSubmit}>
-            <Typography sx={{ padding: 2 }}>
-              <Typography>Username</Typography>
-              <Input
-                name="name"
-                defaultValue={props.user.name}
-                onChange={handleChange}
-                required
-              />
-            </Typography>
-            <Typography sx={{ padding: 2 }}>
-              <Typography>Email</Typography>
-              <Input
-                name="email"
-                defaultValue={props.user.email}
-                onChange={handleChange}
-                required
-              />
-            </Typography>
-            <Typography sx={{ padding: 2 }}>
-              <Typography>Password</Typography>
-              <Input
-                name="password"
-                type="password"
-                defaultValue={props.user.password}
-                onChange={handleChange}
-                required
-              />
-            </Typography>
-            <CardActions>
-              <Button type="submit" variant="outlined" sx={{ margin: 1 }}>
-                <PublishIcon />
-                Submit
-              </Button>
-              <DeleteModal {...deleteProps} />
-            </CardActions>
-          </form>
-        </CardContent>
-      </Card>
+      <Slide
+        in={setChecked}
+        direction="right"
+        {...(checked ? { timeout: 1000 } : {})}
+      >
+        <Card sx={{ boxShadow: 3, borderRadius: 5 }}>
+          <CardContent>
+            <form onSubmit={handleEditSubmit}>
+              <Typography sx={{ padding: 2 }}>
+                <Typography>Username</Typography>
+                <Input
+                  name="name"
+                  defaultValue={props.user.name}
+                  onChange={handleChange}
+                  required
+                />
+              </Typography>
+              <Typography sx={{ padding: 2 }}>
+                <Typography>Email</Typography>
+                <Input
+                  name="email"
+                  defaultValue={props.user.email}
+                  onChange={handleChange}
+                  required
+                />
+              </Typography>
+              <Typography sx={{ padding: 2 }}>
+                <Typography>Password</Typography>
+                <Input
+                  name="password"
+                  type="password"
+                  defaultValue={props.user.password}
+                  onChange={handleChange}
+                  required
+                />
+              </Typography>
+              <CardActions>
+                <Button type="submit" variant="outlined" sx={{ margin: 1 }}>
+                  <PublishIcon />
+                  Submit
+                </Button>
+                <DeleteModal {...deleteProps} />
+              </CardActions>
+            </form>
+          </CardContent>
+        </Card>
+      </Slide>
     </div>
   );
 }

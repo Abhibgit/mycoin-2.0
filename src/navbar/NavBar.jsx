@@ -264,17 +264,17 @@ function NavBar(props) {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <img
-            src={require("../assets/MyCoin.svg").default}
-            alt="mySvgImage"
-            onClick={handleMyCoinClick}
-          />
+          <Button onClick={handleMyCoinClick}>
+            <img
+              src={require("../assets/MyCoin.svg").default}
+              alt="mySvgImage"
+            />
+          </Button>
           <Typography
             variant="h6"
             noWrap
             component="div"
             sx={{ display: { xs: "none", sm: "block" }, m: 0.75, fontSize: 25 }}
-            onClick={handleMyCoinClick}
           >
             MyCoin
           </Typography>

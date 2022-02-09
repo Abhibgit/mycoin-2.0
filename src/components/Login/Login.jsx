@@ -5,7 +5,7 @@ import {
   CardContent,
   Button,
   Typography,
-  Grid,
+  Grow,
   CardActions,
 } from "@mui/material";
 
@@ -71,7 +71,10 @@ export default class Login extends Component {
                   required
                   label="Username"
                   placeholder="Username"
-                  sx={{ marginTop: { xs: 3, md: 10 }, marginRight: { md: 2 } }}
+                  sx={{
+                    marginTop: { xs: 3, md: 10 },
+                    marginRight: { md: 2 },
+                  }}
                 />
                 <Input
                   type="password"
