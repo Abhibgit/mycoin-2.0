@@ -1,6 +1,6 @@
 import React from "react";
 import Profile from "../../components/Profile/Profile";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Watchlist from "../../components/Watchlist/Watchlist";
 import { Grid } from "@mui/material";
 import TopCoins from "../../components/TopCoins/TopCoins";

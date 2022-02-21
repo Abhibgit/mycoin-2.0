@@ -34,7 +34,6 @@ let topTenSymbol = [];
 // Variable that holds the 10 objects in an array from API ping
 let topTen = [];
 // Holds the array that gets refreshed
-let topTenArray = [];
 let token;
 let userDoc;
 let notificationsArray;
@@ -53,7 +52,6 @@ function App() {
   const [topTenCoins, setTopTenCoins] = useState([]);
   //same as coinWatchSymbol, however it's required due to the speed of data renderering
   const [notifications, setNotifications] = useState([]);
-  // const [coinState, setCoinState] = useState([{}]);
   const [user, setUser] = useState({
     id: "",
     name: "",
@@ -67,7 +65,6 @@ function App() {
 
   let coinFeed = [];
   let coinWatchlistArray = [];
-  //
 
   useEffect(() => {
     axios
@@ -108,10 +105,6 @@ function App() {
     });
   }, [user.id]);
 
-  const addNotifications = () => {
-    setNotifications(user.notifications);
-  };
-
   // The ticker.onmessage is the websocket that provides the coinFeed with the realtime data.
   // Due to the nature of what is happening with the websocket from Binance and the API calls from CoinGecko
   // It was required for us to set it up in this way. Calling functions off of the websocket ping is
@@ -126,12 +119,8 @@ function App() {
       topTen = coinList.slice(0, 12);
       let coinSymbolMap = topTen.map((e) => e.symbol.toUpperCase());
       coinSymbolMap.forEach(function (e) {
-        if (e === "USDT") {
-          console.log("invalid");
-        } else {
-          let newCoinSymbol = e + "USDT";
-          topTenSymbol.push(newCoinSymbol);
-        }
+        let newCoinSymbol = e + "USDT";
+        topTenSymbol.push(newCoinSymbol);
       });
     };
     //Ticker "flow", pings every second.
@@ -139,9 +128,6 @@ function App() {
       coinFeed = JSON.parse(message.data);
       let idxTemplate = coinFeed.map((e) => e.s);
       if (coinWatchSymbol.length !== coinState.length) {
-        updateCoinState(idxTemplate);
-      }
-      if (Object.keys(coinState).length < 6) {
         updateCoinState(idxTemplate);
       }
       updateWatchlist(idxTemplate);
@@ -155,7 +141,7 @@ function App() {
       // This will display the watchlist for the user, this is the main portion of the ticker "flow".
       // For the top 10 coins saved from the API
       // goes through each of them to repeat the above code used for saved coins
-      topTenArray = [];
+      let topTenArray = [];
       let topTenIndex = [];
       topTenSymbol.forEach(function (e) {
         if (e === "USDCUSDT") {
@@ -172,6 +158,10 @@ function App() {
       addNotifications();
     };
   }, [tickerSymbol, coinWatchSymbol, coinFeed]);
+
+  const addNotifications = () => {
+    setNotifications(user.notifications);
+  };
 
   const updateWatchlist = (idx) => {
     coinWatchlist = [];
@@ -435,7 +425,6 @@ function App() {
                   element={
                     <DashboardPage
                       topTenCoins={topTenCoins}
-                      coinList={coinList}
                       saveWatchlistCoin={saveWatchlistCoin}
                       setUserInState={setUserInState}
                       coinWatchlist={coinWatchlist}
@@ -492,7 +481,6 @@ function App() {
                       coinState={coinState}
                       deleteWatchItem={deleteWatchItem}
                       topTenCoins={topTenCoins}
-                      coinList={coinList}
                       saveWatchlistCoin={saveWatchlistCoin}
                     />
                   }
